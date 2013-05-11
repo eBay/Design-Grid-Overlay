@@ -1,22 +1,29 @@
-.grid-lines { 
+.cb-grid-lines { 
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
   position: fixed;
+  pointer-events: none;
 }
 
-.grid-lines .container {
+.cb-grid-lines .container {
   height: 100%;
-  border: 2px solid red;
+  border-left: 2px solid red; border-right: 2px solid red;
 }
 
-.grid-lines [class*="span"] {
+.cb-grid-lines [class*="span"] {
   height: 100%;
   border-right: 1px solid blue;
-  margin-right: -1px;
+  border-left: 1px solid blue;
+  margin-right: -2px;
 }
 
-.grid-lines [class*="span"]:last-child {
+.cb-grid-lines [class*="span"]:first-child {
+  margin-left: 0px;
+  border-left: none;
+}
+
+.cb-grid-lines [class*="span"]:last-child {
   border-right: none;
 }
