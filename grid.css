@@ -1,0 +1,22 @@
+.grid-lines { 
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.grid-lines .container {
+  height: 100%;
+  border: 2px solid red;
+}
+
+.grid-lines [class*="span"] {
+  height: 100%;
+  border-right: 1px solid blue;
+  margin-right: -1px;
+}
+
+.grid-lines [class*="span"]:last-child {
+  border-right: none;
+}
