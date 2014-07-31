@@ -3,7 +3,7 @@
 
   "name": "Bootstrap Overlay",
   "description": "This extension creates an overlay for the bootstrap grid system",
-  "version": "1.0",
+  "version": "2.0",
   "icons": { "16": "icon16.png",
            "48": "icon48.png",
           "128": "icon128.png" },
