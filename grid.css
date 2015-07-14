@@ -5,51 +5,65 @@
   left: 0;
   position: fixed;
   pointer-events: none;
+  background: rgba(0,0,0,0.2);
   z-index: 9999;
 }
 
-.cb-grid-lines > * {
+.cb-grid-lines * {
+  pointer-events: none;
   box-sizing: border-box;
 }
 
-.cb-grid-lines .container {
+.cb-grid-lines .grid-overlay-container {
   height: 100%;
+  margin: 0 auto;
+  padding: 0 8px;
+  max-width: 1280px;
   position: relative;
+  background: rgba(0,0,0,0.3);
 }
 
-.cb-grid-lines .container:before {
+.cb-grid-lines .grid-overlay-container:before {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
-  width: 2px;
+  width: 1px;
   height: 100%;
-  background: red;
+  background: black;
 }
 
-.cb-grid-lines .container:after {
+.cb-grid-lines .grid-overlay-container:after {
   content: '';
   position: absolute;
   right: 0;
   top: 0;
-  width: 2px;
+  width: 1px;
   height: 100%;
-  background: red;
+  background: black;
 }
 
-.cb-grid-lines .container .row {
+.cb-grid-lines .grid-overlay-container .row > * {
   height: 100%;
 }
-
-.cb-grid-lines .container .row > * {
-  height: 100%;
-  background: rgba(0,0,0,0.2);
-}
-
-.cb-grid-lines .container .row > *:before {
+/**
+.cb-grid-lines .grid-overlay-container .row > *:before {
   content: '';
   display: block;
   height: 100%;
   width: 100%;
   background: rgba(0,0,0,0.2);
+}
+*/
+
+
+
+/*
+ * FIXME: We should rename this later
+ */
+.col-xs-1 {
+    background: rgba(100,0,0,0.1);
+    margin: 0 8px;
+    width: calc(8.333333333333334% - 16px);
+    display: inline-block;
 }

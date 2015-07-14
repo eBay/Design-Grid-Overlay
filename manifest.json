@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "Bootstrap Overlay",
-  "description": "This extension creates an overlay for the bootstrap grid system",
-  "version": "2.0",
+  "name": "Grid Overlay",
+  "description": "This extension creates an overlay for a grid system",
+  "version": "0.1",
   "icons": { "16": "icon16.png",
            "48": "icon48.png",
           "128": "icon128.png" },
@@ -11,7 +11,8 @@
     "default_icon": "icon32_off.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "permissions": [
     "tabs", "http://*/*"
