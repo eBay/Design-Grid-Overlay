@@ -12,7 +12,8 @@ chrome.browserAction.setIcon({path: extensionIcons[1]});
 chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.browserAction.setIcon({path: getCurrentIcon(true)});
     
-    chrome.tabs.insertCSS({
+    
+    chrome.tabs.insertCSS({ //FIXME: THis inserts the CSS multiple times
         file: 'grid.css'
     }, function() {
         chrome.tabs.executeScript(null, {

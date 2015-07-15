@@ -9,12 +9,9 @@
   z-index: 9999;
 }
 
-.cb-grid-lines * {
+.cb-grid-lines .grid-overlay-container {
   pointer-events: none;
   box-sizing: border-box;
-}
-
-.cb-grid-lines .grid-overlay-container {
   height: 100%;
   margin: 0 auto;
   padding: 0 8px;
@@ -45,7 +42,7 @@
     }
 }
 
-.cb-grid-lines .grid-overlay-container .row > * {
+.cb-grid-lines .grid-overlay-container .row {
   height: 100%;
 }
 /**
@@ -63,7 +60,9 @@
 /*
  * FIXME: We should rename this later
  */
-.col-xs-1 {
+.grid-overlay-col {
+    height: 100%;
+    pointer-events: none;
     background: rgba(244, 174, 1, 0.31); /* F4AE01 */
     margin: 0 8px;
     width: calc(6.25% - 16px);

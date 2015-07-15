@@ -7,7 +7,7 @@ if (document.getElementsByClassName('cb-grid-lines').length){
       <div class="grid-overlay-container"> \
         <div class="row">';
     for (var i = 0; i < numColumns; i += 1) {
-        output +=  '<div class="span1 col-xs-1"></div>';
+        output +=  '<div class="grid-overlay-col"></div>';
     }
     output += '</div> \
       </div> \
@@ -23,13 +23,14 @@ if (document.getElementsByClassName('cb-grid-lines').length){
         columns[j].style.width = 'calc('+(100 / numColumns)+'% - 16 px)';
     }
     */
+   /*
     var styleEl = document.createElement('style');
 
     // Append style element to head
     document.head.appendChild(styleEl);
     
     var dynamicGridRules = styleEl.sheet;
-    
+    */
     //console.log(document.styleSheets);
     //console.log(100 / numColumns); //You need to update the CSS with this value because calc is hard to inject via javascript
     
