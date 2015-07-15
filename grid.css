@@ -42,24 +42,10 @@
     }
 }
 
-.cb-grid-lines .grid-overlay-container .row {
+.grid-overlay-row {
   height: 100%;
 }
-/**
-.cb-grid-lines .grid-overlay-container .row > *:before {
-  content: '';
-  display: block;
-  height: 100%;
-  width: 100%;
-  background: rgba(0,0,0,0.2);
-}
-*/
 
-
-
-/*
- * FIXME: We should rename this later
- */
 .grid-overlay-col {
     height: 100%;
     pointer-events: none;

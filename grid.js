@@ -5,7 +5,7 @@ if (document.getElementsByClassName('cb-grid-lines').length){
     var columnSelector = '.grid-overlay-container .row > .span1';
     var output = '<div class="cb-grid-lines"> \
       <div class="grid-overlay-container"> \
-        <div class="row">';
+        <div class="grid-overlay-row">';
     for (var i = 0; i < numColumns; i += 1) {
         output +=  '<div class="grid-overlay-col"></div>';
     }
