@@ -1,4 +1,4 @@
-chrome-bootstrap
-================
+Grid Overlay
+============
 
-A Chrome extension to overlay your Bootstrap grid
+A Chrome extension to overlay a design grid on your page.

@@ -1,22 +1,22 @@
-var toggleIcons = ["icon32_on.png", "icon32_off.png"];
-var current = true;
+var extensionIcons = ["icon32_on.png", "icon32_off.png"];
+var currentIconIndex = 1;
 
 var getCurrentIcon = function(toggle) {
-    toggle && (current = !current);
-    var icon = toggleIcons[+current];
-    return icon;
+    currentIconIndex = toggle && (currentIconIndex = !currentIconIndex) ? 1 : 0;
+    
+    return extensionIcons[currentIconIndex];
 };
 
-chrome.browserAction.setIcon({path: toggleIcons[1]});
+chrome.browserAction.setIcon({path: extensionIcons[1]});
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.browserAction.setIcon({path: getCurrentIcon(true)});  
+    chrome.browserAction.setIcon({path: getCurrentIcon(true)});
     
     chrome.tabs.insertCSS({
         file: 'grid.css'
-    });
-    
-    chrome.tabs.executeScript({
-        file: 'grid.js'
-    });
+    }, function() {
+        chrome.tabs.executeScript(null, {
+            file: 'grid.js'
+        });    
+    });    
 });

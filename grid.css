@@ -5,7 +5,7 @@
   left: 0;
   position: fixed;
   pointer-events: none;
-  background: rgba(0,0,0,0.2);
+  background: rgba(99,99,99,0.1);
   z-index: 9999;
 }
 
@@ -20,7 +20,7 @@
   padding: 0 8px;
   max-width: 1280px;
   position: relative;
-  background: rgba(0,0,0,0.3);
+  background: rgba(99,99,99,0.2);
 }
 
 .cb-grid-lines .grid-overlay-container:before {
@@ -30,7 +30,7 @@
   top: 0;
   width: 1px;
   height: 100%;
-  background: black;
+  background: rgba(99,99,99,0.5);
 }
 
 .cb-grid-lines .grid-overlay-container:after {
@@ -40,7 +40,7 @@
   top: 0;
   width: 1px;
   height: 100%;
-  background: black;
+  background: rgba(99,99,99,0.5);
 }
 
 .cb-grid-lines .grid-overlay-container .row > * {
@@ -62,8 +62,8 @@
  * FIXME: We should rename this later
  */
 .col-xs-1 {
-    background: rgba(100,0,0,0.1);
+    background: rgba(244, 174, 1, 0.31); /* F4AE01 */
     margin: 0 8px;
-    width: calc(8.333333333333334% - 16px);
+    width: calc(6.25% - 16px);
     display: inline-block;
 }

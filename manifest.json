@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "Grid Overlay",
   "description": "This extension creates an overlay for a grid system",
   "version": "0.1",

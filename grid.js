@@ -1,7 +1,7 @@
-if (document.getElementsByClassName('cb-grid-lines').length){  
+if (document.getElementsByClassName('cb-grid-lines').length){
     document.body.removeChild(document.getElementsByClassName('cb-grid-lines')[0]);
 } else {
-    var numColumns = 12;
+    var numColumns = 16;
     var columnSelector = '.grid-overlay-container .row > .span1';
     var output = '<div class="cb-grid-lines"> \
       <div class="grid-overlay-container"> \
@@ -30,8 +30,8 @@ if (document.getElementsByClassName('cb-grid-lines').length){
     
     var dynamicGridRules = styleEl.sheet;
     
-    console.log(dynamicGridRules);
-    console.log(100 / numColumns);
+    //console.log(document.styleSheets);
+    //console.log(100 / numColumns); //You need to update the CSS with this value because calc is hard to inject via javascript
     
     //dynamicGridRules.insertRule(columnSelector + ' { color: #fff; width: calc('+(100 / numColumns)+'% - 16 px); }', 0);
     //dynamicGridRules.insertRule('.grid-overlay-container .row > * { color: #fff; }', 1);
