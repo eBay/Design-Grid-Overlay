@@ -56,7 +56,7 @@
     display: inline-block;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
     .grid-overlay-container {
         padding: 0 8px;
     }
