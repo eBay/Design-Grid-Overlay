@@ -1,0 +1,27 @@
+<style>
+    #columns, #width  {
+        margin-bottom: 8px;
+    }
+
+    .buttons input {
+        width: 100%;
+        margin-bottom: 4px;
+    }   
+
+</style>
+
+<form id="gridsettings" name="gridsettings">
+
+    <label for="columns">Columns</label>
+    <input type="number" id="columns" value="16">
+    <label for="max-width"> Max Width</label>
+    <input type="number" id="width" value="1280">
+
+    <div class="buttons">
+        <input type="button" id="addGrid" value="Add grid"><br>
+        <input type="button" id="removegrid" value="Remove grid"><br>
+        <input type="button" id="resetsettings" value="Reset settings">
+    </div>
+</form>
+
+<script type="text/javascript" src="popup.js"></script>

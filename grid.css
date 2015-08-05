@@ -15,7 +15,13 @@
   height: 100%;
   margin: 0 auto;
   padding: 0 4px;
+
+  /*
+    Need to be able to dynmically change this 
+  */
   max-width: 1280px;
+
+
   position: relative;
   background: rgba(99,99,99,0.2);
 }
@@ -54,6 +60,12 @@
     margin: 0 4px;
     width: calc(12.5% - 8px);
     display: inline-block;
+}
+
+#grid-settings{
+  display: none;
+  height: auto;
+  width: auto;
 }
 
 @media (min-width: 768px) {
