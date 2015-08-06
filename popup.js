@@ -2,56 +2,76 @@ var chrome = chrome || {};
 
 var gridIsDisplayed = false;
 
+function init(){
+
+	/*
+		Will load in saved content already in local storage
+	*/
+	chrome.storage.sync.get(["width", "columns"], function(items){
+		var width = items.width || 1280;
+		var columns = items.columns || 16;
+		document.getElementById("width").value = width;
+		document.getElementById("columns").value = columns;
+	})
+
+	/*document.getElementById("removegrid").disabled = true;
+	document.getElementById("updategrid").disabled = true;*/
+}
+
 function addGrid(){
-	if(!gridIsDisplayed){
-		chrome.tabs.insertCSS({ 
-        	file: 'grid.css'
-	    }, function() {
-	    	var columns = document.getElementById("columns").value;
-			var width = document.getElementById("width").value;
+	
 
-			localStorage.setItem("width", width);
-	    	localStorage.setItem("columns", columns);
+	//Need to fix this 
+	chrome.tabs.insertCSS({ 
+    	file: 'grid.css'
+    }, function() {
+    	var columns = document.getElementById("columns").value;
+		var width = document.getElementById("width").value;
 
-		    var options = {
-		    	width: width
-		    }
+	    var options = {
+	    	width: width,
+	    	columns: columns
+	    }
 
-	        executeJS();
-	        executeCSS(options);
+	    chrome.storage.sync.set(options);
 
-	        gridIsDisplayed = true;
-	    }); 
-	}
+        executeJS();
+        executeCSS(options);
+
+        
+        /*document.getElementById("addGrid").disabled = true;
+        document.getElementById("removegrid").disabled = false;
+        document.getElementById("updategrid").disabled = false;*/
+    }); 
 }
 
 
 function upDateGrid(){
-
-	if(gridIsDisplayed){
-		var columns = document.getElementById("columns").value;
-		var width = document.getElementById("width").value;
-	    
-		localStorage.setItem("width", width);
-	    localStorage.setItem("columns", columns);
-
-	    var options = {
-	    	width: width
-	    }
-
-	    removeGrid();
-	    executeCSS(options);
-
-	    addGrid();
+	
+	var columns = document.getElementById("columns").value;
+	var width = document.getElementById("width").value;
+    
+	var options = {
+	    width: width,
+	    columns: columns
 	}
+
+	chrome.storage.sync.set(options);
+
+    removeGrid();
+    executeCSS(options);
+
+    addGrid();
 }
 
 
 function removeGrid(){
-	if(gridIsDisplayed){
-		executeJS();
-		gridIsDisplayed = false;
-	}
+	
+	executeJS();
+	/*document.getElementById("addGrid").disabled = false;
+    document.getElementById("removegrid").disabled = true;
+    document.getElementById("updategrid").disabled = true;*/
+	
 }
 
 
@@ -79,3 +99,6 @@ function executeJS(){
 document.getElementById('addGrid').addEventListener('click', addGrid);
 document.getElementById('removegrid').addEventListener('click', removeGrid);
 document.getElementById('updategrid').addEventListener('click', upDateGrid);
+
+
+init();
