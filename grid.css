@@ -9,23 +9,6 @@
   z-index: 9999;
 }
 
-.grid-overlay-container {
-  pointer-events: none;
-  box-sizing: border-box;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0 4px;
-
-  /*
-    Need to be able to dynmically change this 
-  */
-  max-width: 1280px;
-
-
-  position: relative;
-  background: rgba(99,99,99,0.2);
-}
-
 @media (min-width: 1282px) {
     .grid-overlay-container:before {
       content: '';
@@ -56,17 +39,11 @@
     height: 100%;
     pointer-events: none;
     background: rgba(244, 174, 1, 0.31); /* F4AE01 */
-    /* background: linear-gradient(to right, rgba(244, 174, 1, 0.35),  rgba(244, 174, 1, 0.3), rgba(244, 174, 1, 0.35)); */
     margin: 0 4px;
     width: calc(12.5% - 8px);
     display: inline-block;
 }
 
-#grid-settings{
-  display: none;
-  height: auto;
-  width: auto;
-}
 
 @media (min-width: 768px) {
     .grid-overlay-container {
