@@ -7,7 +7,8 @@
            "48": "icon48.png",
           "128": "icon128.png" },
   "browser_action": {
-    "default_icon": "icon32_off.png"
+    "default_icon": "icon32_off.png",
+    "default_popup": "popup.html"
   },
   "background": {
     "scripts": ["background.js"],

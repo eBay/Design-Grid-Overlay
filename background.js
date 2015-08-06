@@ -14,5 +14,5 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.browserAction.setIcon({path: getCurrentIcon(true)});
 });
 
-chrome.browserAction.setPopup({popup : "popup.html"});
+//chrome.browserAction.setPopup({popup : "popup.html"});
 

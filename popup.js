@@ -1,46 +1,57 @@
 var chrome = chrome || {};
 
+var gridIsDisplayed = false;
+
 function addGrid(){
-	chrome.tabs.insertCSS({ 
-        file: 'grid.css'
-    }, function() {
-    	var columns = document.getElementById("columns").value;
-		var width = document.getElementById("width").value;
+	if(!gridIsDisplayed){
+		chrome.tabs.insertCSS({ 
+        	file: 'grid.css'
+	    }, function() {
+	    	var columns = document.getElementById("columns").value;
+			var width = document.getElementById("width").value;
 
-		localStorage.setItem("width", width);
-    	localStorage.setItem("columns", columns);
+			localStorage.setItem("width", width);
+	    	localStorage.setItem("columns", columns);
 
-	    var options = {
-	    	width: width
-	    }
+		    var options = {
+		    	width: width
+		    }
 
-        executeJS();
-        executeCSS(options);
-    }); 
+	        executeJS();
+	        executeCSS(options);
+
+	        gridIsDisplayed = true;
+	    }); 
+	}
 }
 
 
 function upDateGrid(){
 
-	var columns = document.getElementById("columns").value;
-	var width = document.getElementById("width").value;
-    
-	localStorage.setItem("width", width);
-    localStorage.setItem("columns", columns);
+	if(gridIsDisplayed){
+		var columns = document.getElementById("columns").value;
+		var width = document.getElementById("width").value;
+	    
+		localStorage.setItem("width", width);
+	    localStorage.setItem("columns", columns);
 
-    var options = {
-    	width: width
-    }
+	    var options = {
+	    	width: width
+	    }
 
-    removeGrid();
-    executeCSS(options);
+	    removeGrid();
+	    executeCSS(options);
 
-    addGrid();
+	    addGrid();
+	}
 }
 
 
 function removeGrid(){
-	executeJS();
+	if(gridIsDisplayed){
+		executeJS();
+		gridIsDisplayed = false;
+	}
 }
 
 
