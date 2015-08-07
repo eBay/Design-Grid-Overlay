@@ -12,33 +12,33 @@ function init(){
 		var columns = items.columns || 16;
 		document.getElementById("width").value = width;
 		document.getElementById("columns").value = columns;
-	})
+	});
 
 	/*document.getElementById("removegrid").disabled = true;
 	document.getElementById("updategrid").disabled = true;*/
 }
 
 function addGrid(){
-	
+    
+    var columns = document.getElementById("columns").value;
+    var width = document.getElementById("width").value;
+
+    var options = {
+        width: width,
+        columns: columns
+    };
+
+    chrome.storage.sync.set(options);
+
+    
+    executeCSS(options);
 
 	//Need to fix this 
 	chrome.tabs.insertCSS({ 
     	file: 'grid.css'
     }, function() {
-    	var columns = document.getElementById("columns").value;
-		var width = document.getElementById("width").value;
-
-	    var options = {
-	    	width: width,
-	    	columns: columns
-	    }
-
-	    chrome.storage.sync.set(options);
-
+    	
         executeJS();
-        executeCSS(options);
-
-        
         /*document.getElementById("addGrid").disabled = true;
         document.getElementById("removegrid").disabled = false;
         document.getElementById("updategrid").disabled = false;*/
@@ -54,7 +54,7 @@ function upDateGrid(){
 	var options = {
 	    width: width,
 	    columns: columns
-	}
+	};
 
 	chrome.storage.sync.set(options);
 

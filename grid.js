@@ -27,6 +27,6 @@ if (document.getElementsByClassName('cb-grid-lines').length){
         //var gridOverlay = document.querySelectorAll('.grid-overlay-container');
         var columns = document.querySelectorAll(columnSelector);
     
-    })
+    });
 }
 
