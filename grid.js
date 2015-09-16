@@ -4,8 +4,8 @@ if (document.getElementsByClassName('cb-grid-lines').length){
     document.body.removeChild(document.getElementsByClassName('cb-grid-lines')[0]);
 } else {
 
-    chrome.storage.sync.get(["columns"], function(item){
-        var numColumns = item.columns || 16 ;       
+    chrome.storage.sync.get(["largeColumns"], function(item){
+        var numColumns = item.largeColumns || 16 ;       
 
 
         var columnSelector = '.grid-overlay-container .row > .span1';

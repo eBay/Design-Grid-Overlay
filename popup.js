@@ -7,94 +7,148 @@ function init(){
 	/*
 		Will load in saved content already in local storage
 	*/
-	chrome.storage.sync.get(["width", "columns"], function(items){
-		var width = items.width || 1280;
-		var columns = items.columns || 16;
-		document.getElementById("width").value = width;
-		document.getElementById("columns").value = columns;
-	});
+	chrome.storage.sync.get(["largeWidth", "largeColumns", 
+									 "smallColumns", "vwUnits", 
+									 "smallWidth", "gutters"], 
+		function(items){
 
-	/*document.getElementById("removegrid").disabled = true;
-	document.getElementById("updategrid").disabled = true;*/
+			var largeWidth = items.largeWidth || 960;
+			var smallWidth = items.smallWidth || 768;
+			var largeColumns = items.largeColumns || 16;
+			var smallColumns = items.smallColumns || 8;
+			var gutters = item.gutters || 16;
+
+			if(items.vwUnits){
+				document.getElementById('viewports').checked = true;
+			}
+
+			document.getElementById("largeWidth").value = largeWidth;
+			document.getElementById("smallWidth").value = smallWidth;
+			document.getElementById("largeColumns").value = largeColumns;
+			document.getElementById("smallColumns").value = smallColumns;
+			document.getElementById('gutters').value = gutters;
+	});
 }
 
 function addGrid(){
     
-    var columns = document.getElementById("columns").value;
-    var width = document.getElementById("width").value;
-
-    var options = {
-        width: width,
-        columns: columns
-    };
-
-    chrome.storage.sync.set(options);
+    var settings = saveCurrentSettings();
 
     
-    executeCSS(options);
+    executeCSS(settings);
 
 	//Need to fix this 
 	chrome.tabs.insertCSS({ 
     	file: 'grid.css'
     }, function() {
-    	
         executeJS();
-        /*document.getElementById("addGrid").disabled = true;
-        document.getElementById("removegrid").disabled = false;
-        document.getElementById("updategrid").disabled = false;*/
     }); 
 }
 
 
 function upDateGrid(){
 	
-	var columns = document.getElementById("columns").value;
-	var width = document.getElementById("width").value;
-    
-	var options = {
-	    width: width,
-	    columns: columns
-	};
+	var settings = saveCurrentSettings();
 
-	chrome.storage.sync.set(options);
+   removeGrid();
+   executeCSS(settings);
 
-    removeGrid();
-    executeCSS(options);
-
-    addGrid();
+   addGrid();
 }
 
 
 function removeGrid(){
-	
 	executeJS();
-	/*document.getElementById("addGrid").disabled = false;
-    document.getElementById("removegrid").disabled = true;
-    document.getElementById("updategrid").disabled = true;*/
-	
 }
 
 
 function executeCSS(options){
-	 chrome.tabs.insertCSS(null, {
+	var columns = document.getElementById("largeColumns").value;
+	var lgWidth = document.getElementById("largeWidth").value;
+	var smWidth = document.getElementById("smallWidth").value;
+	var gutters = document.getElementById('gutters').value;
+	var maxSize;
+
+    chrome.windows.getCurrent(function(currWindow){
+
+    	var vwCalc = ((options.largeWidth / currWindow.width) * 100);
+    	var units = checkVWBox(options, vwCalc);
+
+		if(document.getElementById('viewports').checked){
+			maxSize = "max-width:" + options.largeWidth + "px;"
+		}else{
+			maxSize = "max-width:" + options.largeWidth + "px;"
+		}
+
+		chrome.tabs.insertCSS(null, {
         code:
-        ".grid-overlay-container {"
-		  + "pointer-events: none;"
-		  + "box-sizing: border-box;"
-		  + "height: 100%;"
-		  + "margin: 0 auto;"
-		  + "padding: 0 4px;"
-		  + "max-width:" + options.width + "px;"
-		  + "position: relative;"
-		  + "background: rgba(99,99,99,0.2);"
-		+ "}"
-    });
+	        ".grid-overlay-container {"
+			  	+ maxSize
+			+ "}"
+
+			
+			+ ".grid-overlay-col {"
+				+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
+			+ "}"
+			
+
+			+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
+				+ ".grid-overlay-col {"
+				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
+				+ "}"
+			+ "}"
+    	});
+
+	})
 
 }
 
 function executeJS(){
 	chrome.tabs.executeScript(null, {file: 'grid.js'}); 
 }
+
+/*
+	Need to fix, vw doesn't always work correctly
+*/
+function checkVWBox(options, vwCalc){
+	/*if(document.getElementById('viewports').checked){
+		//console.log(vwCalc / options.columns);
+		return "width:"+ (vwCalc / options.columns) + "vw;"
+	}else{
+		return "width: calc(" + (100 / options.columns) + "% - 16px);"
+	}*/
+
+
+	return "width: calc(" + (100 / options.columns) + "% - 16px);"
+}
+
+
+/*
+	Will save the data from form fields 
+	into local storage
+*/
+function saveCurrentSettings(){
+	var largeColumns = document.getElementById("largeColumns").value;
+	var smallColumns = document.getElementById("smallColumns").value;
+   var largeWidth = document.getElementById("largeWidth").value;
+   var vwChecked = document.getElementById('viewports').checked;
+   var smallWidth = document.getElementById('smallWidth').value;
+   var gutters = document.getElementById('gutters').value;
+
+   var options = {
+      largeWidth: largeWidth,
+      smallWidth: smallWidth,
+      largeColumns: largeColumns,
+      smallColumns: smallColumns,
+      vwUnits: vwChecked,
+      gutters: gutters
+   };
+
+   chrome.storage.sync.set(options);
+
+   return options;
+}
+
 
 document.getElementById('addGrid').addEventListener('click', addGrid);
 document.getElementById('removegrid').addEventListener('click', removeGrid);
