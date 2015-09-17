@@ -16,7 +16,7 @@ function init(){
 			var smallWidth = items.smallWidth || 768;
 			var largeColumns = items.largeColumns || 16;
 			var smallColumns = items.smallColumns || 8;
-			var gutters = item.gutters || 16;
+			var gutters = items.gutters || 16;
 
 			if(items.vwUnits){
 				document.getElementById('viewports').checked = true;
@@ -28,7 +28,25 @@ function init(){
 			document.getElementById("smallColumns").value = smallColumns;
 			document.getElementById('gutters').value = gutters;
 	});
+
+
+
+	chrome.runtime.onMessage.addListener(function requested(request) {
+		window.alert('resize from popup');
+  			if (request.method === 'resize') {
+   			window.alert('resize from popup');
+  			}
+	});
 }
+
+
+function onResizeOfCurrWindow(){
+	window.alert('Called');
+	chrome.app.window.onBoundsChanged.addListener(function(){
+		window.alert('Resizd');
+	})
+}
+
 
 function addGrid(){
     
@@ -75,9 +93,24 @@ function executeCSS(options){
     	var units = checkVWBox(options, vwCalc);
 
 		if(document.getElementById('viewports').checked){
-			maxSize = "max-width:" + options.largeWidth + "px;"
+			/*
+				Need to figure out this calc function
+				The viewport changes when the browser is resized 
+				so I need to be able to recalculate the view port vidth 
+				when resizing occurs.
+				??????????
+
+
+				When using this, the size is relative to the browser and not the 
+				size of the parent.  
+			*/
+			maxSize = "width: " + vwCalc + "vmin";
 		}else{
 			maxSize = "max-width:" + options.largeWidth + "px;"
+		}
+
+		currWindow.onresize = function(){
+			window.alert('I resized');
 		}
 
 		chrome.tabs.insertCSS(null, {
@@ -86,7 +119,6 @@ function executeCSS(options){
 			  	+ maxSize
 			+ "}"
 
-			
 			+ ".grid-overlay-col {"
 				+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
 			+ "}"
@@ -97,6 +129,7 @@ function executeCSS(options){
 				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
 				+ "}"
 			+ "}"
+
     	});
 
 	})
@@ -156,3 +189,4 @@ document.getElementById('updategrid').addEventListener('click', upDateGrid);
 
 
 init();
+//onResizeOfCurrWindow();
