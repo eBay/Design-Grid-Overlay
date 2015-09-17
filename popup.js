@@ -85,8 +85,7 @@ function executeCSS(options){
 	var lgWidth = document.getElementById("largeWidth").value;
 	var smWidth = document.getElementById("smallWidth").value;
 	var gutters = document.getElementById('gutters').value;
-	var maxSize;
-
+	
     chrome.windows.getCurrent(function(currWindow){
 
     	var vwCalc = ((options.largeWidth / currWindow.width) * 100);
@@ -104,33 +103,46 @@ function executeCSS(options){
 				When using this, the size is relative to the browser and not the 
 				size of the parent.  
 			*/
-			maxSize = "max-width: " + vwCalc + "vw";
-		}else{
-			maxSize = "max-width:" + options.largeWidth + "px;"
-		}
 
-		currWindow.onresize = function(){
-			window.alert('I resized');
-		}
-
-		chrome.tabs.insertCSS(null, {
-        code:
-	        ".grid-overlay-container {"
-			  	+ maxSize
-			+ "}"
-
-			+ ".grid-overlay-col {"
-				+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
-			+ "}"
-			
-
-			+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
-				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
+			chrome.tabs.insertCSS(null, {
+	        code:
+		        ".grid-overlay-container {"
+				  	+ "width:" + vwCalc + "vw;"
 				+ "}"
-			+ "}"
 
-    	});
+				+ ".grid-overlay-col {"
+					+ "width:" + (vwCalc / options.largeColumns) + "vw;"
+				+ "}"
+				
+
+				+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
+					+ ".grid-overlay-col {"
+					 	+ "width:" + ((vwCalc / options.smallColumns) * 2) + "vw;"
+					+ "}"
+				+ "}"
+
+	    	});
+		}else{
+			
+			chrome.tabs.insertCSS(null, {
+	        code:
+		        ".grid-overlay-container {"
+				  	+ "max-width:" + options.largeWidth + "px;"
+				+ "}"
+
+				+ ".grid-overlay-col {"
+					+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
+				+ "}"
+				
+
+				+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
+					+ ".grid-overlay-col {"
+					 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
+					+ "}"
+				+ "}"
+
+	    	});
+		}
 
 	})
 
