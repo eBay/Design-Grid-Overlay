@@ -104,7 +104,7 @@ function executeCSS(options){
 				When using this, the size is relative to the browser and not the 
 				size of the parent.  
 			*/
-			maxSize = "width: " + vwCalc + "vmin";
+			maxSize = "max-width: " + vwCalc + "vw";
 		}else{
 			maxSize = "max-width:" + options.largeWidth + "px;"
 		}
