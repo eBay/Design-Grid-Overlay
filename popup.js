@@ -92,57 +92,41 @@ function executeCSS(options){
     	var units = checkVWBox(options, vwCalc);
 
 		if(document.getElementById('viewports').checked){
-			/*
-				Need to figure out this calc function
-				The viewport changes when the browser is resized 
-				so I need to be able to recalculate the view port vidth 
-				when resizing occurs.
-				??????????
-
-
-				When using this, the size is relative to the browser and not the 
-				size of the parent.  
-			*/
 
 			chrome.tabs.insertCSS(null, {
-	        code:
-		        ".grid-overlay-container {"
-				  	+ "width:" + vwCalc + "vw;"
-				+ "}"
-
-				+ ".grid-overlay-col {"
-					+ "width:" + (vwCalc / options.largeColumns) + "vw;"
-				+ "}"
-				
-
-				+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
-					+ ".grid-overlay-col {"
-					 	+ "width:" + ((vwCalc / options.smallColumns) * 2) + "vw;"
+				code:
+					".cb-grid-lines {"
+  						+ "width:100vw" 
 					+ "}"
-				+ "}"
-
-	    	});
+			})
 		}else{
-			
 			chrome.tabs.insertCSS(null, {
-	        code:
-		        ".grid-overlay-container {"
-				  	+ "max-width:" + options.largeWidth + "px;"
-				+ "}"
-
-				+ ".grid-overlay-col {"
-					+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
-				+ "}"
-				
-
-				+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
-					+ ".grid-overlay-col {"
-					 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
+				code:
+					".cb-grid-lines {"
+  						+ "width:100%" 
 					+ "}"
-				+ "}"
-
-	    	});
+			})
 		}
+
+
+		chrome.tabs.insertCSS(null, {
+        code:
+	        ".grid-overlay-container {"
+			  	+ "max-width:" + options.largeWidth + "px;"
+			+ "}"
+
+			+ ".grid-overlay-col {"
+				+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
+			+ "}"
+			
+
+			+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
+				+ ".grid-overlay-col {"
+				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
+				+ "}"
+			+ "}"
+
+    	});
 
 	})
 
