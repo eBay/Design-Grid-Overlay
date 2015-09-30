@@ -9,7 +9,8 @@ function init(){
 	*/
 	chrome.storage.sync.get(["largeWidth", "largeColumns", 
 									 "smallColumns", "vwUnits", 
-									 "smallWidth", "gutters"], 
+									 "smallWidth", "gutters", 
+									 "outterGutters"], 
 		function(items){
 
 			var largeWidth = items.largeWidth || 960;
@@ -17,43 +18,28 @@ function init(){
 			var largeColumns = items.largeColumns || 16;
 			var smallColumns = items.smallColumns || 8;
 			var gutters = items.gutters || 16;
+			var outterGutters = items.outterGutters || 16;
 
 			if(items.vwUnits){
 				document.getElementById('viewports').checked = true;
 			}
 
-			document.getElementById("largeWidth").value = largeWidth;
-			document.getElementById("smallWidth").value = smallWidth;
-			document.getElementById("largeColumns").value = largeColumns;
-			document.getElementById("smallColumns").value = smallColumns;
+			document.getElementById('largeWidth').value = largeWidth;
+			document.getElementById('smallWidth').value = smallWidth;
+			document.getElementById('largeColumns').value = largeColumns;
+			document.getElementById('smallColumns').value = smallColumns;
 			document.getElementById('gutters').value = gutters;
+			document.getElementById('outterGutters').value = outterGutters;
 	});
-
-
-
-	chrome.runtime.onMessage.addListener(function requested(request) {
-		window.alert('resize from popup');
-  			if (request.method === 'resize') {
-   			window.alert('resize from popup');
-  			}
-	});
-}
-
-
-function onResizeOfCurrWindow(){
-	window.alert('Called');
-	chrome.app.window.onBoundsChanged.addListener(function(){
-		window.alert('Resizd');
-	})
 }
 
 
 function addGrid(){
     
-    var settings = saveCurrentSettings();
+   var settings = saveCurrentSettings();
 
     
-    executeCSS(settings);
+   executeCSS(settings);
 
 	//Need to fix this 
 	chrome.tabs.insertCSS({ 
@@ -81,15 +67,8 @@ function removeGrid(){
 
 
 function executeCSS(options){
-	var columns = document.getElementById("largeColumns").value;
-	var lgWidth = document.getElementById("largeWidth").value;
-	var smWidth = document.getElementById("smallWidth").value;
-	var gutters = document.getElementById('gutters').value;
-	
-    chrome.windows.getCurrent(function(currWindow){
 
-    	var vwCalc = ((options.largeWidth / currWindow.width) * 100);
-    	var units = checkVWBox(options, vwCalc);
+    chrome.windows.getCurrent(function(currWindow){
 
 		if(document.getElementById('viewports').checked){
 
@@ -113,16 +92,21 @@ function executeCSS(options){
         code:
 	        ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
+			  	+ "padding:0px " + options.outterGutters + "px;"
 			+ "}"
 
 			+ ".grid-overlay-col {"
-				+ "width: calc(" + (100 / options.largeColumns) + "% - " + gutters + "px);"
+				+ "width: calc(" + (100 / options.largeColumns) + "% - " + (options.gutters - 1) + "px);"
+				+ "margin: 0 " +  (options.gutters / 2) + "px;"
 			+ "}"
 			
 
-			+ "@media (max-width:" + smWidth + "px) {" //This will be small -1 
+			+ "@media (max-width:" + options.smallWidth + "px) {" //This will be small -1 
 				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + gutters + "px);"
+				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + options.gutters + "px);"
+				+ "}"
+				+ ".grid-overlay-col:first-child{"
+ 					+ "margin-left: 8px;"
 				+ "}"
 			+ "}"
 
@@ -163,6 +147,7 @@ function saveCurrentSettings(){
    var vwChecked = document.getElementById('viewports').checked;
    var smallWidth = document.getElementById('smallWidth').value;
    var gutters = document.getElementById('gutters').value;
+   var outterGutters = document.getElementById('outterGutters').value;
 
    var options = {
       largeWidth: largeWidth,
@@ -170,7 +155,8 @@ function saveCurrentSettings(){
       largeColumns: largeColumns,
       smallColumns: smallColumns,
       vwUnits: vwChecked,
-      gutters: gutters
+      gutters: gutters,
+      outterGutters: outterGutters
    };
 
    chrome.storage.sync.set(options);

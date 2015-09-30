@@ -1,7 +1,6 @@
-
-
 .cb-grid-lines { 
   height: 100%;
+  width: 100%;
   top: 0;
   left: 0;
   position: fixed;
@@ -21,9 +20,17 @@
   background: rgba(99,99,99,0.2);
 }
 
+.grid-overlay-col:first-child{
+  margin-left: 0;
+}
+
+.grid-overlay-col:last-child{
+  margin-right: 0;
+}
+
 @media (min-width: 768px) {
   .grid-overlay-container {
-      padding: 0 8px;
+      padding: 0 16px;
   }
   .grid-overlay-col {
       margin: 0 8px;
