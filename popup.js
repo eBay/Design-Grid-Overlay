@@ -4,6 +4,9 @@ var gridIsDisplayed = false;
 
 function init(){
 
+	document.getElementById('removegrid').disabled = true;
+	document.getElementById('updategrid').disabled = true;
+
 	/*
 		Will load in saved content already in local storage
 	*/
@@ -35,10 +38,13 @@ function init(){
 
 
 function addGrid(){
+
+	document.getElementById('addGrid').disabled = true;
+	document.getElementById('removegrid').disabled = false;
+	document.getElementById('updategrid').disabled = false;
     
    var settings = saveCurrentSettings();
 
-    
    executeCSS(settings);
 
 	//Need to fix this 
@@ -62,6 +68,11 @@ function upDateGrid(){
 
 
 function removeGrid(){
+
+	document.getElementById('addGrid').disabled = false;
+	document.getElementById('removegrid').disabled = true;
+	document.getElementById('updategrid').disabled = true;
+
 	executeJS();
 }
 
@@ -122,22 +133,6 @@ function executeCSS(options){
 function executeJS(){
 	chrome.tabs.executeScript(null, {file: 'grid.js'}); 
 }
-
-/*
-	Need to fix, vw doesn't always work correctly
-*/
-function checkVWBox(options, vwCalc){
-	/*if(document.getElementById('viewports').checked){
-		//console.log(vwCalc / options.columns);
-		return "width:"+ (vwCalc / options.columns) + "vw;"
-	}else{
-		return "width: calc(" + (100 / options.columns) + "% - 16px);"
-	}*/
-
-
-	return "width: calc(" + (100 / options.columns) + "% - 16px);"
-}
-
 
 /*
 	Will save the data from form fields 
