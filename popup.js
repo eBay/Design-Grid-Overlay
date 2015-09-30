@@ -103,10 +103,13 @@ function executeCSS(options){
 
 			+ "@media (max-width:" + options.smallWidth + "px) {" //This will be small -1 
 				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + options.gutters + "px);"
+				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters - 2) + "px);"
 				+ "}"
-				+ ".grid-overlay-col:first-child{"
- 					+ "margin-left: 8px;"
+				+ ".grid-overlay-container {"
+					+ "padding:0px " + (options.outterGutters / 2) + "px;"
+				+ "}"
+				+ ".grid-overlay-col:nth-child(" + options.smallColumns + "){"
+ 					+ "margin-right: 0px;"
 				+ "}"
 			+ "}"
 
