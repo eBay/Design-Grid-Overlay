@@ -4,8 +4,8 @@ var gridIsDisplayed = false;
 
 function init(){
 
-	document.getElementById('removegrid').disabled = true;
-	document.getElementById('updategrid').disabled = true;
+	//document.getElementById('removegrid').disabled = true;
+	//document.getElementById('updategrid').disabled = true;
 
 	/*
 		Will load in saved content already in local storage
@@ -39,9 +39,9 @@ function init(){
 
 function addGrid(){
 
-	document.getElementById('addGrid').disabled = true;
-	document.getElementById('removegrid').disabled = false;
-	document.getElementById('updategrid').disabled = false;
+	//document.getElementById('addGrid').disabled = true;
+	//document.getElementById('removegrid').disabled = false;
+	//document.getElementById('updategrid').disabled = false;
     
    var settings = saveCurrentSettings();
 
@@ -69,9 +69,9 @@ function upDateGrid(){
 
 function removeGrid(){
 
-	document.getElementById('addGrid').disabled = false;
-	document.getElementById('removegrid').disabled = true;
-	document.getElementById('updategrid').disabled = true;
+	//document.getElementById('addGrid').disabled = false;
+	//document.getElementById('removegrid').disabled = true;
+	//document.getElementById('updategrid').disabled = true;
 
 	executeJS();
 }
