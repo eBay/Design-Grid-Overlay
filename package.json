@@ -1,0 +1,26 @@
+{
+  "name": "grid-overlay",
+  "version": "1.0.0",
+  "description": "Grid Overlay ============",
+  "main": "background.js",
+  "scripts": {
+    "test": "node_modules/.bin/phantomjs test/run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tonytopper/grid-overlay.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tonytopper/grid-overlay/issues"
+  },
+  "homepage": "https://github.com/tonytopper/grid-overlay",
+  "dependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "phantomjs": "^1.9.18",
+    "sinon": "^1.17.1",
+    "sinon-chrome": "^0.2.1"
+  }
+}

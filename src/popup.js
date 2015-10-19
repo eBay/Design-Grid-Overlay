@@ -49,7 +49,7 @@ function addGrid(){
 
 	//Need to fix this 
 	chrome.tabs.insertCSS({ 
-    	file: 'grid.css'
+    	file: 'src/grid.css'
     }, function() {
         executeJS();
     }); 
@@ -131,7 +131,7 @@ function executeCSS(options){
 }
 
 function executeJS(){
-	chrome.tabs.executeScript(null, {file: 'grid.js'}); 
+	chrome.tabs.executeScript(null, {file: 'src/grid.js'}); 
 }
 
 /*

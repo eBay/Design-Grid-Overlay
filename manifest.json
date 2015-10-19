@@ -3,20 +3,20 @@
   "name": "Grid Overlay",
   "description": "This extension creates an overlay for a grid system",
   "version": "0.1",
-  "icons": { "16": "icon16.png",
-           "48": "icon48.png",
-          "128": "icon128.png" },
+  "icons": { "16": "icons/icon16.png",
+           "48": "icons/icon48.png",
+          "128": "icons/icon128.png" },
   "browser_action": {
-    "default_icon": "icon32_off.png",
-    "default_popup": "popup.html"
+    "default_icon": "icons/icon32_off.png",
+    "default_popup": "src/popup.html"
   },
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["src/background.js"],
     "persistent": false
   },
   "content_scripts": [
     {
-      "js" : ["options.js"],
+      "js" : ["src/options.js"],
       "matches" : [
         "http://*/*", 
         "https://*/*"
