@@ -103,13 +103,10 @@ function executeCSS(options){
 		chrome.tabs.insertCSS(null, {
         code:"@media (max-width:" + options.smallWidth + "px) {" //This will be small -1 
 				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters - 2) + "px);"
+				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters) + "px);"
 				+ "}"
 				+ ".grid-overlay-container {"
-					+ "padding:0px " + (options.outterGutters / 2) + "px;"
-				+ "}"
-				+ ".grid-overlay-col:nth-child(" + options.smallColumns + "){"
- 					+ "margin-right: 0px;"
+					+ "padding:0px " + (options.outterGutters - (options.gutters)) + "px;"
 				+ "}"
 			+ "}"
 
@@ -148,7 +145,7 @@ function createOverlayContainer(options){
 function createGridOuterGreaterInner(options){
 	return  ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
-			  	+ "padding:0px " + calcContainerPadding(options) + "px;"
+			  	+ "padding:0px " + (options.outterGutters - (options.gutters / 2)) + "px;"
 			+ "}"
 
 			+ ".grid-overlay-col {"
@@ -160,7 +157,7 @@ function createGridOuterGreaterInner(options){
 function createGridInnerGreaterOutter(options){
 	return  ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
-			  	+ "padding:0px " + calcContainerPadding(options) + "px;"
+			  	+ "padding:0px " + (options.outterGutters - (options.gutters / 2)) + "px;"
 			+ "}"
 
 			+ ".grid-overlay-col {"
