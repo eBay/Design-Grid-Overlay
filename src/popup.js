@@ -81,38 +81,27 @@ function executeCSS(options){
 
     chrome.windows.getCurrent(function(currWindow){
 
-		if(document.getElementById('viewports').checked){
+	
+		var unitWidth = checkIfViewPortIsSelected(document.getElementById('viewports').checked);
 
+		chrome.tabs.insertCSS(null, {
+			code: createGridLinesCSS(unitWidth)			
+		})
+
+
+		if(options.gutters > options.outterGutters){
 			chrome.tabs.insertCSS(null, {
-				code:
-					".cb-grid-lines {"
-  						+ "width:100vw" 
-					+ "}"
+				code: createGridInnerGreaterOutter(options)			
 			})
+
 		}else{
 			chrome.tabs.insertCSS(null, {
-				code:
-					".cb-grid-lines {"
-  						+ "width:100%" 
-					+ "}"
+				code: createGridOuterGreaterInner(options)			
 			})
 		}
 
-
 		chrome.tabs.insertCSS(null, {
-        code:
-	        ".grid-overlay-container {"
-			  	+ "max-width:" + options.largeWidth + "px;"
-			  	+ "padding:0px " + options.outterGutters + "px;"
-			+ "}"
-
-			+ ".grid-overlay-col {"
-				+ "width: calc(" + (100 / options.largeColumns) + "% - " + (options.gutters - 1) + "px);"
-				+ "margin: 0 " +  (options.gutters / 2) + "px;"
-			+ "}"
-			
-
-			+ "@media (max-width:" + options.smallWidth + "px) {" //This will be small -1 
+        code:"@media (max-width:" + options.smallWidth + "px) {" //This will be small -1 
 				+ ".grid-overlay-col {"
 				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters - 2) + "px);"
 				+ "}"
@@ -127,6 +116,70 @@ function executeCSS(options){
     	});
 
 	})
+
+}
+
+
+/*
+	Tesable functions
+*/
+function checkIfViewPortIsSelected(viewPortSelected){
+	if(viewPortSelected){
+		return 'vw';
+	}else{
+		return '%';
+	}
+}
+
+function createGridLinesCSS(units){	
+	return ".cb-grid-lines {"
+					+ "width:100" + units 
+			+ "}"
+
+}
+
+function createOverlayContainer(options){
+	return ".grid-overlay-container {"
+			  	+ "max-width:" + options.largeWidth + "px;"
+			  	+ "padding:0px " + options.outterGutters + "px;"
+			+ "}"
+}
+
+function createGridOuterGreaterInner(options){
+	return  ".grid-overlay-container {"
+			  	+ "max-width:" + options.largeWidth + "px;"
+			  	+ "padding:0px " + calcContainerPadding(options) + "px;"
+			+ "}"
+
+			+ ".grid-overlay-col {"
+				+ "width: calc(" + calcColumnPercents(options) + "% - " + options.gutters + "px);"
+				+ "margin: 0 " +  (options.gutters / 2) + "px;"
+			+ "}"
+}
+
+function createGridInnerGreaterOutter(options){
+	return  ".grid-overlay-container {"
+			  	+ "max-width:" + options.largeWidth + "px;"
+			  	+ "padding:0px " + calcContainerPadding(options) + "px;"
+			+ "}"
+
+			+ ".grid-overlay-col {"
+				+ "width: calc(" + calcColumnPercents(options) + "% - " + options.gutters + "px);"
+				+ "margin: 0 " +  (options.gutters / 2) + "px;"
+			+ "}"
+}
+
+
+function calcContainerPadding(options){
+	return (options.outterGutters - (options.gutters / 2));
+}
+
+function calcColumnPercents(options){
+	return (100 / options.largeColumns);
+}
+
+
+function smallScreenGrid(){
 
 }
 

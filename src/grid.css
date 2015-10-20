@@ -20,13 +20,13 @@
   background: rgba(99,99,99,0.2);
 }
 
-.grid-overlay-col:first-child{
+/*.grid-overlay-col:first-child{
   margin-left: 0;
 }
 
 .grid-overlay-col:last-child{
   margin-right: 0;
-}
+}*/
 
 @media (min-width: 768px) {
   .grid-overlay-container {
@@ -45,7 +45,7 @@
   display: inline-block;
 }
 
-@media (min-width: 1282px) {
+/*@media (min-width: 1282px) {
     .grid-overlay-container:before {
       content: '';
       position: absolute;
@@ -65,10 +65,11 @@
       height: 100%;
       background: rgba(99,99,99,0.2);
     }
-}
+}*/
 
 .grid-overlay-row {
   pointer-events: none;
   height: 100%;
+  width: 100%;
 }
 
