@@ -10,7 +10,8 @@ function init(){
 	chrome.storage.sync.get(["largeWidth", "largeColumns", 
 									 "smallColumns", "vwUnits", 
 									 "smallWidth", "gutters", 
-									 "outterGutters"], 
+									 "outterGutters", "mobileInnerGutters",
+									 "mobileOutterGutters"], 
 		function(items){
 
 			var largeWidth = items.largeWidth || 960;
@@ -19,6 +20,8 @@ function init(){
 			var smallColumns = items.smallColumns || 8;
 			var gutters = items.gutters || 16;
 			var outterGutters = items.outterGutters || 16;
+			var mobileInnerGutters = items.mobileInnerGutters || 16;
+			var mobileOutterGutters = items.mobileOutterGutters || 8;
 
 			if(items.vwUnits){
 				document.getElementById('viewports').checked = true;
@@ -30,6 +33,8 @@ function init(){
 			document.getElementById('smallColumns').value = smallColumns;
 			document.getElementById('gutters').value = gutters;
 			document.getElementById('outterGutters').value = outterGutters;
+			document.getElementById('mobileInnerGutters').value = mobileInnerGutters;
+			document.getElementById('mobileOutterGutters').value = mobileOutterGutters;
 	});
 }
 
@@ -121,12 +126,14 @@ function createGridContainer(options){
 
 
 function createSmallContainer(options){
+	console.log(((options.mobileOutterGutters * 2) - (options.mobileInnerGutters)));
 	return "@media (max-width:" + options.smallWidth + "px) {" 
 				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters) + "px);"
+				 	+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + options.mobileInnerGutters + "px);"
+				 	+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
 				+ "}"
 				+ ".grid-overlay-container {"
-					+ "padding:0px " + (options.outterGutters - (options.gutters)) + "px;"
+					+ "padding:0px " + ((options.mobileOutterGutters) - (options.mobileInnerGutters / 2)) + "px;"
 				+ "}"
 			+ "}"
 }
@@ -151,6 +158,8 @@ function saveCurrentSettings(){
    var smallWidth = document.getElementById('smallWidth').value;
    var gutters = document.getElementById('gutters').value;
    var outterGutters = document.getElementById('outterGutters').value;
+   var mobileInnerGutters = document.getElementById('mobileInnerGutters').value;
+   var mobileOutterGutters = document.getElementById('mobileOutterGutters').value;
 
    var options = {
       largeWidth: largeWidth,
@@ -159,7 +168,9 @@ function saveCurrentSettings(){
       smallColumns: smallColumns,
       vwUnits: vwChecked,
       gutters: gutters,
-      outterGutters: outterGutters
+      outterGutters: outterGutters,
+      mobileInnerGutters: mobileInnerGutters,
+      mobileOutterGutters: mobileOutterGutters
    };
 
    chrome.storage.sync.set(options);
