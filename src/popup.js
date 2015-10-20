@@ -4,9 +4,6 @@ var gridIsDisplayed = false;
 
 function init(){
 
-	//document.getElementById('removegrid').disabled = true;
-	//document.getElementById('updategrid').disabled = true;
-
 	/*
 		Will load in saved content already in local storage
 	*/
@@ -38,11 +35,6 @@ function init(){
 
 
 function addGrid(){
-
-	//document.getElementById('addGrid').disabled = true;
-	//document.getElementById('removegrid').disabled = false;
-	//document.getElementById('updategrid').disabled = false;
-    
    var settings = saveCurrentSettings();
 
    executeCSS(settings);
@@ -69,10 +61,6 @@ function upDateGrid(){
 
 function removeGrid(){
 
-	//document.getElementById('addGrid').disabled = false;
-	//document.getElementById('removegrid').disabled = true;
-	//document.getElementById('updategrid').disabled = true;
-
 	executeJS();
 }
 
@@ -90,6 +78,7 @@ function executeCSS(options){
 
 
 		if(options.gutters > options.outterGutters){
+			//This needs some work
 			chrome.tabs.insertCSS(null, {
 				code: createGridInnerGreaterOutter(options)			
 			})
@@ -101,7 +90,7 @@ function executeCSS(options){
 		}
 
 		chrome.tabs.insertCSS(null, {
-        code:"@media (max-width:" + options.smallWidth + "px) {" //This will be small -1 
+        code:"@media (max-width:" + options.smallWidth + "px) {" 
 				+ ".grid-overlay-col {"
 				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters) + "px);"
 				+ "}"

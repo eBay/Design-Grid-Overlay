@@ -22,4 +22,28 @@ describe('popup page', function(){
 			done();
 		})
 	})
+
+})
+
+
+describe('popup JS', function(){
+
+	this.timeout(4000);
+
+	var FILENAME = 'src/popup.js';
+
+	it('Test if vw units', function(done){
+
+
+		
+		done();
+	})
+
+
+	it('Test if percentages', function(done){
+
+
+		done();
+	})
+
 })
