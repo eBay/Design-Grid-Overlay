@@ -76,30 +76,13 @@ function executeCSS(options){
 			code: createGridLinesCSS(unitWidth)			
 		})
 
-
-		if(options.gutters > options.outterGutters){
-			//This needs some work
-			chrome.tabs.insertCSS(null, {
-				code: createGridInnerGreaterOutter(options)			
-			})
-
-		}else{
-			chrome.tabs.insertCSS(null, {
-				code: createGridOuterGreaterInner(options)			
-			})
-		}
+		chrome.tabs.insertCSS(null, {
+			code: createGridContainer(options)			
+		})
 
 		chrome.tabs.insertCSS(null, {
-        code:"@media (max-width:" + options.smallWidth + "px) {" 
-				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters) + "px);"
-				+ "}"
-				+ ".grid-overlay-container {"
-					+ "padding:0px " + (options.outterGutters - (options.gutters)) + "px;"
-				+ "}"
-			+ "}"
-
-    	});
+        code: createSmallContainer(options)
+    	})
 
 	})
 
@@ -124,49 +107,32 @@ function createGridLinesCSS(units){
 
 }
 
-function createOverlayContainer(options){
-	return ".grid-overlay-container {"
-			  	+ "max-width:" + options.largeWidth + "px;"
-			  	+ "padding:0px " + options.outterGutters + "px;"
-			+ "}"
-}
-
-function createGridOuterGreaterInner(options){
+function createGridContainer(options){
 	return  ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
 			  	+ "padding:0px " + (options.outterGutters - (options.gutters / 2)) + "px;"
 			+ "}"
 
 			+ ".grid-overlay-col {"
-				+ "width: calc(" + calcColumnPercents(options) + "% - " + options.gutters + "px);"
-				+ "margin: 0 " +  (options.gutters / 2) + "px;"
-			+ "}"
-}
-
-function createGridInnerGreaterOutter(options){
-	return  ".grid-overlay-container {"
-			  	+ "max-width:" + options.largeWidth + "px;"
-			  	+ "padding:0px " + (options.outterGutters - (options.gutters / 2)) + "px;"
-			+ "}"
-
-			+ ".grid-overlay-col {"
-				+ "width: calc(" + calcColumnPercents(options) + "% - " + options.gutters + "px);"
+				+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + options.gutters + "px);"
 				+ "margin: 0 " +  (options.gutters / 2) + "px;"
 			+ "}"
 }
 
 
-function calcContainerPadding(options){
-	return (options.outterGutters - (options.gutters / 2));
+function createSmallContainer(options){
+	return "@media (max-width:" + options.smallWidth + "px) {" 
+				+ ".grid-overlay-col {"
+				 	+ "width: calc(" + (100 / options.smallColumns) + "% - " + (options.gutters) + "px);"
+				+ "}"
+				+ ".grid-overlay-container {"
+					+ "padding:0px " + (options.outterGutters - (options.gutters)) + "px;"
+				+ "}"
+			+ "}"
 }
 
-function calcColumnPercents(options){
-	return (100 / options.largeColumns);
-}
-
-
-function smallScreenGrid(){
-
+function calcColumnPercents(columns){
+	return (100 / columns);
 }
 
 function executeJS(){
