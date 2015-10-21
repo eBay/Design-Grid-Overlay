@@ -1,5 +1,5 @@
-Grid Overlay
-============
+Design Grid Overlay
+===================
 
 A Chrome extension to overlay a design grid on your web page; configurable to fit many design scenarios.
 
