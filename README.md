@@ -1,7 +1,7 @@
 Grid Overlay
 ============
 
-A Chrome extension to overlay a design grid on your web page. Configurable to fit many design scenarios.
+A Chrome extension to overlay a design grid on your web page; configurable to fit many design scenarios.
 
 ![Screen shot](https://raw.githubusercontent.com/eBay/Design-Grid-Overlay/master/screen_shot.png)
 
