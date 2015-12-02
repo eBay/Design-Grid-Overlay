@@ -127,7 +127,7 @@ function createGridContainer(options){
 
 function createSmallContainer(options){
 	console.log(((options.mobileOutterGutters * 2) - (options.mobileInnerGutters)));
-	return "@media (max-width:" + options.smallWidth + "px) {" 
+	return "@media (max-width:" + (options.smallWidth - 1) + "px) {" 
 				+ ".grid-overlay-col {"
 				 	+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + options.mobileInnerGutters + "px);"
 				 	+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
