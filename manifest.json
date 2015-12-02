@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Grid Overlay",
-  "description": "This extension creates an overlay for a grid system",
-  "version": "0.1",
+  "name": "Design Grid Overlay",
+  "description": "This extension creates an overlay for a design grid system.  It is configurable to fit many design scenarios",
+  "version": "0.2.0",
   "icons": { "16": "icons/icon16.png",
            "48": "icons/icon48.png",
           "128": "icons/icon128.png" },
