@@ -1,15 +1,23 @@
 <style>
+    label {
+        color: #555;
+        display: inline-block;
+        margin-bottom: 2px;
+        font-weight: 300;
+    }
+
     #gridsettings {
-        width: 200px;
+        width: 225px;
     }
     
     #gridsettings * {
         box-sizing: border-box;
     }
 
-    #gridsettings input {
+    #gridsettings input[type=number] {
         margin-bottom: 8px;
         border-radius: 3px;
+        color: rgb(85, 85, 85);
         border: 1px solid #d3d3d3;
         width: 100%;
         padding: 3px 0 3px 5px;
@@ -22,18 +30,26 @@
     }
     
     #gridsettings fieldset {
-        border: 1px solid #ddd;
-        padding: 8px;
+        border: 1px solid #ccc;
+        padding: 16px 16px 8px 16px;
+        border-radius: 2px;
     }
 
     #gridsettings .buttons input {
         width: 100%;
-        margin-bottom: 3px;
+        display: block;
+        font-size: 14px;
+        padding: 8px 0;
+        margin: 0 auto 8px;
         border-width: 1px;
         color: rgb(6, 84, 186);
         border-color: rgb(204,204,204);
+        border-style: solid;
         border-radius: 3px;
         background-color: rgb(255,255,255);
+        text-align: center;
+        cursor: pointer;
+        -webkit-appearance: button;
     }
     
     .gridsettings__columns div, .gridsettings__gutters div {
@@ -101,8 +117,8 @@
     <br>
 
     <div class="buttons">
-        <input type="button" id="addGrid" value="Show grid"><br>
-        <input type="button" id="removegrid" value="Hide grid"><br>
+        <input type="button" id="addGrid" value="Show grid">
+        <input type="button" id="removegrid" value="Hide grid">
         <input type="button" id="updategrid" value="Update grid">
         <input type="reset"/>
     </div>
