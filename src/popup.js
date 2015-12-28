@@ -1,9 +1,20 @@
 var chrome = chrome || {};
+var gridForm = document.getElementById('gridsettings');
+
 
 var gridIsDisplayed = false;
 
-function init(){
-
+function init(){    
+	var inputs = gridForm.getElementsByTagName('input');
+       
+    var len = inputs.length;
+    while (len--) {
+        console.log('Adding event to ', inputs[len]);
+        inputs[len].addEventListener("change", function() {
+            console.log('Event triggered.');
+            updateGrid();
+        });
+    }
 	/*
 		Will load in saved content already in local storage
 	*/
@@ -53,16 +64,13 @@ function addGrid(){
 }
 
 
-function upDateGrid(){
-	
-	var settings = saveCurrentSettings();
+function updateGrid(){
+    console.log("Updating grid.");
+    var settings = saveCurrentSettings();
 
-   removeGrid();
-   executeCSS(settings);
-
-   addGrid();
+    removeGrid();
+    addGrid();
 }
-
 
 function removeGrid(){
 
@@ -79,17 +87,17 @@ function executeCSS(options){
 
 		chrome.tabs.insertCSS(null, {
 			code: createGridLinesCSS(unitWidth)			
-		})
+		});
 
 		chrome.tabs.insertCSS(null, {
 			code: createGridContainer(options)			
-		})
+		});
 
 		chrome.tabs.insertCSS(null, {
         code: createSmallContainer(options)
-    	})
+    	});
 
-	})
+	});
 
 }
 
@@ -108,7 +116,7 @@ function checkIfViewPortIsSelected(viewPortSelected){
 function createGridLinesCSS(units){	
 	return ".cb-grid-lines {"
 					+ "width:100" + units 
-			+ "}"
+			+ "}";
 
 }
 
@@ -121,7 +129,7 @@ function createGridContainer(options){
 			+ ".grid-overlay-col {"
 				+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + options.gutters + "px);"
 				+ "margin: 0 " +  (options.gutters / 2) + "px;"
-			+ "}"
+			+ "}";
 }
 
 
@@ -135,7 +143,7 @@ function createSmallContainer(options){
 				+ ".grid-overlay-container {"
 					+ "padding:0px " + ((options.mobileOutterGutters) - (options.mobileInnerGutters / 2)) + "px;"
 				+ "}"
-			+ "}"
+			+ "}";
 }
 
 function calcColumnPercents(columns){
@@ -178,10 +186,9 @@ function saveCurrentSettings(){
    return options;
 }
 
-
 document.getElementById('addGrid').addEventListener('click', addGrid);
-document.getElementById('removegrid').addEventListener('click', removeGrid);
-document.getElementById('updategrid').addEventListener('click', upDateGrid);
+//document.getElementById('removegrid').addEventListener('click', removeGrid);
+document.getElementById('updategrid').addEventListener('click', updateGrid);
 
 
 init();

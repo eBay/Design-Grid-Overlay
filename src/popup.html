@@ -62,7 +62,14 @@
     }
 </style>
 <form id="gridsettings" name="gridsettings">
-
+    
+    <div class="buttons">
+        <input type="button" id="addGrid" value="Toggle grid">
+        <!--<input type="button" id="removegrid" value="Hide grid">-->
+        <input type="button" id="updategrid" value="Update grid">
+        <input type="reset"/>
+    </div>
+    
     <fieldset class="gridsettings__columns">
         <legend>Columns</legend>
         <div>
@@ -80,19 +87,19 @@
     <fieldset class="gridsettings__gutters">
         <legend>Gutters</legend>
         <div>
-            <label for="columns">Desktop Inner</label>
+            <label for="gutters">Desktop Inner</label>
             <input type="number" id="gutters" value="16">
         </div>
         <div>
-            <label type="number">Desktop Outter</label>
+            <label for="outterGutters">Desktop Outer</label>
             <input type="number" id="outterGutters" value="16">
         </div>
         <div>
-            <label type="number">Mobile Inner</label>
+            <label for="mobileInnerGutters">Mobile Inner</label>
             <input type="number" id="mobileInnerGutters" value="16">
         </div>
         <div>
-            <label type="number">Mobile Outter</label>
+            <label for="mobileOutterGutters">Mobile Outer</label>
             <input type="number" id="mobileOutterGutters" value="8">
         </div>
     </fieldset>
@@ -102,10 +109,10 @@
     <fieldset>
         <legend>Screen Sizes</legend>
 
-        <label>Max Layout Width</label>
+        <label for="largeWidth">Max Layout Width</label>
         <input type="number" id="largeWidth" value="960">
 
-        <label>Desktop to Mobile Breakpoint</label>
+        <label for="smallWidth">Desktop to Mobile Breakpoint</label>
         <input type="number" id="smallWidth" value="768">
     </fieldset>
 
@@ -115,13 +122,13 @@
     <input type="checkbox" id="viewports" > View Port (vw) <br>
 
     <br>
-
+    <!--
     <div class="buttons">
         <input type="button" id="addGrid" value="Show grid">
         <input type="button" id="removegrid" value="Hide grid">
         <input type="button" id="updategrid" value="Update grid">
         <input type="reset"/>
-    </div>
+    </div>-->
 </form>
 
 <script type="text/javascript" src="popup.js"></script>
