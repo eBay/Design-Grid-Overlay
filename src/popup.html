@@ -35,7 +35,8 @@
         border-radius: 2px;
     }
 
-    #gridsettings .buttons input {
+    input[type=button],
+    input[type=reset] {
         width: 100%;
         display: block;
         font-size: 14px;
@@ -52,6 +53,13 @@
         -webkit-appearance: button;
     }
     
+    input[type=reset] {
+        margin-top: 8px;
+        color: #555555;
+        border: 1px solid #999999;
+        background-color: rgba(240, 238, 236, 0.5);
+    }
+    
     .gridsettings__columns div, .gridsettings__gutters div {
         width: 50%;
         float: left;
@@ -63,11 +71,10 @@
 </style>
 <form id="gridsettings" name="gridsettings">
     
-    <div class="buttons">
+    <div>
         <input type="button" id="addGrid" value="Toggle grid">
         <!--<input type="button" id="removegrid" value="Hide grid">-->
         <input type="button" id="updategrid" value="Update grid">
-        <input type="reset"/>
     </div>
     
     <fieldset class="gridsettings__columns">
@@ -119,16 +126,11 @@
     <br>
 
     <!--<input type="checkbox" checked>Percentages (%) <br>-->
-    <input type="checkbox" id="viewports" > View Port (vw) <br>
+    <input type="checkbox" id="viewports"><label for="viewports">View Port units (vw)</label>
 
-    <br>
-    <!--
-    <div class="buttons">
-        <input type="button" id="addGrid" value="Show grid">
-        <input type="button" id="removegrid" value="Hide grid">
-        <input type="button" id="updategrid" value="Update grid">
-        <input type="reset"/>
-    </div>-->
+    <div>
+        <input type="reset" id="resetToDefaults" value="Reset to defaults">
+    </div>
 </form>
 
 <script type="text/javascript" src="popup.js"></script>

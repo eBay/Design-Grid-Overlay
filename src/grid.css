@@ -15,7 +15,6 @@
   box-sizing: border-box;
   height: 100%;
   margin: 0 auto;
-  /*padding: 0 4px;*/
   position: relative;
   background: rgba(99,99,99,0.2);
 }
@@ -27,15 +26,6 @@
 .grid-overlay-col:last-child{
   margin-right: 0;
 }*/
-
-@media (min-width: 768px) {
-  .grid-overlay-container {
-      padding: 0 16px;
-  }
-  .grid-overlay-col {
-      margin: 0 8px;
-  }
-}
 
 .grid-overlay-col {
   height: 100%;

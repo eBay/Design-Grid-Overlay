@@ -1,9 +1,6 @@
 var chrome = chrome || {};
 var gridForm = document.getElementById('gridsettings');
 
-
-var gridIsDisplayed = false;
-
 function init(){    
 	var inputs = gridForm.getElementsByTagName('input');
        
@@ -15,6 +12,7 @@ function init(){
             updateGrid();
         });
     }
+    
 	/*
 		Will load in saved content already in local storage
 	*/
@@ -189,7 +187,9 @@ function saveCurrentSettings(){
 document.getElementById('addGrid').addEventListener('click', addGrid);
 //document.getElementById('removegrid').addEventListener('click', removeGrid);
 document.getElementById('updategrid').addEventListener('click', updateGrid);
-
+gridForm.addEventListener('reset', function() {
+    setTimeout(updateGrid); //The update needs to happen after the reset so we need setTimeout
+});
 
 init();
 //onResizeOfCurrWindow();
