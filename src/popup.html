@@ -1,81 +1,20 @@
-<style>
-    label {
-        color: #555;
-        display: inline-block;
-        margin-bottom: 2px;
-        font-weight: 300;
-    }
-
-    #gridsettings {
-        width: 225px;
-    }
-    
-    #gridsettings * {
-        box-sizing: border-box;
-    }
-
-    #gridsettings input[type=number] {
-        margin-bottom: 8px;
-        border-radius: 3px;
-        color: rgb(85, 85, 85);
-        border: 1px solid #d3d3d3;
-        width: 100%;
-        padding: 3px 0 3px 5px;
-    }
-    
-    #gridsettings input:focus {
-        border-color: #0654BA;
-        
-        outline: 0 none;
-    }
-    
-    #gridsettings fieldset {
-        border: 1px solid #ccc;
-        padding: 16px 16px 8px 16px;
-        border-radius: 2px;
-    }
-
-    input[type=button],
-    input[type=reset] {
-        width: 100%;
-        display: block;
-        font-size: 14px;
-        padding: 8px 0;
-        margin: 0 auto 8px;
-        border-width: 1px;
-        color: rgb(6, 84, 186);
-        border-color: rgb(204,204,204);
-        border-style: solid;
-        border-radius: 3px;
-        background-color: rgb(255,255,255);
-        text-align: center;
-        cursor: pointer;
-        -webkit-appearance: button;
-    }
-    
-    input[type=reset] {
-        margin-top: 8px;
-        color: #555555;
-        border: 1px solid #999999;
-        background-color: rgba(240, 238, 236, 0.5);
-    }
-    
-    .gridsettings__columns div, .gridsettings__gutters div {
-        width: 50%;
-        float: left;
-    }
-    
-    .gridsettings__columns div:nth-child(even), .gridsettings__gutters div:nth-child(even) {
-        padding: 0 8px 0 0;
-    }
-</style>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="popup.css">
+    </head>
+    <body>
 <form id="gridsettings" name="gridsettings">
+    <div class="switch">
+        <label for="gridToggle">Grid Overlay</label>
+        <input id="gridToggle" type="checkbox" name="gridToggle" />
+        <span></span>
+    </div>
     
+    <!--
     <div>
-        <input type="button" id="addGrid" value="Toggle grid">
-        <!--<input type="button" id="removegrid" value="Hide grid">-->
         <input type="button" id="updategrid" value="Update grid">
     </div>
+    -->
     
     <fieldset class="gridsettings__columns">
         <legend>Columns</legend>
@@ -132,6 +71,7 @@
         <input type="reset" id="resetToDefaults" value="Reset to defaults">
     </div>
 </form>
-
 <script type="text/javascript" src="popup.js"></script>
 
+</body>
+</html>

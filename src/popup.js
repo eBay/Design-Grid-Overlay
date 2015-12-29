@@ -1,27 +1,39 @@
 var chrome = chrome || {};
 var gridForm = document.getElementById('gridsettings');
+var gridToggle = document.getElementById('gridToggle');
+
+//When the popup gets opened
+window.addEventListener('load', function() {
+    
+    //Tell me stuff about my tab
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      console.log(tabs[0]); //TODO: Use this to save the state of the grid for the current tab
+    });
+    
+    //Trigger a message that will tell me if the grid is on or off
+    chrome.tabs.executeScript(null, {file: 'src/gridStatus.js'});
+});
 
 function init(){    
 	var inputs = gridForm.getElementsByTagName('input');
        
     var len = inputs.length;
     while (len--) {
-        console.log('Adding event to ', inputs[len]);
-        inputs[len].addEventListener("change", function() {
-            console.log('Event triggered.');
-            updateGrid();
+        inputs[len].addEventListener("change", function(event) {
+            if (event.target.id !== 'gridToggle') updateGrid();
         });
     }
     
 	/*
 		Will load in saved content already in local storage
 	*/
+	//TODO: Make this scale better; lot of repetition going on here but no looping?
 	chrome.storage.sync.get(["largeWidth", "largeColumns", 
 									 "smallColumns", "vwUnits", 
 									 "smallWidth", "gutters", 
 									 "outterGutters", "mobileInnerGutters",
 									 "mobileOutterGutters"], 
-		function(items){
+		function(items) {
 
 			var largeWidth = items.largeWidth || 960;
 			var smallWidth = items.smallWidth || 768;
@@ -32,7 +44,7 @@ function init(){
 			var mobileInnerGutters = items.mobileInnerGutters || 16;
 			var mobileOutterGutters = items.mobileOutterGutters || 8;
 
-			if(items.vwUnits){
+			if (items.vwUnits) {
 				document.getElementById('viewports').checked = true;
 			}
 
@@ -47,32 +59,30 @@ function init(){
 	});
 }
 
-
-function addGrid(){
-   var settings = saveCurrentSettings();
-
-   executeCSS(settings);
-
-	//Need to fix this 
-	chrome.tabs.insertCSS({ 
-    	file: 'src/grid.css'
-    }, function() {
-        executeJS();
-    }); 
-}
-
-
-function updateGrid(){
-    console.log("Updating grid.");
+function toggleGrid() {
     var settings = saveCurrentSettings();
 
-    removeGrid();
-    addGrid();
+    executeCSS(settings);
+
+    chrome.tabs.insertCSS({ 
+        file: 'src/grid.css' //FIXME: http://stackoverflow.com/questions/18533820/how-do-i-remove-an-injected-css-file
+    }, function() {
+        chrome.tabs.executeScript(null, {file: 'src/grid.js'});
+    });
 }
 
-function removeGrid(){
+function updateGrid(){
+    removeGrid();
+    toggleGrid();
+}
 
-	executeJS();
+/**
+ * Unlike grid.js, this won't send a message with a status update
+ */
+function removeGrid(){
+    chrome.tabs.executeScript(null, {
+        code: 'document.body.removeChild(document.getElementsByClassName(\'cb-grid-lines\')[0]);'
+    });
 }
 
 
@@ -80,7 +90,6 @@ function executeCSS(options){
 
     chrome.windows.getCurrent(function(currWindow){
 
-	
 		var unitWidth = checkIfViewPortIsSelected(document.getElementById('viewports').checked);
 
 		chrome.tabs.insertCSS(null, {
@@ -92,7 +101,7 @@ function executeCSS(options){
 		});
 
 		chrome.tabs.insertCSS(null, {
-        code: createSmallContainer(options)
+            code: createSmallContainer(options)
     	});
 
 	});
@@ -113,7 +122,7 @@ function checkIfViewPortIsSelected(viewPortSelected){
 
 function createGridLinesCSS(units){	
 	return ".cb-grid-lines {"
-					+ "width:100" + units 
+					+ "width: 100" + units 
 			+ "}";
 
 }
@@ -148,10 +157,6 @@ function calcColumnPercents(columns){
 	return (100 / columns);
 }
 
-function executeJS(){
-	chrome.tabs.executeScript(null, {file: 'src/grid.js'}); 
-}
-
 /*
 	Will save the data from form fields 
 	into local storage
@@ -184,12 +189,22 @@ function saveCurrentSettings(){
    return options;
 }
 
-document.getElementById('addGrid').addEventListener('click', addGrid);
-//document.getElementById('removegrid').addEventListener('click', removeGrid);
-document.getElementById('updategrid').addEventListener('click', updateGrid);
+gridToggle.addEventListener('click', toggleGrid);
+
+//document.getElementById('updategrid').addEventListener('click', updateGrid);
 gridForm.addEventListener('reset', function() {
     setTimeout(updateGrid); //The update needs to happen after the reset so we need setTimeout
 });
 
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        //console.log(request);
+        if (request.status === 1 && gridToggle.checked === false) {
+            gridToggle.checked = true;
+        } else if (request.status === 0 && gridToggle.checked === true) {
+            gridToggle.checked = false;
+        }        
+    }
+);
+
 init();
-//onResizeOfCurrWindow();

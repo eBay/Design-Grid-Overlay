@@ -1,14 +1,13 @@
-var chrome = chrome || {};
+//var chrome = chrome || {}; //Don't think we need this
 
-if (document.getElementsByClassName('cb-grid-lines').length){
+if (document.getElementsByClassName('cb-grid-lines').length) {
     document.body.removeChild(document.getElementsByClassName('cb-grid-lines')[0]);
+    respond(0);
 } else {
-
-    chrome.storage.sync.get(["largeColumns"], function(item){
-        var numColumns = item.largeColumns || 16 ;       
-
-
-        var columnSelector = '.grid-overlay-container .row > .span1';
+     
+    chrome.storage.sync.get(["largeColumns"], function(item) {
+        respond(1);
+        var numColumns = item.largeColumns || 16;       
 
         var output = '<div class="cb-grid-lines"> \
           <div class="grid-overlay-container"> \
@@ -24,9 +23,14 @@ if (document.getElementsByClassName('cb-grid-lines').length){
 
         document.body.innerHTML += output;
 
+        //var columnSelector = '.grid-overlay-container .row > .span1';
         //var gridOverlay = document.querySelectorAll('.grid-overlay-container');
-        var columns = document.querySelectorAll(columnSelector);
-    
+        //var columns = document.querySelectorAll(columnSelector);
     });
 }
 
+function respond(gridStatus) {
+    chrome.runtime.sendMessage({status: gridStatus}, function(response) {
+      //console.log(response);
+    });
+}
