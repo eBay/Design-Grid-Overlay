@@ -22,6 +22,8 @@ function init(){
         inputs[len].addEventListener("change", function(event) {
             if (event.target.id !== 'gridToggle') updateGrid();
         });
+
+        console.log(inputs);
     }
     
 	/*
@@ -152,6 +154,7 @@ function createSmallContainer(options){
 				+ "}"
 				+ ".grid-overlay-container {"
 					+ "padding:0px " + ((options.mobileOutterGutters) - (options.mobileInnerGutters / 2)) + "px;"
+					+ "left:" + options.offsetX + "px;"
 				+ "}"
 			+ "}";
 }
