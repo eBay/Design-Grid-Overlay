@@ -32,7 +32,7 @@ function init(){
 									 "smallColumns", "vwUnits", 
 									 "smallWidth", "gutters", 
 									 "outterGutters", "mobileInnerGutters",
-									 "mobileOutterGutters"], 
+									 "mobileOutterGutters", "offsetX"], 
 		function(items) {
 
 			var largeWidth = items.largeWidth || 960;
@@ -43,6 +43,7 @@ function init(){
 			var outterGutters = items.outterGutters || 16;
 			var mobileInnerGutters = items.mobileInnerGutters || 16;
 			var mobileOutterGutters = items.mobileOutterGutters || 8;
+			var offsetX = items.offsetX || 0;
 
 			if (items.vwUnits) {
 				document.getElementById('viewports').checked = true;
@@ -56,6 +57,7 @@ function init(){
 			document.getElementById('outterGutters').value = outterGutters;
 			document.getElementById('mobileInnerGutters').value = mobileInnerGutters;
 			document.getElementById('mobileOutterGutters').value = mobileOutterGutters;
+			document.getElementById('offsetX').value = offsetX;
 	});
 }
 
@@ -131,6 +133,7 @@ function createGridContainer(options){
 	return  ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
 			  	+ "padding:0px " + (options.outterGutters - (options.gutters / 2)) + "px;"
+			  	+ "left:" + options.offsetX + "px;"
 			+ "}"
 
 			+ ".grid-overlay-col {"
@@ -171,6 +174,7 @@ function saveCurrentSettings(){
    var outterGutters = document.getElementById('outterGutters').value;
    var mobileInnerGutters = document.getElementById('mobileInnerGutters').value;
    var mobileOutterGutters = document.getElementById('mobileOutterGutters').value;
+   var offsetX = document.getElementById('offsetX').value;
 
    var options = {
       largeWidth: largeWidth,
@@ -181,7 +185,8 @@ function saveCurrentSettings(){
       gutters: gutters,
       outterGutters: outterGutters,
       mobileInnerGutters: mobileInnerGutters,
-      mobileOutterGutters: mobileOutterGutters
+      mobileOutterGutters: mobileOutterGutters,
+      offsetX: offsetX
    };
 
    chrome.storage.sync.set(options);
