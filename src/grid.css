@@ -6,7 +6,7 @@
   position: fixed;
   pointer-events: none;
   background: rgba(99,99,99,0.1);
-  z-index: 9999;
+  z-index: 16777271;
   margin: 0;
 }
 
