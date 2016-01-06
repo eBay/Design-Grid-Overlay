@@ -2,6 +2,13 @@ var chrome = chrome || {};
 var gridForm = document.getElementById('gridsettings');
 var gridToggle = document.getElementById('gridToggle');
 
+//Wana figure out a more dynamic way to do this 
+var options = ["largeWidth", "largeColumns", 
+					"smallColumns", "viewports", 
+					"smallWidth", "gutters", 
+					"outterGutters", "mobileInnerGutters",
+					"mobileOutterGutters", "offsetX"];
+
 //When the popup gets opened
 window.addEventListener('load', function() {
     
@@ -22,44 +29,21 @@ function init(){
         inputs[len].addEventListener("change", function(event) {
             if (event.target.id !== 'gridToggle') updateGrid();
         });
-
-        console.log(inputs);
     }
-    
+
 	/*
 		Will load in saved content already in local storage
 	*/
-	//TODO: Make this scale better; lot of repetition going on here but no looping?
-	chrome.storage.sync.get(["largeWidth", "largeColumns", 
-									 "smallColumns", "vwUnits", 
-									 "smallWidth", "gutters", 
-									 "outterGutters", "mobileInnerGutters",
-									 "mobileOutterGutters", "offsetX"], 
-		function(items) {
+	chrome.storage.sync.get(options, function(items) {
 
-			var largeWidth = items.largeWidth || 960;
-			var smallWidth = items.smallWidth || 768;
-			var largeColumns = items.largeColumns || 16;
-			var smallColumns = items.smallColumns || 8;
-			var gutters = items.gutters || 16;
-			var outterGutters = items.outterGutters || 16;
-			var mobileInnerGutters = items.mobileInnerGutters || 16;
-			var mobileOutterGutters = items.mobileOutterGutters || 8;
-			var offsetX = items.offsetX || 0;
+			options.forEach(function(option){
 
-			if (items.vwUnits) {
-				document.getElementById('viewports').checked = true;
-			}
+				if(inputs[option].type == "number")
+					inputs[option].value = items[option] || inputs[option].value
+				else if(inputs[option].type == "checkbox")
+					inputs[option].checked = items[option]
 
-			document.getElementById('largeWidth').value = largeWidth;
-			document.getElementById('smallWidth').value = smallWidth;
-			document.getElementById('largeColumns').value = largeColumns;
-			document.getElementById('smallColumns').value = smallColumns;
-			document.getElementById('gutters').value = gutters;
-			document.getElementById('outterGutters').value = outterGutters;
-			document.getElementById('mobileInnerGutters').value = mobileInnerGutters;
-			document.getElementById('mobileOutterGutters').value = mobileOutterGutters;
-			document.getElementById('offsetX').value = offsetX;
+			})
 	});
 }
 
@@ -94,7 +78,7 @@ function executeCSS(options){
 
     chrome.windows.getCurrent(function(currWindow){
 
-		var unitWidth = checkIfViewPortIsSelected(document.getElementById('viewports').checked);
+		var unitWidth = checkIfViewPortIsSelected(options['viewports']);
 
 		chrome.tabs.insertCSS(null, {
 			code: createGridLinesCSS(unitWidth)			
@@ -126,7 +110,7 @@ function checkIfViewPortIsSelected(viewPortSelected){
 
 function createGridLinesCSS(units){	
 	return ".cb-grid-lines {"
-					+ "width: 100" + units 
+				+ "width: 100" + units 
 			+ "}";
 
 }
@@ -168,33 +152,23 @@ function calcColumnPercents(columns){
 	into local storage
 */
 function saveCurrentSettings(){
-	var largeColumns = document.getElementById("largeColumns").value;
-	var smallColumns = document.getElementById("smallColumns").value;
-   var largeWidth = document.getElementById("largeWidth").value;
-   var vwChecked = document.getElementById('viewports').checked;
-   var smallWidth = document.getElementById('smallWidth').value;
-   var gutters = document.getElementById('gutters').value;
-   var outterGutters = document.getElementById('outterGutters').value;
-   var mobileInnerGutters = document.getElementById('mobileInnerGutters').value;
-   var mobileOutterGutters = document.getElementById('mobileOutterGutters').value;
-   var offsetX = document.getElementById('offsetX').value;
+ 
+   var inputs = gridForm.getElementsByTagName('input');
 
-   var options = {
-      largeWidth: largeWidth,
-      smallWidth: smallWidth,
-      largeColumns: largeColumns,
-      smallColumns: smallColumns,
-      vwUnits: vwChecked,
-      gutters: gutters,
-      outterGutters: outterGutters,
-      mobileInnerGutters: mobileInnerGutters,
-      mobileOutterGutters: mobileOutterGutters,
-      offsetX: offsetX
-   };
+   var settings = {};
 
-   chrome.storage.sync.set(options);
+   options.forEach(function(option){
 
-   return options;
+   	if(inputs[option].type == "number")
+			settings[option] = inputs[option].value;
+		else if(inputs[option].type == "checkbox")
+			settings[option] = inputs[option].checked || false;
+   	
+   })
+
+   chrome.storage.sync.set(settings);
+
+   return settings;
 }
 
 gridToggle.addEventListener('click', toggleGrid);
