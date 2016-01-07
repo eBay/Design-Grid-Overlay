@@ -8,6 +8,7 @@ var options = ["largeWidth", "largeColumns",
 					"smallWidth", "gutters", 
 					"outterGutters", "mobileInnerGutters",
 					"mobileOutterGutters", "offsetX"];
+					
 
 //When the popup gets opened
 window.addEventListener('load', function() {
