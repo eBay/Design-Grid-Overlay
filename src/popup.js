@@ -48,15 +48,10 @@ function init(){
 }
 
 function toggleGrid() {
-    var settings = saveCurrentSettings();
+   var settings = saveCurrentSettings();
 
-    executeCSS(settings);
-
-    chrome.tabs.insertCSS({ 
-        file: 'src/grid.css' //FIXME: http://stackoverflow.com/questions/18533820/how-do-i-remove-an-injected-css-file
-    }, function() {
-        chrome.tabs.executeScript(null, {file: 'src/grid.js'});
-    });
+   executeCSS(settings);
+   chrome.tabs.executeScript(null, {file: 'src/grid.js'});
 }
 
 function updateGrid(){
@@ -89,7 +84,7 @@ function executeCSS(options){
 		});
 
 		chrome.tabs.insertCSS(null, {
-            code: createSmallContainer(options)
+         code: createSmallContainer(options)
     	});
 
 	});
@@ -130,7 +125,6 @@ function createGridContainer(options){
 
 
 function createSmallContainer(options){
-	console.log(((options.mobileOutterGutters * 2) - (options.mobileInnerGutters)));
 	return "@media (max-width:" + (options.smallWidth - 1) + "px) {" 
 				+ ".grid-overlay-col {"
 				 	+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + options.mobileInnerGutters + "px);"
@@ -146,6 +140,7 @@ function createSmallContainer(options){
 function calcColumnPercents(columns){
 	return (100 / columns);
 }
+
 
 /*
 	Will save the data from form fields 

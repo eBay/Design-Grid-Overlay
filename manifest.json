@@ -16,12 +16,12 @@
   },
   "content_scripts": [
     {
-      "js" : ["src/options.js"],
+      "css" : ["src/grid.css"],
       "matches" : [
         "http://*/*", 
-        "https://*/*"
-      ],
-      "run_at" : "document_start"
+        "https://*/*",
+        "file://*/*"
+      ]
     }
   ],
   "permissions": [
@@ -29,6 +29,7 @@
     "http://*/*", 
     "https://*/*", 
     "file://*/*",
-    "storage"
+    "storage",
+    "activeTab"
   ]
 }
