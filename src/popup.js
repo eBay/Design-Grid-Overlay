@@ -168,7 +168,6 @@ function saveCurrentSettings(){
 
 gridToggle.addEventListener('click', toggleGrid);
 
-//document.getElementById('updategrid').addEventListener('click', updateGrid);
 gridForm.addEventListener('reset', function() {
     setTimeout(updateGrid); //The update needs to happen after the reset so we need setTimeout
 });
