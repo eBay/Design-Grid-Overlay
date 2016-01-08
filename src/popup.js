@@ -8,7 +8,7 @@ var options = ["largeWidth", "largeColumns",
 					"smallWidth", "gutters", 
 					"outterGutters", "mobileInnerGutters",
 					"mobileOutterGutters", "offsetX"];
-					
+
 
 //When the popup gets opened
 window.addEventListener('load', function() {
@@ -22,7 +22,7 @@ window.addEventListener('load', function() {
     chrome.tabs.executeScript(null, {file: 'src/gridStatus.js'});
 });
 
-function init(){    
+function init(){
 	var inputs = gridForm.getElementsByTagName('input');
        
     var len = inputs.length;

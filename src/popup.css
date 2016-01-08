@@ -133,3 +133,46 @@ input[type=reset] {
 .gridsettings__columns div:nth-child(even), .gridsettings__gutters div:nth-child(even) {
     padding: 0 8px 0 0;
 }
+
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.35);
+    bottom: 26px;
+    color: #333333;
+    content: attr(info);
+    left: 10%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 150px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #fff transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 21px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
+
+
+
+
+
+
+
+
+
+
