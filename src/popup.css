@@ -1,8 +1,8 @@
 label {
     color: #555;
-    display: inline-block;
+    /*display: inline-block;*/
     margin-bottom: 2px;
-    font-weight: 300;
+    /*font-weight: 300;*/
 }
 
 .switch {
