@@ -83,6 +83,7 @@ function updateGrid(){
 	 saveTabStates();
     removeGrid();
     toggleGrid();
+    
 }
 
 function setCurrentTabState(){
