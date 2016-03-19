@@ -83,9 +83,10 @@ function updateGrid(){
 	 saveTabStates();
     removeGrid();
     toggleGrid();
-    
+
 }
 
+//Will set the current state of tabs
 function setCurrentTabState(){
 	chrome.storage.sync.get(['currentTab', 'currentTabLabel'], function(items){
 		console.log(items);
