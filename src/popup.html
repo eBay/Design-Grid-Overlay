@@ -1,93 +1,135 @@
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="tab.css">
         <link rel="stylesheet" type="text/css" href="popup.css">
     </head>
     <body>
-<form id="gridsettings" name="gridsettings">
-    <div class="switch">
-        <label for="gridToggle">Grid Overlay</label>
-        <input id="gridToggle" type="checkbox" name="gridToggle" />
-        <span></span>
-    </div>
+         <div class="switch">
+                <label for="gridToggle">Grid Overlay</label>
+                <input id="gridToggle" type="checkbox" name="gridToggle" />
+                <span></span>
+            </div>
+        <div class="tabs">
+            <div role="tablist" id="tabContainer">
+                <div aria-controls="panel1" role="tab" tabindex="0" aria-selected="true" id="tab1" class="tabLabel">
+                    <span>Settings</span>
+                </div>
+                <div aria-controls="panel2" role="tab" tabindex="-1" aria-selected="false" id="tab2" class="tabLabel">
+                    <span>Report</span>
+                </div>
+                <div aria-controls="panel3" role="tab" tabindex="-1" aria-selected="false" id="tab3" class="tabLabel">
+                    <span>Advanced</span>
+                </div>
+            </div>
+            <div id="gridsettings" >
+                <div id="panel1" role="tabpanel" aria-hidden="false" aria-labelledby="tab1" class="tab">
+                    <form name="gridsettings">
+                        <fieldset class="gridsettings__columns">
+                            <legend>Columns</legend>
+                            <div>
+                                <label for="columns">Desktop</label>
+                                <input type="number" id="largeColumns" value="16">
+                            </div>
+                            <div>
+                                <label for="columns">Mobile</label>
+                                <input type="number" id="smallColumns" value="8">    
+                            </div>
+                        </fieldset>
+
+                        <br>
+
+                        <fieldset class="gridsettings__gutters">
+                            <legend>Gutters</legend>
+                            <div>
+                                <label for="gutters">Desktop Inner</label>
+                                <input type="number" id="gutters" value="16">
+                            </div>
+                            <div>
+                                <label for="outterGutters">Desktop Outer</label>
+                                <input type="number" id="outterGutters" value="16">
+                            </div>
+                            <div>
+                                <label for="mobileInnerGutters">Mobile Inner</label>
+                                <input type="number" id="mobileInnerGutters" value="16">
+                            </div>
+                            <div>
+                                <label for="mobileOutterGutters">Mobile Outer</label>
+                                <input type="number" id="mobileOutterGutters" value="8">
+                            </div>
+                        </fieldset>
+
+                        <br>
+
+                        <fieldset>
+                            <legend>Screen Sizes</legend>
+
+                            <label for="largeWidth">Max Layout Width</label>
+                            <input type="number" id="largeWidth" value="960">
+
+                            <label for="smallWidth">Desktop to Mobile Breakpoint</label>
+                            <input type="number" id="smallWidth" value="768">
+                        </fieldset>
+
+                        <br>
+
+                        <fieldset>
+                            <legend>Offset</legend>
+
+                            <div>
+                                <label for="offsetX">X</label>
+                                <input type="number" id="offsetX" value="0">
+                            </div>
+                        </fieldset>
+
+                        <br>
+
+                        <input type="checkbox" id="viewports">
+                        <label 
+                        info="Will center grid by using View Port units (vw), ignoring the scroll bar" 
+                        for="viewports"
+                        class="tooltip">
+                            Ignore scrollbar 
+                        </label>
+                        <div>
+                            <input type="reset" id="resetToDefaults" value="Reset to defaults">
+                        </div>
+
+                    </form>
+                </div>
+                <div id="panel2" role="tabpanel" aria-hidden="true" aria-labelledby="tab2" class="tab">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#Cols</th>
+                                <th>Width</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="panel3" role="tabpanel" aria-hidden="true" aria-labelledby="tab3" class="tab">
+                    <form name="gridsettings">
+                        <fieldset class="gridsettings__columns">
+                            <legend>Columns</legend>
+                            <div>
+                                <label for="color">Color</label>
+                                <input type="text" id="color" value="#f4ae01">
+                            </div>
+                        </fieldset>
+
+                        <div>
+                            <input type="reset" value="Reset to defaults">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     
-    <!--
-    <div>
-        <input type="button" id="updategrid" value="Update grid">
-    </div>
-    -->
-    
-    <fieldset class="gridsettings__columns">
-        <legend>Columns</legend>
-        <div>
-            <label for="columns">Desktop</label>
-            <input type="number" id="largeColumns" value="16">
-        </div>
-        <div>
-            <label for="columns">Mobile</label>
-            <input type="number" id="smallColumns" value="8">    
-        </div>
-    </fieldset>
+        <script type="text/javascript" src="jquery-2.2.2.min.js"></script>
+        <script type="text/javascript" src="options.js"></script>
+        <script type="text/javascript" src="popup.js"></script>
 
-    <br>
-
-    <fieldset class="gridsettings__gutters">
-        <legend>Gutters</legend>
-        <div>
-            <label for="gutters">Desktop Inner</label>
-            <input type="number" id="gutters" value="16">
-        </div>
-        <div>
-            <label for="outterGutters">Desktop Outer</label>
-            <input type="number" id="outterGutters" value="16">
-        </div>
-        <div>
-            <label for="mobileInnerGutters">Mobile Inner</label>
-            <input type="number" id="mobileInnerGutters" value="16">
-        </div>
-        <div>
-            <label for="mobileOutterGutters">Mobile Outer</label>
-            <input type="number" id="mobileOutterGutters" value="8">
-        </div>
-    </fieldset>
-
-    <br>
-
-    <fieldset>
-        <legend>Screen Sizes</legend>
-
-        <label for="largeWidth">Max Layout Width</label>
-        <input type="number" id="largeWidth" value="960">
-
-        <label for="smallWidth">Desktop to Mobile Breakpoint</label>
-        <input type="number" id="smallWidth" value="768">
-    </fieldset>
-
-    <br>
-
-    <fieldset>
-        <legend>Offset</legend>
-
-        <div>
-            <label for="offsetX">X</label>
-            <input type="number" id="offsetX" value="0">
-        </div>
-    </fieldset>
-
-    <br>
-
-    <input type="checkbox" id="viewports">
-    <label 
-    info="Will center grid by ignoring the scroll bar" 
-    for="viewports"
-    class="tooltip">
-        View Port units (vw)
-    </label>
-    <div>
-        <input type="reset" id="resetToDefaults" value="Reset to defaults">
-    </div>
-
-</form>
-<script type="text/javascript" src="popup.js"></script>
-
-</body>
+    </body>
 </html>

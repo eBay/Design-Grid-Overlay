@@ -21,7 +21,7 @@
 .grid-overlay-col {
   height: 100%;
   pointer-events: none;
-  background: rgba(244, 174, 1, 0.31);
+  opacity: 0.31; 
   margin: 0 8px;
   display: inline-block;
 }

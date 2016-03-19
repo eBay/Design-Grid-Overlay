@@ -1,3 +1,8 @@
+body {
+    width:250px;
+}
+
+
 label {
     color: #555;
     /*display: inline-block;*/
@@ -72,7 +77,7 @@ label {
 }
 
 #gridsettings {
-    width: 225px;
+    /*width: 225px;*/
 }
 
 #gridsettings * {
@@ -96,7 +101,7 @@ label {
 
 #gridsettings fieldset {
     border: 1px solid #ccc;
-    padding: 16px 16px 8px 16px;
+    /*padding: 16px 16px 8px 16px;*/
     border-radius: 2px;
 }
 
@@ -166,7 +171,52 @@ input[type=reset] {
     z-index: 99;
 }
 
+.tabs > div:last-child {
+    padding: 0;
+}
 
+.tabs div[role=tablist] {
+    margin-bottom: 16px;
+}
+
+.tabs div[role=tab] > span {
+    padding: .75rem 0 0.45rem;
+    font-weight: initial;
+    color: #999999;
+}
+
+
+.tabs div[role=tab]:focus {
+    outline: 0;
+    z-index: 10;
+    /*border: 1px solid rgba(6,84,186,.5);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;*/
+}
+
+
+table {
+    text-align:left;
+    font-size: 100%;
+    width:100%;
+}
+
+table tr {
+    border-bottom: 1px solid #DDDDDD !important; 
+    display: table;
+    width: 100%;
+}
+
+table td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+table th {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    font-weight: 400;
+}
 
 
 
