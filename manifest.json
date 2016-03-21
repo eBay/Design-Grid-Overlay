@@ -10,13 +10,9 @@
   "browser_action": {
     "default_popup": "src/popup.html"
   },
-  "background": {
-    "scripts": ["src/background.js"],
-    "persistent": false
-  },
   "content_scripts": [
     {
-      "css" : ["src/grid.css"],
+      "css" : ["src/css/grid.css"],
       "matches" : [
         "http://*/*", 
         "https://*/*",
