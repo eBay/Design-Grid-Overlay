@@ -25,7 +25,7 @@ var popup = (function(){
 	    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 	      console.log(tabs[0]); //TODO: Use this to save the state of the grid for the current tab
 
-	      currentChromeTab = tabs[0];
+	      currentChromeTab = tabs[0].id;
 	      tabController.setCurrentTabState();
 	    });
 	    
@@ -71,9 +71,12 @@ var popup = (function(){
 	}
 
 	var load = function(inputs){
-		console.log('Fell');
-		chrome.storage.sync.get(options, function(items) {
+		console.log(currentChromeTab);
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
 				console.log(items);
+
+				items = items[tabs[0].id.toString()];
 
 				options.forEach(function(option){
 
@@ -83,6 +86,8 @@ var popup = (function(){
 						inputs[option].checked = items[option]
 
 				})
+			});
+
 		});
 	}
 
@@ -101,7 +106,10 @@ var popup = (function(){
 	   })
 
 	   console.log(settings);
-	   chrome.storage.sync.set(settings);
+	   var data = {};
+	   data[currentChromeTab] = settings;
+	   console.log(data);
+	   chrome.storage.sync.set(data);
 
 	   return settings;
 	}
