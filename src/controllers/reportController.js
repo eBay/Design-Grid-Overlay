@@ -24,7 +24,6 @@ var reportController = (function(){
 	}
 
 	var calculateReport = function(){
-		console.log('Execute report');
 		chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
