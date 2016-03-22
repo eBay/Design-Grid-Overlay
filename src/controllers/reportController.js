@@ -3,7 +3,7 @@ var reportController = (function(){
 	chrome.runtime.onMessage.addListener(function(request) {
 	  if (request.method === 'resize') {
 	   	var values = request.colSizes.split(',');
-	   	reportController.createReport(values.length, values);
+	   	createReport(values.length, values);
 	  }
 	});
 
@@ -18,10 +18,13 @@ var reportController = (function(){
 			}
 		}
 
+		console.log(columns);
+
 		document.getElementById('report').innerHTML = output;
 	}
 
 	var calculateReport = function(){
+		console.log('Execute report');
 		chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 

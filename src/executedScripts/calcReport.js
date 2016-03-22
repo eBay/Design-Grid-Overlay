@@ -4,6 +4,7 @@ if (document.getElementsByClassName('cb-grid-lines').length) {
 
 function fireCalc(){
 	chrome.storage.sync.get(["smallColumns", "smallWidth", "largeColumns"], function(items){
+		console.log(items);
 		if(getWidth() <= parseInt(items["smallWidth"])){
 			calculateReport(parseInt(items["smallColumns"]));
 		}else{

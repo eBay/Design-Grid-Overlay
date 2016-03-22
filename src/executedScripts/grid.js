@@ -34,3 +34,7 @@ function respond(gridStatus) {
       //console.log(response);
     });
 }
+
+window.addEventListener("scroll", function(){
+    console.log('scroll');
+});

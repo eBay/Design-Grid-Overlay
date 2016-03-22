@@ -2,6 +2,19 @@ var chrome = chrome || {};
 var gridForm = document.getElementById('gridsettings');
 var gridToggle = document.getElementById('gridToggle');
 
+var setTabAction = function(tabOuter, tabInner, contentId) {
+	 $('#' + tabInner).bind("click", function (event) {
+	   $('.' + tabOuter + ' div[aria-selected=true]').attr("aria-selected","false");
+	   this.setAttribute("aria-selected", "true");
+	   $('.' + tabOuter).find("[aria-hidden=false]").attr("aria-hidden","true");
+	   $('#' + contentId).eq($(this).attr('tabindex')).attr("aria-hidden", "false");
+	 });
+};
+
+setTabAction('tabs', 'tab1', 'panel1');
+setTabAction('tabs', 'tab2', 'panel2');
+setTabAction('tabs', 'tab3', 'panel3');
+
 var options = ["largeWidth", 
                "largeColumns", 
 					"smallColumns", 
@@ -71,12 +84,11 @@ var popup = (function(){
 	}
 
 	var load = function(inputs){
-		console.log(currentChromeTab);
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
-				console.log(items);
+			chrome.storage.sync.get(options, function(items) {
+				
 
-				items = items[tabs[0].id.toString()];
+			   //items = items[tabs[0].id.toString()];
 
 				options.forEach(function(option){
 
@@ -105,11 +117,10 @@ var popup = (function(){
 	   	
 	   })
 
-	   console.log(settings);
-	   var data = {};
+	   /*var data = {};
 	   data[currentChromeTab] = settings;
-	   console.log(data);
-	   chrome.storage.sync.set(data);
+	   console.log(data);*/
+	   chrome.storage.sync.set(settings);
 
 	   return settings;
 	}

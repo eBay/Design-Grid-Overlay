@@ -76,7 +76,9 @@ var gridController = (function(){
 
 	var toggleGrid = function(options) {
 	   executeCSS(options);
-	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/grid.js'});
+	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/grid.js'}, function(result){
+	   	console.log(result);
+	   });
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
