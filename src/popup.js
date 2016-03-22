@@ -35,14 +35,16 @@ var popup = (function(){
 
 	chrome.runtime.onMessage.addListener(
 	    function(request, sender, sendResponse) {
-	        reportController.calculateReport();
+    		if(request.status){
+    			 reportController.calculateReport();
 
-	        if (request.status === 1 && gridToggle.checked === false) {
+    			 if (request.status === 1 && gridToggle.checked === false) {
 	            gridToggle.checked = true;
 	            //Need to send a message here to get new caluclation
-	        } else if (request.status === 0 && gridToggle.checked === true) {
-	            gridToggle.checked = false;
-	        }        
+		        } else if (request.status === 0 && gridToggle.checked === true) {
+		            gridToggle.checked = false;
+		        }
+    		}        
 	    }
 	);
 
