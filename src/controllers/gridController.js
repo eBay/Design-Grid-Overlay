@@ -80,9 +80,9 @@ var gridController = (function(){
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
-	var updateGrid = function(){
+	var updateGrid = function(options){
 	    removeGrid();
-	    toggleGrid();
+	    toggleGrid(options);
 	}
 
 	/**

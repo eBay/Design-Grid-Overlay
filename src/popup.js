@@ -16,13 +16,16 @@ var options = ["largeWidth",
 
 var popup = (function(){
 
+	var currentChromeTab = '';
 
-	//When the popup gets opened
+	//When the popup gets opene
 	window.addEventListener('load', function() {
 	    
 	    //Tell me stuff about my tab
 	    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 	      console.log(tabs[0]); //TODO: Use this to save the state of the grid for the current tab
+
+	      currentChromeTab = tabs[0];
 	      tabController.setCurrentTabState();
 	    });
 	    
@@ -49,7 +52,7 @@ var popup = (function(){
 
 	gridForm.addEventListener('reset', function() {
 		tabController.saveTabStates();
-	   setTimeout(gridController.updateGrid); 
+	   setTimeout(gridController.updateGrid(save())); 
 	});
 
 	var init = function(){
@@ -58,7 +61,7 @@ var popup = (function(){
 	   var len = inputs.length;
 	   while (len--) {
         inputs[len].addEventListener("change", function(event) {
-            if (event.target.id !== 'gridToggle') updateGrid();
+            if (event.target.id !== 'gridToggle') gridController.updateGrid(save());
         });
 	   }
 
@@ -66,7 +69,9 @@ var popup = (function(){
 	}
 
 	var load = function(inputs){
+		console.log('Fell');
 		chrome.storage.sync.get(options, function(items) {
+				console.log(items);
 
 				options.forEach(function(option){
 
