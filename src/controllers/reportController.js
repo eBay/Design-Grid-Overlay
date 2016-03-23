@@ -13,7 +13,7 @@ var reportController = (function(){
 		if(valuesArray){
 			for(var i = 0; i <= columns; i++){
 				if(valuesArray[i]){
-					output = output + '<tr><td style="width: 50%;">' + (i + 1) + '</td><td>' + valuesArray[i] + ' px</td></tr>';
+					output = output + '<tr><td style="width: 50%;">' + (i + 1) + '</td><td>' + valuesArray[i] + 'px</td></tr>';
 				}
 			}
 		}

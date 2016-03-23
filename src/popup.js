@@ -15,6 +15,13 @@ setTabAction('tabs', 'tab1', 'panel1');
 setTabAction('tabs', 'tab2', 'panel2');
 setTabAction('tabs', 'tab3', 'panel3');
 
+var git = document.getElementById('github-icon'); 
+git.addEventListener('click', function(e){
+  if(this.href!==undefined){
+    chrome.tabs.create({url:this.href})
+  }
+})
+
 var options = ["largeWidth", 
                "largeColumns", 
 					"smallColumns", 

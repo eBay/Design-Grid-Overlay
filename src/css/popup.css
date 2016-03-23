@@ -194,6 +194,19 @@ input[type=reset] {
     border-top-right-radius: 2px;*/
 }
 
+.reset {
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 16px);
+}
+
+#github-icon {
+    display: block;
+    text-align: center;
+    margin-top: 50%;
+    text-decoration: inherit;
+}
+
 
 table {
     text-align:left;
