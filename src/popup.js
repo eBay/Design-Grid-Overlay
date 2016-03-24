@@ -73,8 +73,11 @@ var popup = (function(){
 	});
 
 	gridForm.addEventListener('reset', function() {
-		tabController.saveTabStates();
-	   setTimeout(gridController.updateGrid(save())); 
+		setTimeout(function(){
+			var settings = save();
+			tabController.saveTabStates();
+		   gridController.updateGrid(settings);
+		})
 	});
 
 	
@@ -143,7 +146,8 @@ var popup = (function(){
 	   var settings = {};
 
 	   options.forEach(function(option){
-
+	   	console.log(option);
+	   	console.log(inputs[option].value);
 	   	if(inputs[option].type == "number" || inputs[option].type == "text")
 				settings[option] = inputs[option].value;
 			else if(inputs[option].type == "checkbox")
@@ -154,6 +158,7 @@ var popup = (function(){
 	   /*var data = {};
 	   data[currentChromeTab] = settings;
 	   console.log(data);*/
+	   console.log(settings);
 	   chrome.storage.sync.set(settings);
 
 	   return settings;
