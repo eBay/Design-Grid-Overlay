@@ -2,38 +2,46 @@ var tabController = (function(){
 
 	document.getElementById('tabContainer').addEventListener('click', saveTabStates);
 
-	function saveTabStates(){
+	function saveTabStates(tabId){
 		setTimeout(function(){
-			var tabs = document.querySelector("div[aria-hidden='false']");
-			var tabLabel = document.querySelector("div[aria-selected='true']");
-			console.log(tabs.id);
-			console.log(tabLabel.id);
-			chrome.storage.sync.set({'currentTab' : tabs.id, 'currentTabLabel' : tabLabel.id});
+				console.log(tabId);
+				var tabs = document.querySelector("div[aria-hidden='false']");
+				var tabLabel = document.querySelector("div[aria-selected='true']");
+				var data = {};
+	   		data[tabId.toString()] = {'currentTab' : tabs.id, 'currentTabLabel' : tabLabel.id};
+	   		console.log(data);
+				chrome.storage.sync.set(data);
 		}, 0);
 	}
 
 
-	function setCurrentTabState(){
-		chrome.storage.sync.get(['currentTab', 'currentTabLabel'], function(items){
+	function setCurrentTabState(tabId){
+		chrome.storage.sync.get(tabId.toString(), function(items){
+			console.log(tabId);
+			items = items[tabId.toString()];
+
 			console.log(items);
 
-			var activeTab = document.getElementById(items["currentTab"]);
-			var activeLabel = document.getElementById(items["currentTabLabel"]);
+			if(items["currentTab"] &&  items["currentTabLabel"]){
 
-			var tabs = document.getElementsByClassName('tab');
-			var tabLabels = document.getElementsByClassName('tabLabel');
+				var activeTab = document.getElementById(items["currentTab"]);
+				var activeLabel = document.getElementById(items["currentTabLabel"]);
 
-			console.log(tabs);
-			console.log(tabLabels);
-			
-			for(var i = 0; i < tabs.length; i++){
-				tabs[i].setAttribute('aria-hidden', true);
-				tabLabels[i].setAttribute('aria-selected', false);
+				var tabs = document.getElementsByClassName('tab');
+				var tabLabels = document.getElementsByClassName('tabLabel');
+
+				console.log(tabs);
+				console.log(tabLabels);
+				
+				for(var i = 0; i < tabs.length; i++){
+					tabs[i].setAttribute('aria-hidden', true);
+					tabLabels[i].setAttribute('aria-selected', false);
+				}
+
+				
+				activeTab.setAttribute('aria-hidden', false);
+				activeLabel.setAttribute('aria-selected', true);
 			}
-
-			
-			activeTab.setAttribute('aria-hidden', false);
-			activeLabel.setAttribute('aria-selected', true);
 
 		});
 	}

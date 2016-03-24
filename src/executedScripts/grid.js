@@ -4,7 +4,7 @@ if (document.getElementsByClassName('cb-grid-lines').length) {
     document.body.removeChild(document.getElementsByClassName('cb-grid-lines')[0]);
     respond(0);
 } else {
-     
+    console.log(chrome.tabs);
     chrome.storage.sync.get(["largeColumns"], function(item) {
         respond(1);
         var numColumns = item.largeColumns || 16;       

@@ -74,15 +74,37 @@ var gridController = (function(){
 
 	}
 
+	var respond =  function(gridStatus) {
+    chrome.runtime.sendMessage({status: gridStatus}, function(response) {
+      //console.log(response);
+    });
+	}
+
+
+	var createGrid = function(){
+		respond(1);
+		 chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+	      chrome.tabs.sendMessage(tabs[0].id, {method: "create", tabId: tabs[0].id}, function(response) {
+            console.log('Fired grid create');
+        	});
+	    });
+	}
+
 	var toggleGrid = function(options) {
+		var gridToggle = document.getElementById('gridToggle');
+
+		if(gridToggle.checked){
+			removeGrid();
+			createGrid();
+		}else{
+			removeGrid();
+		}
+	
 	   executeCSS(options);
-	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/grid.js'});
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
-	//This needs to be fixed, theres a race condition issue 
 	var updateGrid = function(options){
-	    removeGrid();
 	    toggleGrid(options);
 	}
 
@@ -90,8 +112,11 @@ var gridController = (function(){
 	 * Unlike grid.js, this won't send a message with a status update
 	 */
 	var removeGrid = function(){
-	   chrome.tabs.executeScript(null, {
-	       code: 'document.body.removeChild(document.getElementsByClassName(\'cb-grid-lines\')[0]);'
+		respond(0);
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+	      chrome.tabs.sendMessage(tabs[0].id, {method: "destroy", tabId: tabs[0].id}, function(response) {
+            console.log('Fired grid destroy');
+        	});
 	   });
 	}
 

@@ -3,12 +3,12 @@ var gridForm = document.getElementById('gridsettings');
 var gridToggle = document.getElementById('gridToggle');
 
 var setTabAction = function(tabOuter, tabInner, contentId) {
-	 $('#' + tabInner).bind("click", function (event) {
+	$('#' + tabInner).bind("click", function (event) {
 	   $('.' + tabOuter + ' div[aria-selected=true]').attr("aria-selected","false");
 	   this.setAttribute("aria-selected", "true");
 	   $('.' + tabOuter).find("[aria-hidden=false]").attr("aria-hidden","true");
 	   $('#' + contentId).eq($(this).attr('tabindex')).attr("aria-hidden", "false");
-	 });
+	});
 };
 
 setTabAction('tabs', 'tab1', 'panel1');
@@ -33,8 +33,11 @@ var options = ["largeWidth",
 					"mobileOutterGutters", 
 					"offsetX",
 					"color"];
+var portsByTabId = {};
+
 
 var popup = (function(){
+
 
 	var currentChromeTab = '';
 
@@ -46,7 +49,12 @@ var popup = (function(){
 	      console.log(tabs[0]); //TODO: Use this to save the state of the grid for the current tab
 
 	      currentChromeTab = tabs[0].id;
-	      tabController.setCurrentTabState();
+
+	      document.getElementById('tabContainer').addEventListener('click', function(){
+	      	tabController.saveTabStates(tabs[0].id)
+	      });
+	      
+	      tabController.setCurrentTabState(tabs[0].id);
 	    });
 	    
 	    //Trigger a message that will tell me if the grid is on or off
@@ -59,24 +67,29 @@ var popup = (function(){
     			 reportController.calculateReport();
 
     			 if (request.status === 1 && gridToggle.checked === false) {
+    			 	console.log('toggle on');
 	            gridToggle.checked = true;
 	            //Need to send a message here to get new caluclation
 		        } else if (request.status === 0 && gridToggle.checked === true) {
+		        		console.log('toggle off');
 		            gridToggle.checked = false;
 		        }
     		}        
 	    }
 	);
 
+	//Need to fix this 
 	gridToggle.addEventListener('click', function(){
-		gridController.toggleGrid(save());
+		gridController.updateGrid(save());
 	});
 
 	gridForm.addEventListener('reset', function() {
 		setTimeout(function(){
-			var settings = save();
-			tabController.saveTabStates();
-		   gridController.updateGrid(settings);
+			chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+				var settings = save();
+				tabController.saveTabStates(tabs[0].id);
+			   gridController.updateGrid(settings);
+			});
 		})
 	});
 
@@ -122,10 +135,10 @@ var popup = (function(){
 
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			chrome.storage.sync.get(options, function(items) {
+			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
 				
 
-			   //items = items[tabs[0].id.toString()];
+			   items = items[tabs[0].id.toString()];
 
 				options.forEach(function(option){
 
@@ -146,20 +159,17 @@ var popup = (function(){
 	   var settings = {};
 
 	   options.forEach(function(option){
-	   	console.log(option);
-	   	console.log(inputs[option].value);
 	   	if(inputs[option].type == "number" || inputs[option].type == "text")
 				settings[option] = inputs[option].value;
 			else if(inputs[option].type == "checkbox")
 				settings[option] = inputs[option].checked || false;
-	   	
 	   })
 
-	   /*var data = {};
+	   var data = {};
 	   data[currentChromeTab] = settings;
-	   console.log(data);*/
+	   console.log(data);
 	   console.log(settings);
-	   chrome.storage.sync.set(settings);
+	   chrome.storage.sync.set(data);
 
 	   return settings;
 	}
