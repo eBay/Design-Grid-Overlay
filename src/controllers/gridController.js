@@ -80,6 +80,7 @@ var gridController = (function(){
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
+	//This needs to be fixed, theres a race condition issue 
 	var updateGrid = function(options){
 	    removeGrid();
 	    toggleGrid(options);
@@ -89,9 +90,9 @@ var gridController = (function(){
 	 * Unlike grid.js, this won't send a message with a status update
 	 */
 	var removeGrid = function(){
-	    chrome.tabs.executeScript(null, {
-	        code: 'document.body.removeChild(document.getElementsByClassName(\'cb-grid-lines\')[0]);'
-	    });
+	   chrome.tabs.executeScript(null, {
+	       code: 'document.body.removeChild(document.getElementsByClassName(\'cb-grid-lines\')[0]);'
+	   });
 	}
 
 	return {

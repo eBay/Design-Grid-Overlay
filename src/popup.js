@@ -77,14 +77,41 @@ var popup = (function(){
 	   setTimeout(gridController.updateGrid(save())); 
 	});
 
+	
+	var throttle = function(fn, threshhold, scope) {
+		threshhold || (threshhold = 250);
+		var last,
+		   deferTimer;
+		return function () {
+		 var context = scope || this;
+
+		 var now = +new Date,
+		     args = arguments;
+		 if (last && now < last + threshhold) {
+		   // hold on to it
+		   clearTimeout(deferTimer);
+		   deferTimer = setTimeout(function () {
+		     last = now;
+		     fn.apply(context, args);
+		   }, threshhold);
+		 } else {
+		   last = now;
+		   fn.apply(context, args);
+		 }
+		};
+	}	
+
 	var init = function(){
 		var inputs = gridForm.getElementsByTagName('input');
 	   console.log(inputs);
 	   var len = inputs.length;
 	   while (len--) {
-        inputs[len].addEventListener("change", function(event) {
-            if (event.target.id !== 'gridToggle') gridController.updateGrid(save());
-        });
+
+	   	inputs[len].addEventListener("change", throttle(function (event) {
+			   if (event.target.id !== 'gridToggle'){ 
+            	gridController.updateGrid(save());
+            }
+			}, 1000));
 	   }
 
 	   load(inputs);
