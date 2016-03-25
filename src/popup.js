@@ -39,13 +39,10 @@ var popup = (function(){
 
 	var currentChromeTab = '';
 
-	//When the popup gets opene
 	window.addEventListener('load', function() {
 	    
-	    //Tell me stuff about my tab
-	    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-	      console.log(tabs[0]); //TODO: Use this to save the state of the grid for the current tab
-
+	   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+	  
 	      currentChromeTab = tabs[0].id;
 
 	      document.getElementById('tabContainer').addEventListener('click', function(){
@@ -53,10 +50,10 @@ var popup = (function(){
 	      });
 	      
 	      tabController.getCurrentTabState(tabs[0].id);
-	    });
+	   });
 	    
-	    //Trigger a message that will tell me if the grid is on or off
-	    chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
+	   //Trigger a message that will tell me if the grid is on or off
+	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
 	});
 
 	chrome.runtime.onMessage.addListener(
@@ -65,12 +62,9 @@ var popup = (function(){
     			 reportController.calculateReport(currentChromeTab);
 
     			 if (request.status === 1 && gridToggle.checked === false) {
-    			 	console.log('toggle on');
 	            gridToggle.checked = true;
-	            //Need to send a message here to get new caluclation
 		        } else if (request.status === 0 && gridToggle.checked === true) {
-		        		console.log('toggle off');
-		            gridToggle.checked = false;
+		         gridToggle.checked = false;
 		        }
     		}        
 	    }
@@ -83,15 +77,9 @@ var popup = (function(){
 
 	gridForm.addEventListener('reset', function() {
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-				var settings = save();
-
-				gridController.updateGrid(settings);
-				reportController.calculateReport(tabs[0].id);
-
-				//Do think I need this here
-				setTimeout(function(){
-					//tabController.saveTabStates(tabs[0].id);
-				}, 0);
+			var settings = save();
+			gridController.updateGrid(settings);
+			reportController.calculateReport(tabs[0].id);
 		});
 	});
 
@@ -121,13 +109,11 @@ var popup = (function(){
 
 	var init = function(){
 		var inputs = gridForm.getElementsByTagName('input');
-	   console.log(inputs);
 	   var len = inputs.length;
 	   while (len--) {
 
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){ 
-			   	console.log('fired change');
 			   	reportController.calculateReport();
             	gridController.updateGrid(save());
             }
@@ -140,9 +126,6 @@ var popup = (function(){
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
-
-				console.log(items);
-				
 
 			   items = items[tabs[0].id.toString()];
 
@@ -173,8 +156,6 @@ var popup = (function(){
 
 	   var data = {};
 	   data[currentChromeTab] = settings;
-	   console.log(data);
-	   console.log(settings);
 	   chrome.storage.sync.set(data);
 
 	   return settings;

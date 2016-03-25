@@ -38,9 +38,6 @@ var gridController = (function(){
 				 	+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
 				 	+ "background: " +  options.color + ";"
 				+ "}"
-				//+ ".grid-overlay-col:nth-of-type(1n+" + (options.smallColumns + 1) + "){"
-					//+ "visibility: hidden;"	
-				//+ "}"
 				+ ".grid-overlay-container {"
 					+ "padding:0px " + ((options.mobileOutterGutters) - (options.mobileInnerGutters / 2)) + "px;"
 					+ "left:" + options.offsetX + "px;"
@@ -76,18 +73,14 @@ var gridController = (function(){
 	}
 
 	var respond =  function(gridStatus) {
-    chrome.runtime.sendMessage({status: gridStatus}, function(response) {
-      //console.log(response);
-    });
+    chrome.runtime.sendMessage({status: gridStatus});
 	}
 
 
 	var createGrid = function(){
 		respond(1);
 		 chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-	      chrome.tabs.sendMessage(tabs[0].id, {method: "create", tabId: tabs[0].id}, function(response) {
-            console.log('Fired grid create');
-        	});
+	      chrome.tabs.sendMessage(tabs[0].id, {method: "create", tabId: tabs[0].id});
 	    });
 	}
 
@@ -105,18 +98,14 @@ var gridController = (function(){
 	}
 
 	var updateGrid = function(options){
-	    toggleGrid(options);
+	   toggleGrid(options);
 	}
 
-	/**
-	 * Unlike grid.js, this won't send a message with a status update
-	 */
+	
 	var removeGrid = function(){
 		respond(0);
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-	      chrome.tabs.sendMessage(tabs[0].id, {method: "destroy", tabId: tabs[0].id}, function(response) {
-            console.log('Fired grid destroy');
-        	});
+	      chrome.tabs.sendMessage(tabs[0].id, {method: "destroy", tabId: tabs[0].id});
 	   });
 	}
 

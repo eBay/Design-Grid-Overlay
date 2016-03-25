@@ -2,7 +2,6 @@ var reportController = (function(){
 
 	chrome.runtime.onMessage.addListener(function(request) {
 	  if (request.method === 'resize') {
-	  		console.log(request);
 	   	var values = request.colSizes.split(',');
 	   	createReport(values.length, values);
 	  }
@@ -19,20 +18,13 @@ var reportController = (function(){
 			}
 		}
 
-		console.log(columns);
-
 		document.getElementById('report').innerHTML = output;
 	}
 
 	var calculateReport = function(tabId){
-		console.log('Fell into calculate');
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {method: "fireCalc", tabId: tabs[0].id}, function(response) {
-            console.log('report');
-        	});
+			chrome.tabs.sendMessage(tabs[0].id, {method: "fireCalc", tabId: tabs[0].id});
 		});
-
-		//chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
 

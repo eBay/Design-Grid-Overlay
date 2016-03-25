@@ -5,9 +5,7 @@ if (document.getElementsByClassName('cb-grid-lines').length) {
 }
 
 function respond(gridStatus) {
-    chrome.runtime.sendMessage({status: gridStatus}, function(response) {
-      //console.log(response);
-    });
+    chrome.runtime.sendMessage({status: gridStatus});
 }
 
 

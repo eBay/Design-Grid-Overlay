@@ -1,26 +1,26 @@
 chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
-        if(request.method == "create"){
-            chrome.storage.sync.get(request.tabId.toString(), function(item) {
-            var numColumns = item[request.tabId.toString()].largeColumns || 16;       
+    if(request.method == "create"){
+        chrome.storage.sync.get(request.tabId.toString(), function(item) {
+        var numColumns = item[request.tabId.toString()].largeColumns || 16;       
 
-            var output = '<div class="cb-grid-lines"> \
-              <div class="grid-overlay-container"> \
-                <div class="grid-overlay-row">';
+        var output = '<div class="cb-grid-lines"> \
+          <div class="grid-overlay-container"> \
+            <div class="grid-overlay-row">';
 
-            for (var i = 0; i < numColumns; i += 1) {
-                output +=  '<div class="grid-overlay-col"></div>';
-            }
+        for (var i = 0; i < numColumns; i += 1) {
+            output +=  '<div class="grid-overlay-col"></div>';
+        }
 
-            output += '</div> \
-              </div> \
-            </div>';
+        output += '</div> \
+          </div> \
+        </div>';
 
-            document.body.innerHTML += output;
+        document.body.innerHTML += output;
 
-            respond(1);
-        });
-    }
+        respond(1);
+    });
+  }
 });
 
 
@@ -34,7 +34,5 @@ chrome.runtime.onMessage.addListener(
 
 
 function respond(gridStatus) {
-    chrome.runtime.sendMessage({status: gridStatus}, function(response) {
-      //console.log(response);
-    });
+    chrome.runtime.sendMessage({status: gridStatus});
 }

@@ -2,7 +2,7 @@ var tabController = (function(){
 
 	function saveTabStates(){
 		var tabId = '';
-		
+
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 
 			tabId = tabs[0].id.toString();
@@ -14,7 +14,6 @@ var tabController = (function(){
 				if(chrome.runtime.lastError || Object.keys(items).length === 0){
 			      var data = {};
 		   		data[tabId.toString()] = {'currentTab' : tabs.id, 'currentTabLabel' : tabLabel.id};
-		   		console.log(data);
 					chrome.storage.sync.set(data);
 			   }else{
 			   	items[tabId].currentTab = tabs.id;
@@ -29,7 +28,6 @@ var tabController = (function(){
 
 	function getCurrentTabState(tabId){
 		chrome.storage.sync.get(tabId.toString(), function(items){
-			console.log(items);
 			items = items[tabId.toString()]; 
 
 			if(!items)return;
@@ -42,14 +40,10 @@ var tabController = (function(){
 				var tabs = document.getElementsByClassName('tab');
 				var tabLabels = document.getElementsByClassName('tabLabel');
 
-				console.log(tabs);
-				console.log(tabLabels);
-				
 				for(var i = 0; i < tabs.length; i++){
 					tabs[i].setAttribute('aria-hidden', true);
 					tabLabels[i].setAttribute('aria-selected', false);
 				}
-
 				
 				activeTab.setAttribute('aria-hidden', false);
 				activeLabel.setAttribute('aria-selected', true);
