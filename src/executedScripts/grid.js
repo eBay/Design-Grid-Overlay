@@ -4,8 +4,10 @@ chrome.runtime.onMessage.addListener(
         chrome.storage.sync.get(request.tabId.toString(), function(item) {
         var numColumns = item[request.tabId.toString()].largeColumns || 16;       
 
-        var output = '<div class="cb-grid-lines"> \
-          <div class="grid-overlay-container"> \
+        var div = document.createElement('div');
+        div.setAttribute("class", "cb-grid-lines"); 
+
+        var output = '<div class="grid-overlay-container"> \
             <div class="grid-overlay-row">';
 
         for (var i = 0; i < numColumns; i += 1) {
@@ -13,11 +15,11 @@ chrome.runtime.onMessage.addListener(
         }
 
         output += '</div> \
-          </div> \
-        </div>';
+          </div>';
 
-        document.body.innerHTML += output;
-
+        div.innerHTML = output;
+        //document.body.innerHTML += output;
+        document.body.appendChild(div);
         respond(1);
     });
   }
