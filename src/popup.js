@@ -33,8 +33,6 @@ var options = ["largeWidth",
 					"mobileOutterGutters", 
 					"offsetX",
 					"color"];
-var portsByTabId = {};
-
 
 var popup = (function(){
 
@@ -54,7 +52,7 @@ var popup = (function(){
 	      	tabController.saveTabStates(tabs[0].id)
 	      });
 	      
-	      tabController.setCurrentTabState(tabs[0].id);
+	      tabController.getCurrentTabState(tabs[0].id);
 	    });
 	    
 	    //Trigger a message that will tell me if the grid is on or off
@@ -64,7 +62,7 @@ var popup = (function(){
 	chrome.runtime.onMessage.addListener(
 	    function(request, sender, sendResponse) {
     		if(request.status){
-    			 reportController.calculateReport();
+    			 reportController.calculateReport(currentChromeTab);
 
     			 if (request.status === 1 && gridToggle.checked === false) {
     			 	console.log('toggle on');
@@ -78,19 +76,23 @@ var popup = (function(){
 	    }
 	);
 
-	//Need to fix this 
 	gridToggle.addEventListener('click', function(){
 		gridController.updateGrid(save());
+		reportController.calculateReport(currentChromeTab);
 	});
 
 	gridForm.addEventListener('reset', function() {
-		setTimeout(function(){
-			chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 				var settings = save();
-				tabController.saveTabStates(tabs[0].id);
-			   gridController.updateGrid(settings);
-			});
-		})
+
+				gridController.updateGrid(settings);
+				reportController.calculateReport(tabs[0].id);
+
+				//Do think I need this here
+				setTimeout(function(){
+					//tabController.saveTabStates(tabs[0].id);
+				}, 0);
+		});
 	});
 
 	
@@ -125,6 +127,8 @@ var popup = (function(){
 
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){ 
+			   	console.log('fired change');
+			   	reportController.calculateReport();
             	gridController.updateGrid(save());
             }
 			}, 1000));
@@ -136,6 +140,8 @@ var popup = (function(){
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
+
+				console.log(items);
 				
 
 			   items = items[tabs[0].id.toString()];
@@ -143,10 +149,10 @@ var popup = (function(){
 				options.forEach(function(option){
 
 					if(inputs[option].type == "number" || inputs[option].type == "text")
-						inputs[option].value = items[option] || inputs[option].value
-					else if(inputs[option].type == "checkbox")
-						inputs[option].checked = items[option]
-
+						inputs[option].value = items ? items[option] : inputs[option].value
+					else if(inputs[option].type == "checkbox"){
+						inputs[option].checked = items ? items[option] : inputs[option].checked
+					}
 				})
 			});
 
@@ -174,8 +180,7 @@ var popup = (function(){
 	   return settings;
 	}
 
-
-
+	
 	return {
 		init:init
 	}

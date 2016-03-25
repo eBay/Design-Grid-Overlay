@@ -55,8 +55,9 @@ var gridController = (function(){
 	var executeCSS = function(options){
 
 		chrome.windows.getCurrent(function(currWindow){
-
 			var unitWidth = checkIfViewPortIsSelected(options['viewports']);
+
+			console.log(unitWidth);
 
 			chrome.tabs.insertCSS(null, {
 				code: createGridLinesCSS(unitWidth)			
@@ -101,7 +102,6 @@ var gridController = (function(){
 		}
 	
 	   executeCSS(options);
-	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/calcReport.js'});
 	}
 
 	var updateGrid = function(options){

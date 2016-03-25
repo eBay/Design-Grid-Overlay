@@ -1,19 +1,34 @@
-if (document.getElementsByClassName('cb-grid-lines').length) {
-    fireCalc();
-} 
+//Switch this to be an onMessage 
 
-function fireCalc(){
-	chrome.storage.sync.get(["smallColumns", "smallWidth", "largeColumns"], function(items){
+/*if (document.getElementsByClassName('cb-grid-lines').length) {
+    fireCalc();
+} */
+	console.log('Fell into calc');
+
+chrome.runtime.onMessage.addListener(
+ function(request, sender, sendResponse) {
+ 	console.log(request);
+ 	if(request.method == "fireCalc"){
+ 		console.log('Fell into calc');
+ 		fireCalc(request.tabId);
+ 	}
+ });
+
+function fireCalc(tabId){
+	chrome.storage.sync.get(tabId.toString(), function(items){
 		console.log(items);
-		if(getWidth() <= parseInt(items["smallWidth"])){
-			calculateReport(parseInt(items["smallColumns"]));
+		if(getWidth() <= parseInt(items[tabId]["smallWidth"])){
+			calculateReport(parseInt(items[tabId]["smallColumns"]));
 		}else{
-			calculateReport(parseInt(items["largeColumns"]));
+			calculateReport(parseInt(items[tabId]["largeColumns"]));
 		}
 	});
 }
 
 function calculateReport(size){
+	//This might a symptom of something else
+	if(!document.querySelectorAll(".grid-overlay-col").length) return;
+
 	var width = document.querySelectorAll(".grid-overlay-col")[0].clientWidth;
 	console.log(width);
 	var gutter = calculateGutter();

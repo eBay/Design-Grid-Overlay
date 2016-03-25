@@ -1,26 +1,38 @@
 var tabController = (function(){
 
-	document.getElementById('tabContainer').addEventListener('click', saveTabStates);
+	function saveTabStates(){
+		var tabId = '';
+		
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 
-	function saveTabStates(tabId){
-		setTimeout(function(){
-				console.log(tabId);
+			tabId = tabs[0].id.toString();
+
+			chrome.storage.sync.get(tabs[0].id.toString(), function(items){
 				var tabs = document.querySelector("div[aria-hidden='false']");
 				var tabLabel = document.querySelector("div[aria-selected='true']");
-				var data = {};
-	   		data[tabId.toString()] = {'currentTab' : tabs.id, 'currentTabLabel' : tabLabel.id};
-	   		console.log(data);
-				chrome.storage.sync.set(data);
-		}, 0);
+
+				if(chrome.runtime.lastError || Object.keys(items).length === 0){
+			      var data = {};
+		   		data[tabId.toString()] = {'currentTab' : tabs.id, 'currentTabLabel' : tabLabel.id};
+		   		console.log(data);
+					chrome.storage.sync.set(data);
+			   }else{
+			   	items[tabId].currentTab = tabs.id;
+			   	items[tabId].currentTabLabel = tabLabel.id;
+			   	chrome.storage.sync.set(items);
+			   }
+
+			});
+		});
 	}
 
 
-	function setCurrentTabState(tabId){
+	function getCurrentTabState(tabId){
 		chrome.storage.sync.get(tabId.toString(), function(items){
-			console.log(tabId);
-			items = items[tabId.toString()];
-
 			console.log(items);
+			items = items[tabId.toString()]; 
+
+			if(!items)return;
 
 			if(items["currentTab"] &&  items["currentTabLabel"]){
 
@@ -48,7 +60,7 @@ var tabController = (function(){
 
 	return {
 		saveTabStates: saveTabStates,
-		setCurrentTabState: setCurrentTabState
+		getCurrentTabState: getCurrentTabState
 	}
 
 })();
