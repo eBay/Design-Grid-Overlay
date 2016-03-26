@@ -59,27 +59,30 @@ var popup = (function(){
 	chrome.runtime.onMessage.addListener(
 	    function(request, sender, sendResponse) {
     		if(request.status){
-    			 reportController.calculateReport(currentChromeTab);
+    			reportController.calculateReport(currentChromeTab);
 
-    			 if (request.status === 1 && gridToggle.checked === false) {
+    			if (request.status === 1 && gridToggle.checked === false) {
 	            gridToggle.checked = true;
-		        } else if (request.status === 0 && gridToggle.checked === true) {
+		      } else if (request.status === 0 && gridToggle.checked === true) {
 		         gridToggle.checked = false;
-		        }
+		      }
     		}        
 	    }
 	);
 
 	gridToggle.addEventListener('click', function(){
-		gridController.updateGrid(save());
-		reportController.calculateReport(currentChromeTab);
+		save(function(settings){
+			gridController.updateGrid(settings);
+			reportController.calculateReport(currentChromeTab);
+		});
 	});
 
 	gridForm.addEventListener('reset', function() {
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			var settings = save();
-			gridController.updateGrid(settings);
-			reportController.calculateReport(tabs[0].id);
+			save(function(settings){
+				gridController.updateGrid(settings);
+				reportController.calculateReport(currentChromeTab);
+			});
 		});
 	});
 
@@ -94,7 +97,6 @@ var popup = (function(){
 		 var now = +new Date,
 		     args = arguments;
 		 if (last && now < last + threshhold) {
-		   // hold on to it
 		   clearTimeout(deferTimer);
 		   deferTimer = setTimeout(function () {
 		     last = now;
@@ -114,8 +116,10 @@ var popup = (function(){
 
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){ 
-			   	reportController.calculateReport();
-            	gridController.updateGrid(save());
+			   	save(function(settings){
+						gridController.updateGrid(settings);
+						reportController.calculateReport(currentChromeTab);
+					});
             }
 			}, 1000));
 	   }
@@ -123,11 +127,17 @@ var popup = (function(){
 	   load(inputs);
 	}
 
-	var load = function(inputs){
+	var getTabId = function(cb){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
+			cb(tabs[0].id.toString());
+		});
+	}
 
-			   items = items[tabs[0].id.toString()];
+	var load = function(inputs){
+		 getTabId(function (tabId) {
+			chrome.storage.sync.get(tabId, function(items) {
+
+			   items = items[tabId];
 
 				options.forEach(function(option){
 
@@ -138,11 +148,10 @@ var popup = (function(){
 					}
 				})
 			});
-
 		});
 	}
 
-	var save = function(){
+	var save = function(cb){
 		var inputs = gridForm.getElementsByTagName('input');
 
 	   var settings = {};
@@ -154,11 +163,23 @@ var popup = (function(){
 				settings[option] = inputs[option].checked || false;
 	   })
 
-	   var data = {};
-	   data[currentChromeTab] = settings;
-	   chrome.storage.sync.set(data);
+	   getTabId(function (tabId) {
+		   chrome.storage.sync.get(tabId, function(items){
+		   	if(chrome.runtime.lastError || Object.keys(items).length === 0){
+			     var data = {};
+				  data[tabId] = settings;
+				  chrome.storage.sync.set(data);
+			   }else{
+			   	console.log(items[currentChromeTab]);
+			   	for (var key in settings){
+			   		items[tabId][key] = settings[key]; 
+			   	} 
+			   	chrome.storage.sync.set(items);
+			   }
 
-	   return settings;
+			   cb(settings);
+		   })
+		});
 	}
 
 	

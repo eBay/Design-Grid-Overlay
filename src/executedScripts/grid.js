@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
-    if(request.method == "create"){
-        chrome.storage.sync.get(request.tabId.toString(), function(item) {
+   if(request.method == "create"){
+    chrome.storage.sync.get(request.tabId.toString(), function(item) {
         var numColumns = item[request.tabId.toString()].largeColumns || 16;       
 
         var div = document.createElement('div');
@@ -18,7 +18,6 @@ chrome.runtime.onMessage.addListener(
           </div>';
 
         div.innerHTML = output;
-        //document.body.innerHTML += output;
         document.body.appendChild(div);
         respond(1);
     });
