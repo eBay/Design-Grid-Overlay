@@ -11,6 +11,9 @@ var tabController = (function(){
 				var tabs = document.querySelector("div[aria-hidden='false']");
 				var tabLabel = document.querySelector("div[aria-selected='true']");
 
+				console.log(tabs);
+				console.log(tabLabel);
+
 				if(chrome.runtime.lastError || Object.keys(items).length === 0){
 			      var data = {};
 		   		data[tabId.toString()] = {'currentTab' : tabs.id, 'currentTabLabel' : tabLabel.id};

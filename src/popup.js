@@ -34,6 +34,10 @@ var options = ["largeWidth",
 					"offsetX",
 					"color"];
 
+document.getElementById("advancedForm").onsubmit = function () {
+    return false;
+};
+
 var popup = (function(){
 
 
@@ -59,6 +63,7 @@ var popup = (function(){
 	chrome.runtime.onMessage.addListener(
 	    function(request, sender, sendResponse) {
     		if(request.status){
+    			console.log('Fell into status');
     			reportController.calculateReport(currentChromeTab);
 
     			if (request.status === 1 && gridToggle.checked === false) {
@@ -79,6 +84,7 @@ var popup = (function(){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			var settings = save();
 			gridController.updateGrid(settings);
+			tabController.saveTabStates(tabs[0].id);
 			reportController.calculateReport(tabs[0].id);
 		});
 	});
@@ -111,11 +117,13 @@ var popup = (function(){
 		var inputs = gridForm.getElementsByTagName('input');
 	   var len = inputs.length;
 	   while (len--) {
-
+	   	console.log(inputs[len]);
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){ 
 			   	reportController.calculateReport();
             	gridController.updateGrid(save());
+            	tabController.saveTabStates(currentChromeTab);
+
             }
 			}, 1000));
 	   }

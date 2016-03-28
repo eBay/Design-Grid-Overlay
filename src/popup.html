@@ -1,9 +1,7 @@
 <html>
     <head>
-        <!-- build:css css/main.css -->
         <link rel="stylesheet" type="text/css" href="css/tab.css">
         <link rel="stylesheet" type="text/css" href="css/popup.css">
-        <!-- /build -->
     </head>
     <body>
          <div class="switch">
@@ -112,7 +110,7 @@
                     </table>
                 </div>
                 <div id="panel3" role="tabpanel" aria-hidden="true" aria-labelledby="tab3" class="tab">
-                    <form name="gridsettings">
+                    <form id="advancedForm">
                         <fieldset class="gridsettings__columns">
                             <legend>Columns</legend>
                             <div>
@@ -136,7 +134,6 @@
         </div>
         
         <script type="text/javascript" src="vendor/jquery-2.2.2.min.js"></script>
-        <!--<script type="text/javascript" src="vendor/tabs-widget.js"></script>-->
         <script type="text/javascript" src="controllers/tabController.js"></script>
         <script type="text/javascript" src="controllers/gridController.js"></script>
         <script type="text/javascript" src="controllers/reportController.js"></script>
