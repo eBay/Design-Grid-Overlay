@@ -71,18 +71,15 @@ var popup = (function(){
 	);
 
 	gridToggle.addEventListener('click', function(){
-		save(function(settings){
-			gridController.updateGrid(settings);
-			reportController.calculateReport(currentChromeTab);
-		});
+		gridController.updateGrid(save());
+		reportController.calculateReport(currentChromeTab);
 	});
 
 	gridForm.addEventListener('reset', function() {
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			save(function(settings){
-				gridController.updateGrid(settings);
-				reportController.calculateReport(currentChromeTab);
-			});
+			var settings = save();
+			gridController.updateGrid(settings);
+			reportController.calculateReport(tabs[0].id);
 		});
 	});
 
@@ -97,6 +94,7 @@ var popup = (function(){
 		 var now = +new Date,
 		     args = arguments;
 		 if (last && now < last + threshhold) {
+		   // hold on to it
 		   clearTimeout(deferTimer);
 		   deferTimer = setTimeout(function () {
 		     last = now;
@@ -116,10 +114,8 @@ var popup = (function(){
 
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){ 
-			   	save(function(settings){
-						gridController.updateGrid(settings);
-						reportController.calculateReport(currentChromeTab);
-					});
+			   	reportController.calculateReport();
+            	gridController.updateGrid(save());
             }
 			}, 1000));
 	   }
@@ -127,20 +123,13 @@ var popup = (function(){
 	   load(inputs);
 	}
 
-	var getTabId = function(cb){
-		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			cb(tabs[0].id.toString());
-		});
-	}
-
 	var load = function(inputs){
-		 getTabId(function (tabId) {
-			chrome.storage.sync.get(tabId, function(items) {
+		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
 
-			   items = items[tabId];
+			   items = items[tabs[0].id.toString()];
 
 				options.forEach(function(option){
-
 					if(inputs[option].type == "number" || inputs[option].type == "text")
 						inputs[option].value = items ? items[option] : inputs[option].value
 					else if(inputs[option].type == "checkbox"){
@@ -148,10 +137,11 @@ var popup = (function(){
 					}
 				})
 			});
+
 		});
 	}
 
-	var save = function(cb){
+	var save = function(){
 		var inputs = gridForm.getElementsByTagName('input');
 
 	   var settings = {};
@@ -163,23 +153,11 @@ var popup = (function(){
 				settings[option] = inputs[option].checked || false;
 	   })
 
-	   getTabId(function (tabId) {
-		   chrome.storage.sync.get(tabId, function(items){
-		   	if(chrome.runtime.lastError || Object.keys(items).length === 0){
-			     var data = {};
-				  data[tabId] = settings;
-				  chrome.storage.sync.set(data);
-			   }else{
-			   	console.log(items[currentChromeTab]);
-			   	for (var key in settings){
-			   		items[tabId][key] = settings[key]; 
-			   	} 
-			   	chrome.storage.sync.set(items);
-			   }
+	   var data = {};
+	   data[currentChromeTab] = settings;
+	   chrome.storage.sync.set(data);
 
-			   cb(settings);
-		   })
-		});
+	   return settings;
 	}
 
 	
