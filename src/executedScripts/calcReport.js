@@ -17,6 +17,9 @@ function fireCalc(tabId){
 	});
 }
 
+
+//This needs to be updated to loop 
+//over the columns 
 function calculateReport(size){
 	if(!document.querySelectorAll(".grid-overlay-col").length) return;
 

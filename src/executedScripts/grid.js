@@ -20,6 +20,8 @@ chrome.runtime.onMessage.addListener(
         div.innerHTML = output;
         document.body.appendChild(div);
         respond(1);
+
+        var sheet = document.styleSheets[0];
     });
   }
 });
@@ -34,6 +36,34 @@ chrome.runtime.onMessage.addListener(
 });
 
 
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse){
+        if(request.method == "addCSS"){
+            var customGridStyles = document.createElement('style');
+            customGridStyles.id = "custom-grid-style";
+            customGridStyles.appendChild(document.createTextNode(
+               request.css
+            ));
+            document.head.appendChild(customGridStyles); 
+        }
+
+});
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse){
+        if(request.method == "removeCSS"){
+            var customGridStyles = document.getElementById("custom-grid-style");
+
+            //Check if style exists 
+            if(customGridStyles){
+                customGridStyles.remove();
+            }
+        }
+});
+
+
 function respond(gridStatus) {
     chrome.runtime.sendMessage({status: gridStatus});
 }
+
+
