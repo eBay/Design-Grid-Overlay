@@ -180,6 +180,7 @@ var gridController = (function(){
 		respond(0);
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 	      chrome.tabs.sendMessage(tabs[0].id, {method: "destroy", tabId: tabs[0].id});
+	      chrome.tabs.sendMessage(tabs[0].id, {method: "removeCSS", tabId: tabs[0].id});
 	   });
 	}
 
