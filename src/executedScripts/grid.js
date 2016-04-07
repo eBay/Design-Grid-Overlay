@@ -42,6 +42,7 @@ chrome.runtime.onMessage.addListener(
             customGridStyles.appendChild(document.createTextNode(
                request.css
             ));
+
             document.head.appendChild(customGridStyles); 
         }
 
