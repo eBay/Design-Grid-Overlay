@@ -21,99 +21,49 @@ var gridController = (function(){
 		return outsideGutter >= 0 ? outsideGutter : 0;
 	}
 
-	//Need to do some first and last child stuff for the cases when the outer is less
-	//then half of the inner	
+		
 	var createGridContainer = function(options){
-		console.log(options);
-		console.log((options.outterGutters + (options.gutters/2)));
-
-		var temp = '';
-
-		//Need to make this a bit cleaner and do it for the mobile grid as well
-		if(options.outterGutters < (options.gutters / 2)){
-			var newWidth = (parseInt(options.outterGutters) + parseInt(options.gutters/2));
-			console.log(newWidth);
-
-			temp = ".grid-overlay-col:first-child {"
-    		+ "margin-left:" + options.outterGutters + "px;"
-    		+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + newWidth + "px);"
-			+ "}"
-			+ ".grid-overlay-col:last-child {"
-    		+ "margin-right:"+ options.outterGutters  + "px;"
-    		+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + newWidth + "px);"
-			+ "}";
-		}else{
-			temp = ".grid-overlay-col:first-child {"
-    		+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + options.gutters + "px);"
-				+ "margin: 0 " +  (options.gutters / 2) + "px;"
-			+ "}"
-			+ ".grid-overlay-col:last-child {"
-    		+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + options.gutters + "px);"
-				+ "margin: 0 " +  (options.gutters / 2) + "px;"
-			+ "}";
-		}
-
-
-
+	
 		return  ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
-			  	+ "padding:0px " + calculateOutsideGutter(options.outterGutters, options.gutters) + "px;"
+			  	+ "padding:0px " + options.outterGutters + "px;"
 			  	+ "left:" + options.offsetX + "px;"
 			+ "}"
 			+ ".grid-overlay-col {"
-				+ "width: calc(" + calcColumnPercents(options.largeColumns) + "% - " + options.gutters + "px);"
+				+ "width:" + calcColumnPercents(options.largeColumns) + "%;"
 				+ "margin: 0 " +  (options.gutters / 2) + "px;"
 				+ "background: " +  options.color + ";"
-			+ "}"+ temp;
+			+ "}"
+			+ ".grid-overlay-col:first-child {"
+    			+ "margin-left:0px;"
+			+ "}"
+			+ ".grid-overlay-col:last-child {"
+    			+ "margin-right:0px;"
+			+ "}"
 	}
 
 
    var createSmallContainer = function(options){
-		console.log(((options.mobileOutterGutters) - (options.mobileInnerGutters / 2)));
-
-		console.log(options);
-
-		var temp = '';
-
-		//Need to clean this up a bit
-		if(options.mobileOutterGutters < (options.mobileInnerGutters / 2)){
-
-
-			var newWidth = (parseInt(options.mobileOutterGutters) + parseInt(options.mobileInnerGutters/2));
-			console.log(newWidth);
-
-			temp = ".grid-overlay-col:first-child {"
-						+ "margin-left:" + options.mobileOutterGutters + "px;"
-						+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + newWidth + "px);"
-					+ "}"
-					+ ".grid-overlay-col:nth-child(" + options.smallColumns + ") {"
-						+ "margin-right:" + options.mobileOutterGutters + "px;"
-						+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + newWidth + "px);"
-					+ "}"
-		}else{
-
-			temp = ".grid-overlay-col:first-child {"
-						+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
-						+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + options.mobileInnerGutters + "px);"
-					+ "}"
-					+ ".grid-overlay-col:nth-child(" + options.mobileOutterGutters + ") {"
-						+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
-						+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + options.mobileInnerGutters + "px);"
-					+ "}"
-		}
-
 	
 		return "@media (max-width:" + (options.smallWidth - 1) + "px) {" 
 				+ ".grid-overlay-col {"
-				 	+ "width: calc(" + calcColumnPercents(options.smallColumns) + "% - " + options.mobileInnerGutters + "px);"
+				 	+ "width:" + calcColumnPercents(options.smallColumns) + "%;"
 				 	+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
 				 	+ "background: " +  options.color + ";"
 				+ "}"
 				+ ".grid-overlay-container {"
-					+ "padding:0px " + calculateOutsideGutter(options.mobileOutterGutters, options.mobileInnerGutters) + "px;"
+					+ "padding:0px " + options.mobileOutterGutters + "px;"
 					+ "left:" + options.offsetX + "px;"
 				+ "}"
-				+ temp
+				+ ".grid-overlay-col:first-child {"
+					+ "margin-left:0px;"
+				+ "}"
+				+ ".grid-overlay-col:nth-child(" + options.smallColumns + ") {"
+					+ "margin-right:0px;"
+				+ "}"
+				+ ".grid-overlay-col:nth-child(n+" + (parseInt(options.smallColumns) + 1) + ") {"
+					+ "display:none;"
+				+ "}"
 			+ "}" 
 	}
 
@@ -129,18 +79,6 @@ var gridController = (function(){
 			chrome.tabs.sendMessage(tabs[0].id, { method: "addCSS",
 			 	css: createGridLinesCSS(unitWidth) + createGridContainer(options) + createSmallContainer(options)
 			});
-
-			/*chrome.tabs.insertCSS(null, {
-				code: createGridLinesCSS(unitWidth)			
-			});
-
-			chrome.tabs.insertCSS(null, {
-				code: createGridContainer(options)			
-			});
-
-			chrome.tabs.insertCSS(null, {
-		      code: createSmallContainer(options)
-		 	});*/
 
 		});
 
