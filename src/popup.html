@@ -4,11 +4,13 @@
         <link rel="stylesheet" type="text/css" href="css/popup.css">
     </head>
     <body>
+      <header>
          <div class="switch">
                 <label for="gridToggle">Grid Overlay</label>
                 <input id="gridToggle" type="checkbox" name="gridToggle" />
                 <span></span>
             </div>
+      </header>
         <div class="tabs">
             <div role="tablist" id="tabContainer">
                 <div aria-controls="panel1" role="tab" tabindex="0" aria-selected="true" id="tab1" class="tabLabel">
@@ -27,12 +29,12 @@
                         <fieldset class="gridsettings__columns">
                             <legend>Columns</legend>
                             <div>
-                                <label for="columns">Desktop</label>
-                                <input type="number" id="largeColumns" value="16">
+                                <label for="largeColumns">Large</label>
+                                <input type="number" id="largeColumns" class="numCol" value="16" min="1" max="999">
                             </div>
                             <div>
-                                <label for="columns">Mobile</label>
-                                <input type="number" id="smallColumns" value="8">    
+                                <label for="smallColumns">Small</label>
+                                <input type="number" id="smallColumns" class="numCol" value="8" min="1" max="999">
                             </div>
                         </fieldset>
 
@@ -40,20 +42,22 @@
 
                         <fieldset class="gridsettings__gutters">
                             <legend>Gutters</legend>
+                            <h3>Large</h3>
                             <div>
-                                <label for="gutters">Desktop Inner</label>
+                                <label for="gutters">Inner</label>
                                 <input type="number" id="gutters" value="16">
                             </div>
                             <div>
-                                <label for="outterGutters">Desktop Outer</label>
+                                <label for="outterGutters">Outer</label>
                                 <input type="number" id="outterGutters" value="16">
                             </div>
+                            <h3>Small</h3>
                             <div>
-                                <label for="mobileInnerGutters">Mobile Inner</label>
+                                <label for="mobileInnerGutters">Inner</label>
                                 <input type="number" id="mobileInnerGutters" value="16">
                             </div>
                             <div>
-                                <label for="mobileOutterGutters">Mobile Outer</label>
+                                <label for="mobileOutterGutters">Outer</label>
                                 <input type="number" id="mobileOutterGutters" value="8">
                             </div>
                         </fieldset>
@@ -66,7 +70,7 @@
                             <label for="largeWidth">Max Layout Width</label>
                             <input type="number" id="largeWidth" value="960">
 
-                            <label for="smallWidth">Desktop to Mobile Breakpoint</label>
+                            <label for="smallWidth">Large to Small Breakpoint</label>
                             <input type="number" id="smallWidth" value="600">
                         </fieldset>
 
@@ -84,11 +88,11 @@
                         <br>
 
                         <input type="checkbox" id="viewports">
-                        <label 
-                        info="Will center grid by using View Port units (vw), ignoring the scroll bar" 
+                        <label
+                        info="Will center grid by using View Port units (vw), ignoring the scroll bar"
                         for="viewports"
                         class="tooltip">
-                            Ignore scrollbar 
+                            Ignore scrollbar
                         </label>
                         <div>
                             <input type="reset" id="resetToDefaults" value="Reset Settings">
@@ -119,10 +123,10 @@
                             </div>
                         </fieldset>
 
-                   
+
                         <a href="https://github.com/eBay/Design-Grid-Overlay" id="github-icon">
                             <p>Feedback?</p>
-                            <img src="../icons/GitHub-Mark-120px-plus.png"> 
+                            <img src="../icons/GitHub-Mark-120px-plus.png">
                         </a>
 
                         <div class="reset">
@@ -132,12 +136,12 @@
                 </div>
             </div>
         </div>
-        
+
         <script type="text/javascript" src="vendor/jquery-2.2.2.min.js"></script>
         <script type="text/javascript" src="controllers/tabController.js"></script>
         <script type="text/javascript" src="controllers/gridController.js"></script>
         <script type="text/javascript" src="controllers/reportController.js"></script>
         <script type="text/javascript" src="popup.js"></script>
-    
+
     </body>
 </html>

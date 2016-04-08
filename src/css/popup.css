@@ -1,13 +1,30 @@
 body {
-    width:250px;
+    width: 250px;
+    margin: 0;
 }
 
+header {
+  padding: 0 8px;
+}
 
 label {
     color: #555;
-    /*display: inline-block;*/
-    margin-bottom: 2px;
-    /*font-weight: 300;*/
+    margin: 4px 5px 0 0;
+}
+
+legend {
+  background-color: #f0eeec;
+  padding: 3px 5px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  line-height: 1;
+}
+
+h3 {
+  margin: 5px 0 0 0;
+  font-weight: 500;
+  font-size: 12px;
+  color: #555;
 }
 
 .switch {
@@ -24,7 +41,6 @@ label {
 
 .switch > input {
     position: absolute;
-    
     flex: 2;
     z-index: 5;
     width: 2.25rem;
@@ -76,16 +92,21 @@ label {
     left: 1.25rem;
 }
 
+#tabContainer {
+  margin: 0 8px;
+}
+
 #gridsettings {
-    /*width: 225px;*/
+  background-color: #f0eeec;
+  padding: 16px 8px 0 8px;
+  height: 100%;
 }
 
 #gridsettings * {
     box-sizing: border-box;
 }
 
-#gridsettings input[type=number] {
-    margin-bottom: 8px;
+input[type=number] {
     border-radius: 3px;
     color: rgb(85, 85, 85);
     border: 1px solid #d3d3d3;
@@ -93,16 +114,19 @@ label {
     padding: 3px 0 3px 5px;
 }
 
+input[type=number].numCol {
+  flex-grow: 1;
+}
+
 #gridsettings input:focus {
     border-color: #0654BA;
-    
     outline: 0 none;
 }
 
-#gridsettings fieldset {
-    border: 1px solid #ccc;
-    /*padding: 16px 16px 8px 16px;*/
-    border-radius: 2px;
+fieldset {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 input[type=button],
@@ -131,14 +155,24 @@ input[type=reset] {
 }
 
 .gridsettings__columns div, .gridsettings__gutters div {
-    width: 50%;
-    float: left;
+  display: flex;
+  width: 50%;
+  float: left;
 }
 
-.gridsettings__columns div:nth-child(even), .gridsettings__gutters div:nth-child(even) {
-    padding: 0 8px 0 0;
+.gridsettings__columns label, .gridsettings__gutters label {
+  width: 32px;
+  flex-shrink: 0;
+  display: inline-block;
 }
 
+.gridsettings__columns div:nth-of-type(odd) {
+  padding: 0 8px 0 0;
+}
+
+.gridsettings__gutters div:nth-of-type(odd) {
+  padding: 0 8px 0 0;
+}
 
 .tooltip{
     display: inline;
@@ -181,7 +215,6 @@ input[type=reset] {
 
 .tabs div[role=tab] > span {
     padding: .75rem 0 0.45rem;
-    font-weight: initial;
     color: #999999;
 }
 
@@ -209,33 +242,25 @@ input[type=reset] {
 
 
 table {
-    text-align:left;
-    font-size: 100%;
-    width:100%;
+  text-align:left;
+  font-size: 100%;
+  border-collapse: collapse;
+  width:100%;
 }
 
-table tr {
-    border-bottom: 1px solid #DDDDDD !important; 
-    display: table;
-    width: 100%;
+tr {
+  border-bottom: 1px solid #ddd;
+  width: 100%;
 }
 
-table td {
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
+tr:last-of-type {
+  border-bottom: none;
 }
 
-table th {
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-    font-weight: 400;
+td, th {
+  padding: 4px;
 }
 
-
-
-
-
-
-
-
-
+th {
+  font-weight: 400;
+}
