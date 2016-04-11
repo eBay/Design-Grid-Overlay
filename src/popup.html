@@ -4,13 +4,14 @@
         <link rel="stylesheet" type="text/css" href="css/popup.css">
     </head>
     <body>
-      <header>
-         <div class="switch">
-                <label for="gridToggle">Grid Overlay</label>
-                <input id="gridToggle" type="checkbox" name="gridToggle" />
-                <span></span>
-            </div>
-      </header>
+      <div id="main">
+        <header>
+           <div class="switch">
+                  <label for="gridToggle">Grid Overlay</label>
+                  <input id="gridToggle" type="checkbox" name="gridToggle" />
+                  <span></span>
+              </div>
+        </header>
         <div class="tabs">
             <div role="tablist" id="tabContainer">
                 <div aria-controls="panel1" role="tab" tabindex="0" aria-selected="true" id="tab1" class="tabLabel">
@@ -23,7 +24,7 @@
                     <span>Advanced</span>
                 </div>
             </div>
-            <div id="gridsettings" >
+            <div id="gridsettings">
                 <div id="panel1" role="tabpanel" aria-hidden="false" aria-labelledby="tab1" class="tab">
                     <form name="gridsettings">
                         <fieldset class="gridsettings__columns">
@@ -136,6 +137,7 @@
                 </div>
             </div>
         </div>
+      </div>
 
         <script type="text/javascript" src="vendor/jquery-2.2.2.min.js"></script>
         <script type="text/javascript" src="controllers/tabController.js"></script>

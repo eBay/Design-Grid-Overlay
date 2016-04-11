@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     width: 250px;
     margin: 0;
@@ -32,6 +36,12 @@ h3 {
     display: flex;
     align-items: center;
     width: 100%;
+}
+
+#main {
+  display:flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .switch > label {
@@ -99,11 +109,7 @@ h3 {
 #gridsettings {
   background-color: #f0eeec;
   padding: 16px 8px 0 8px;
-  height: 100%;
-}
-
-#gridsettings * {
-    box-sizing: border-box;
+  flex-grow: 1;
 }
 
 input[type=number] {
@@ -203,6 +209,12 @@ input[type=reset] {
     left: 50%;
     position: absolute;
     z-index: 99;
+}
+
+.tabs {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .tabs > div:last-child {
