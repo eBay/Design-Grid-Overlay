@@ -23,9 +23,6 @@ function calculateReport(size){
 
 	var width = document.querySelectorAll(".grid-overlay-col")[1].clientWidth;
 	var gutter = calculateGutter();
-
-	console.log(width);
-	console.log(gutter);
 	var output = '';
 
 	for(var i = 1; i <= size; i++){
