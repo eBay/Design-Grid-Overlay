@@ -21,8 +21,11 @@ function fireCalc(tabId){
 function calculateReport(size){
 	if(!document.querySelectorAll(".grid-overlay-col").length) return;
 
-	var width = document.querySelectorAll(".grid-overlay-col")[0].clientWidth;
+	var width = document.querySelectorAll(".grid-overlay-col")[1].clientWidth;
 	var gutter = calculateGutter();
+
+	console.log(width);
+	console.log(gutter);
 	var output = '';
 
 	for(var i = 1; i <= size; i++){
@@ -45,7 +48,7 @@ function calculateReport(size){
 
 function calculateGutter(){
 	var  elements = document.getElementsByClassName('grid-overlay-col');
-	var el = elements[0];
+	var el = elements[1];
 	var style = el.currentStyle || window.getComputedStyle(el);
 	var margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight);	
 
