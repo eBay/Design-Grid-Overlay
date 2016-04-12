@@ -38,6 +38,8 @@ document.getElementById("advancedForm").onsubmit = function () {
     return false;
 };
 
+//Heartbeat pattern to determine whether content script is already inject
+//If not it will be injected.
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
         if (response) {
@@ -153,9 +155,9 @@ var popup = (function(){
 
 				options.forEach(function(option){
 					if(inputs[option].type == "number" || inputs[option].type == "text")
-						inputs[option].value = items ? items[option] : inputs[option].value
+						inputs[option].value = items ? items[option] : (items[option] != ' ' || items[options] != undefined) ? items[options] : inputs[option].value
 					else if(inputs[option].type == "checkbox"){
-						inputs[option].checked = items ? items[option] : inputs[option].checked
+						inputs[option].checked = items ? items[option] : (items[option] != ' ' || items[options] != undefined) ? items[options] : inputs[option].checked
 					}
 				})
 			});
