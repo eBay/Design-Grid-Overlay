@@ -13,13 +13,12 @@
   "content_scripts": [
     {
       "css" : ["src/css/grid.css"],
-      "js" : ["src/executedScripts/grid.js", "src/executedScripts/calcReport.js"],
       "matches" : [
         "http://*/*", 
         "https://*/*",
         "file://*/*"
       ],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
   ],
   "permissions": [

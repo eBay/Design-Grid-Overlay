@@ -38,6 +38,19 @@ document.getElementById("advancedForm").onsubmit = function () {
     return false;
 };
 
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+        if (response) {
+            console.log("Already there");
+        }
+        else {
+            console.log("Not there, inject contentscript");
+            chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/grid.js"});
+            chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
+        }
+    });
+});
+
 var popup = (function(){
 
 
@@ -131,6 +144,7 @@ var popup = (function(){
 	   load(inputs);
 	}
 
+	//Something is broken here. Maybe check for empty strings? 
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {

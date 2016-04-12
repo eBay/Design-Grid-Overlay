@@ -1,4 +1,10 @@
 chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.greeting == "hello")
+            sendResponse({message: "hi"});
+});
+
+chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
    if(request.method == "create"){
     chrome.storage.sync.get(request.tabId.toString(), function(item) {
