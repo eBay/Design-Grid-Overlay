@@ -21,12 +21,12 @@ function fireCalc(tabId){
 function calculateReport(size){
 	if(!document.querySelectorAll(".grid-overlay-col").length) return;
 
-	var width = document.querySelectorAll(".grid-overlay-col")[1].clientWidth;
+	var rec = document.querySelectorAll(".grid-overlay-col")[1].getBoundingClientRect();
 	var gutter = calculateGutter();
 	var output = '';
 
 	for(var i = 1; i <= size; i++){
-		var columnSetWidth = ((gutter * (i - 1)) + (width * i));
+		var columnSetWidth = ((gutter * (i - 1)) + (rec.width * i));
 
 		if(i == size){
 			output = output + columnSetWidth;
