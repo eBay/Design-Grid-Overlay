@@ -134,11 +134,10 @@ var popup = (function(){
 	   while (len--) {
 	   	console.log(inputs[len]);
 	   	inputs[len].addEventListener("change", throttle(function (event) {
-			   if (event.target.id !== 'gridToggle'){ 
+			   if (event.target.id !== 'gridToggle'){
+			   	tabController.saveTabStates(currentChromeTab); 
 			   	reportController.calculateReport();
             	gridController.updateGrid(save());
-            	tabController.saveTabStates(currentChromeTab);
-
             }
 			}, 1000));
 	   }
@@ -150,14 +149,18 @@ var popup = (function(){
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
-
 			   items = items[tabs[0].id.toString()];
 
 				options.forEach(function(option){
-					if(inputs[option].type == "number" || inputs[option].type == "text")
-						inputs[option].value = items ? items[option] : (items[option] != ' ' || items[options] != undefined) ? items[options] : inputs[option].value
+					if(inputs[option].type == "number" || inputs[option].type == "text"){
+						if(items){
+							if(items[option].length > 0){
+								inputs[option].value = items[option];
+							}
+						}
+					}
 					else if(inputs[option].type == "checkbox"){
-						inputs[option].checked = items ? items[option] : (items[option] != ' ' || items[options] != undefined) ? items[options] : inputs[option].checked
+						inputs[option].checked = items ? items[option] : inputs[option].checked
 					}
 				})
 			});
