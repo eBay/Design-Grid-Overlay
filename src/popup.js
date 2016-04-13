@@ -145,7 +145,6 @@ var popup = (function(){
 	   load(inputs);
 	}
 
-	//Something is broken here. Maybe check for empty strings? 
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
