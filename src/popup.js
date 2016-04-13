@@ -48,6 +48,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         }
         else {
             console.log("Not there, inject contentscript");
+            chrome.tabs.insertCSS(null, {file: "src/css/grid.css"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/grid.js"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
         }
@@ -75,7 +76,6 @@ var popup = (function(){
 	   });
 	    
 	   //Trigger a message that will tell me if the grid is on or off
-	   chrome.tabs.insertCSS(null, {file: "src/css/grid.css"});
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
 	});
 

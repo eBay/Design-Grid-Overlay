@@ -67,3 +67,8 @@ function getWidth() {
   }
 }
 
+function numberFormat(val, decimalPlaces) {
+
+    var multiplier = Math.pow(10, decimalPlaces);
+    return (Math.round(val * multiplier) / multiplier).toFixed(decimalPlaces);
+}
