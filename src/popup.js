@@ -42,6 +42,7 @@ document.getElementById("advancedForm").onsubmit = function () {
 //If not it will be injected.
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+
         if (response) {
             console.log("Already there");
         }
@@ -50,6 +51,8 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/grid.js"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
         }
+
+        popup.init();
     });
 });
 
@@ -72,6 +75,7 @@ var popup = (function(){
 	   });
 	    
 	   //Trigger a message that will tell me if the grid is on or off
+	   chrome.tabs.insertCSS(null, {file: "src/css/grid.css"});
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
 	});
 
@@ -193,5 +197,4 @@ var popup = (function(){
 
 })();
 
-popup.init();
 

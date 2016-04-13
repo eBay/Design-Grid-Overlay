@@ -10,17 +10,6 @@
   "browser_action": {
     "default_popup": "src/popup.html"
   },
-  "content_scripts": [
-    {
-      "css" : ["src/css/grid.css"],
-      "matches" : [
-        "http://*/*", 
-        "https://*/*",
-        "file://*/*"
-      ],
-      "run_at": "document_start"
-    }
-  ],
   "permissions": [
     "tabs", 
     "http://*/*", 
