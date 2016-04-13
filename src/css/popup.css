@@ -110,6 +110,7 @@ h3 {
   background-color: #f0eeec;
   padding: 16px 8px 0 8px;
   flex-grow: 1;
+  -webkit-user-select: none;
 }
 
 input[type=number] {
