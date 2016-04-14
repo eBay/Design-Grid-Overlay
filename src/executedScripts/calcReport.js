@@ -26,7 +26,7 @@ function calculateReport(size){
 	var output = '';
 
 	for(var i = 1; i <= size; i++){
-		var columnSetWidth = ((gutter * (i - 1)) + (rec.width * i));
+		var columnSetWidth = numberFormat(((gutter * (i - 1)) + (rec.width * i)), 2);
 
 		if(i == size){
 			output = output + columnSetWidth;

@@ -10,6 +10,9 @@
   "browser_action": {
     "default_popup": "src/popup.html"
   },
+  "background": {
+    "scripts": ["src/executedScripts/background.js"]
+  },
   "permissions": [
     "tabs", 
     "http://*/*", 

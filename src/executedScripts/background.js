@@ -1,22 +1,30 @@
-// Background
-/*function ensureSendMessage(tabId, message, callback){
-  chrome.tabs.sendMessage(tabId, {ping: true}, function(response){
-    if(response) { // Content script ready
-      chrome.tabs.sendMessage(tabId, message, callback);
-    } else { // No listener on the other end
-      chrome.tabs.executeScript(tabId, {file: "grid.js"}, function(){
-        if(chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
-          throw Error("Unable to inject script into tab " + tabId);
-        }
-        // OK, now it's injected and ready
-        chrome.tabs.sendMessage(tabId, message, callback);
-      });
-    }
-  });
-}
+//var port;
 
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  console.log(tabs);
-  //ensureSendMessage(tabs[0].id, {greeting: "hello"});
-});**/
+// Attempt to reconnect
+/*var reconnectToExtension = function () {
+    // Reset port
+    port = null;
+    // Attempt to reconnect after 1 second
+   setTimeout(connectToExtension, 1000 * 1);
+   //connectToExtension();
+};*/
+
+// Attempt to connect, send a message to re inject scripts 
+/*var connectToExtension = function () {
+    console.log('connecting to stuff');
+    // Make the connection
+    port = chrome.runtime.connect({name: "my-port"});
+    console.log(port);
+
+    // When extension is upgraded or disabled and renabled, the content scripts
+    // will still be injected, so we have to reconnect them.
+    // We listen for an onDisconnect event, and then wait for a second before
+    // trying to connect again. Becuase chrome.extension.connect fires an onDisconnect
+    // event if it does not connect, an unsuccessful connection should trigger
+    // another attempt, 1 second later.
+    //port.onDisconnect.addListener(reconnectToExtension);
+
+};
+
+// Connect for the first time
+connectToExtension();*/
