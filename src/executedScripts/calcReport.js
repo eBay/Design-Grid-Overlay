@@ -10,7 +10,7 @@ chrome.runtime.onMessage.addListener(
 function fireCalc(tabId){
 	chrome.storage.sync.get(tabId.toString(), function(items){
 		if(getWidth() <= parseInt(items[tabId]["smallWidth"])){
-			calculateReport(parseInt(items[tabId]["smallColumns"]));
+			calculateReport((parseInt(items[tabId]["smallColumns"])));
 		}else{
 			calculateReport(parseInt(items[tabId]["largeColumns"]));
 		}

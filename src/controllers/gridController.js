@@ -45,7 +45,7 @@ var gridController = (function(){
 
    var createSmallContainer = function(options){
 	
-		return "@media (max-width:" + (options.smallWidth - 1) + "px) {" 
+		return "@media (max-width:" + options.smallWidth + "px) {" 
 				+ ".grid-overlay-col {"
 				 	+ "width:" + calcColumnPercents(options.smallColumns) + "%;"
 				 	+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
