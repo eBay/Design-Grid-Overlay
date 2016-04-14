@@ -15,22 +15,22 @@ setTabAction('tabs', 'tab1', 'panel1');
 setTabAction('tabs', 'tab2', 'panel2');
 setTabAction('tabs', 'tab3', 'panel3');
 
-var git = document.getElementById('github-icon'); 
+var git = document.getElementById('github-icon');
 git.addEventListener('click', function(e){
   if(this.href!==undefined){
     chrome.tabs.create({url:this.href})
   }
 })
 
-var options = ["largeWidth", 
-               "largeColumns", 
-					"smallColumns", 
-					"viewports", 
-					"smallWidth", 
-					"gutters", 
-					"outterGutters", 
+var options = ["largeWidth",
+               "largeColumns",
+					"smallColumns",
+					"viewports",
+					"smallWidth",
+					"gutters",
+					"outterGutters",
 					"mobileInnerGutters",
-					"mobileOutterGutters", 
+					"mobileOutterGutters",
 					"offsetX",
 					"color"];
 
@@ -63,18 +63,18 @@ var popup = (function(){
 	var currentChromeTab = '';
 
 	window.addEventListener('load', function() {
-	    
+
 	   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-	  
+
 	      currentChromeTab = tabs[0].id;
 
 	      document.getElementById('tabContainer').addEventListener('click', function(){
 	      	tabController.saveTabStates(tabs[0].id)
 	      });
-	      
+
 	      tabController.getCurrentTabState(tabs[0].id);
 	   });
-	    
+
 	   //Trigger a message that will tell me if the grid is on or off
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
 	});
@@ -90,7 +90,7 @@ var popup = (function(){
 		      } else if (request.status === 0 && gridToggle.checked === true) {
 		         gridToggle.checked = false;
 		      }
-    		}        
+    		}
 	    }
 	);
 
@@ -108,7 +108,9 @@ var popup = (function(){
 		});
 	});
 
-	
+	/**
+	 * TODO: Add description
+	 */
 	var throttle = function(fn, threshhold, scope) {
 		threshhold || (threshhold = 250);
 		var last,
@@ -130,8 +132,11 @@ var popup = (function(){
 		   fn.apply(context, args);
 		 }
 		};
-	}	
+	}
 
+	/**
+	 * TODO: Add description
+	 */
 	var init = function(){
 		var inputs = gridForm.getElementsByTagName('input');
 	   var len = inputs.length;
@@ -139,7 +144,7 @@ var popup = (function(){
 	   	console.log(inputs[len]);
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){
-			   	tabController.saveTabStates(currentChromeTab); 
+			   	tabController.saveTabStates(currentChromeTab);
 			   	reportController.calculateReport();
             	gridController.updateGrid(save());
             }
@@ -149,6 +154,9 @@ var popup = (function(){
 	   load(inputs);
 	}
 
+	/**
+	 * TODO: Add description
+	 */
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.storage.sync.get(tabs[0].id.toString(), function(items) {
@@ -171,6 +179,9 @@ var popup = (function(){
 		});
 	}
 
+	/**
+	 * TODO: Add description
+	 */
 	var save = function(){
 		var inputs = gridForm.getElementsByTagName('input');
 
@@ -190,11 +201,9 @@ var popup = (function(){
 	   return settings;
 	}
 
-	
+
 	return {
 		init:init
 	}
 
 })();
-
-
