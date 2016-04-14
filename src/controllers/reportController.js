@@ -1,5 +1,8 @@
 var reportController = (function(){
 
+	/**
+	 * Listens for the event that adds the report to popup
+	 */
 	chrome.runtime.onMessage.addListener(function(request) {
 	  if (request.method === 'resize') {
 	   	var values = request.colSizes.split(',');
@@ -7,6 +10,12 @@ var reportController = (function(){
 	  }
 	});
 
+	/**
+	 * Creates the report 
+	 *
+	 * @param {int} columns - The numbers of columns of the grid
+	 * @param {Array} valuesArray - the array of values for the table
+	 */
 	var createReport = function(columns, valuesArray){
 		var output = '';
 
@@ -21,6 +30,11 @@ var reportController = (function(){
 		document.getElementById('report').innerHTML = output;
 	}
 
+	/**
+	 * Sends a message to get the column pixel widths
+	 *
+	 * @param {int} tabId - The id of the current tab
+	 */
 	var calculateReport = function(tabId){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, {method: "fireCalc", tabId: tabs[0].id});
@@ -28,6 +42,9 @@ var reportController = (function(){
 	}
 
 
+	/**
+	 * Publicly accessible methods 
+	 */
 	return {
 		createReport:createReport,
 		calculateReport:calculateReport
