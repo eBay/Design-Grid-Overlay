@@ -111,7 +111,10 @@ var popup = (function(){
 	});
 
 	/**
-	 * TODO: Add description
+	 * Used to stop a user from incrementing the  
+	 * number field to fast. This stops the event from
+	 * firing to fast and stops multiple grids 
+	 * from appearing stacked on the page
 	 */
 	var throttle = function(fn, threshhold, scope) {
 		threshhold || (threshhold = 250);
@@ -137,13 +140,14 @@ var popup = (function(){
 	}
 
 	/**
-	 * TODO: Add description
+	 * Used to initialize the state of the popup window.
+	 * Saves the current tab state, generates the grid,
+	 * and calculates the report.  
 	 */
 	var init = function(){
 		var inputs = gridForm.getElementsByTagName('input');
 	   var len = inputs.length;
 	   while (len--) {
-	   	console.log(inputs[len]);
 	   	inputs[len].addEventListener("change", throttle(function (event) {
 			   if (event.target.id !== 'gridToggle'){
 			   	tabController.saveTabStates(currentChromeTab);
@@ -157,7 +161,11 @@ var popup = (function(){
 	}
 
 	/**
-	 * TODO: Add description
+	 * Goes into local storage and pulls out
+	 * settings that are saved in the current 
+	 * tab. If no settings are saved, the default 
+	 * value is used that is specified in the html
+	 * for the popup. 
 	 */
 	var load = function(inputs){
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -182,7 +190,9 @@ var popup = (function(){
 	}
 
 	/**
-	 * TODO: Add description
+	 * Grabs the value from each input field and
+	 * saves it into local storage with the key
+	 * being the current tab id.  
 	 */
 	var save = function(){
 		var inputs = gridForm.getElementsByTagName('input');
