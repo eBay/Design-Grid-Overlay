@@ -38,6 +38,8 @@ document.getElementById("advancedForm").onsubmit = function () {
     return false;
 };
 
+
+
 //Heartbeat pattern to determine whether content script is already inject
 //If not it will be injected.
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -48,7 +50,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         }
         else {
             console.log("Not there, inject contentscript");
-            chrome.tabs.insertCSS(null, {file: "src/css/grid.css"});
+            chrome.tabs.insertCSS(tabs[0].id, {file: "src/css/grid.css"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/grid.js"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
         }

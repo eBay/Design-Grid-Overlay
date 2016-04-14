@@ -1,30 +1,22 @@
-//var port;
 
-// Attempt to reconnect
-/*var reconnectToExtension = function () {
-    // Reset port
-    port = null;
-    // Attempt to reconnect after 1 second
-   setTimeout(connectToExtension, 1000 * 1);
-   //connectToExtension();
-};*/
 
-// Attempt to connect, send a message to re inject scripts 
-/*var connectToExtension = function () {
-    console.log('connecting to stuff');
-    // Make the connection
-    port = chrome.runtime.connect({name: "my-port"});
-    console.log(port);
+/*
+ *This method will listen to see
+ *weather the extension has been 
+ *newly installed or updated. If
+ *so the scripts get reInjejcted into the page 
+ */
+chrome.runtime.onInstalled.addListener(function(){
+    chrome.tabs.query({}, function(tabs) { 
 
-    // When extension is upgraded or disabled and renabled, the content scripts
-    // will still be injected, so we have to reconnect them.
-    // We listen for an onDisconnect event, and then wait for a second before
-    // trying to connect again. Becuase chrome.extension.connect fires an onDisconnect
-    // event if it does not connect, an unsuccessful connection should trigger
-    // another attempt, 1 second later.
-    //port.onDisconnect.addListener(reconnectToExtension);
-
-};
-
-// Connect for the first time
-connectToExtension();*/
+        for(var i = 0; i < tabs.length; i++){
+            if(chrome.runtime.lastError){
+               console.warn("Whoops.. " + chrome.runtime.lastError.message);
+            }else{
+                chrome.tabs.insertCSS(tabs[i].id, {file: "src/css/grid.css"});
+                chrome.tabs.executeScript(tabs[i].id, {file: "src/executedScripts/grid.js"});
+                chrome.tabs.executeScript(tabs[i].id, {file: "src/executedScripts/calcReport.js"});
+            }
+        } 
+    });
+});
