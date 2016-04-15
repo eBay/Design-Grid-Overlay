@@ -1,5 +1,8 @@
+/**
+ * Responsible for saving and retrieving the current state of
+ * tabs in the popup.
+ */
 var tabController = (function(){
-
 
 	/**
 	 * Saves the current tab a user is on the local storage

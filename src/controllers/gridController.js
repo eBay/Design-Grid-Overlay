@@ -1,3 +1,7 @@
+/**
+ * Responsible for build the css based on the options
+ * in the popup. 
+ */
 var gridController = (function(){
 
 	/**

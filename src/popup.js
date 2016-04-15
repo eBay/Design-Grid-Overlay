@@ -2,6 +2,10 @@ var chrome = chrome || {};
 var gridForm = document.getElementById('gridsettings');
 var gridToggle = document.getElementById('gridToggle');
 
+
+/**
+ * Set the click event for the tabs 
+ */
 var setTabAction = function(tabOuter, tabInner, contentId) {
 	$('#' + tabInner).bind("click", function (event) {
 	   $('.' + tabOuter + ' div[aria-selected=true]').attr("aria-selected","false");
@@ -11,10 +15,16 @@ var setTabAction = function(tabOuter, tabInner, contentId) {
 	});
 };
 
+
 setTabAction('tabs', 'tab1', 'panel1');
 setTabAction('tabs', 'tab2', 'panel2');
 setTabAction('tabs', 'tab3', 'panel3');
 
+
+/**
+ * Allows a user to click the github icon and 
+ * be taken directly to the eBaay grid issue page
+ */
 var git = document.getElementById('github-icon');
 git.addEventListener('click', function(e){
   if(this.href!==undefined){
@@ -22,6 +32,11 @@ git.addEventListener('click', function(e){
   }
 })
 
+
+/**
+ * The list of options by there id 
+ * that exist in the popup menu.
+ */
 var options = ["largeWidth",
                "largeColumns",
 					"smallColumns",
@@ -34,14 +49,19 @@ var options = ["largeWidth",
 					"offsetX",
 					"color"];
 
+/**
+ * Will stop the advanced form from submitting 
+ */
 document.getElementById("advancedForm").onsubmit = function () {
     return false;
 };
 
 
 
-//Heartbeat pattern to determine whether content script is already inject
-//If not it will be injected.
+/**
+ * Heartbeat pattern to determine whether content script is already inject
+ * If not it will be injected.
+ */
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
 
@@ -63,6 +83,12 @@ var popup = (function(){
 
 	var currentChromeTab = '';
 
+
+	/**
+	 * Called when the popup is load. A call
+	 * to save the tab state and check the grid status is
+	 * made. 
+	 */
 	window.addEventListener('load', function() {
 
 	   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -76,10 +102,13 @@ var popup = (function(){
 	      tabController.getCurrentTabState(tabs[0].id);
 	   });
 
-	   //Trigger a message that will tell me if the grid is on or off
 	   chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
 	});
 
+	/**
+	 * Event that changes the toggle based on if 
+	 * the grid is active or not 
+	 */	
 	chrome.runtime.onMessage.addListener(
 	    function(request, sender, sendResponse) {
     		if(request.status){
@@ -95,11 +124,21 @@ var popup = (function(){
 	    }
 	);
 
+	/**
+	 * A click event listen that will change the values 
+	 * off the grid based on the popup values.
+	 */
 	gridToggle.addEventListener('click', function(){
 		gridController.updateGrid(save());
 		reportController.calculateReport(currentChromeTab);
 	});
 
+	/**
+	 * Adds an event to the reset button
+	 * in order to reset all the values on 
+	 * the grid to the default values in the 
+	 * popup window. 
+	 */
 	gridForm.addEventListener('reset', function() {
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 			var settings = save();
@@ -212,7 +251,9 @@ var popup = (function(){
 	   return settings;
 	}
 
-
+	/**
+	 * Return the publicly accessible methods  
+	 */
 	return {
 		init:init
 	}

@@ -1,3 +1,7 @@
+/**
+ * Responsible for generating the report in
+ * the popup. 
+ */
 var reportController = (function(){
 
 	/**
