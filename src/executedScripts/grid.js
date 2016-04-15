@@ -56,6 +56,8 @@ chrome.runtime.onMessage.addListener(
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "addCSS"){
+            insertBaseCSS();
+
             var customGridStyles = document.createElement('style');
             customGridStyles.id = "custom-grid-style";
             customGridStyles.appendChild(document.createTextNode(
@@ -86,21 +88,23 @@ chrome.runtime.onMessage.addListener(
  * the head of the document. This is done by 
  * adding a link tag with an href to the grid.css file.
  */
+function insertBaseCSS(){
+    var css = document.createElement('link');
+    css.id = "base-grid-styles";
+    css.rel = "stylesheet";
+    css.type = "text/css";
+    css.href = chrome.extension.getURL('src/css/grid.css');
+    
+    if(!document.getElementById('base-grid-styles')){
+        document.head.appendChild(css);
+    }
+}
+
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
-       
         if(request.method == "insertBaseCSS"){
-            var css = document.createElement('link');
-            css.id = "base-grid-styles";
-            css.rel = "stylesheet";
-            css.type = "text/css";
-            css.href = chrome.extension.getURL('src/css/grid.css');
-            
-            if(!document.getElementById('base-grid-styles')){
-                document.head.appendChild(css);
-            }
+            insertBaseCSS();
         }
-
 });
 
 /**
