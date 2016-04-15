@@ -1,3 +1,5 @@
+console.log('Calc report updated');
+
 /**
  * Listener that calls the fireCalc method when need 
  * to generate the values for the report.
@@ -5,6 +7,7 @@
 chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
  	if(request.method == "fireCalc"){
+ 		console.log('Fired calc');
  		fireCalc(request.tabId);
  	}
  });

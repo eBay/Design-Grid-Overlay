@@ -13,11 +13,8 @@ chrome.runtime.onInstalled.addListener(function(){
             }else{
                 if(tabs[i]){
                     var currentId = tabs[i].id;
-                    chrome.tabs.executeScript(currentId, {file: "src/executedScripts/grid.js"}, function(){
-                        chrome.tabs.sendMessage(currentId, {method: "insertBaseCSS"}, function(res){
-                            chrome.tabs.executeScript(currentId, {file: "src/executedScripts/calcReport.js"});
-                        });
-                    });
+                    chrome.tabs.executeScript(currentId, {file: "src/executedScripts/grid.js"});
+                    chrome.tabs.executeScript(currentId, {file: "src/executedScripts/calcReport.js"});  
                 }
             }
         } 

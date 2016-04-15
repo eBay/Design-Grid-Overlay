@@ -54,7 +54,6 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
         }
 
-        //chrome.tabs.sendMessage(tabs[0].id, {method: "insertBaseCSS"});
         popup.init();
     });
 });
