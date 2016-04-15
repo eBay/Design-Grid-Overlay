@@ -1,5 +1,3 @@
-
-
 /*
  *This method will listen to see
  *weather the extension has been 
