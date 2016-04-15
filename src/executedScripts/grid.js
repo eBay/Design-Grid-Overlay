@@ -1,9 +1,17 @@
+/**
+ * Heartbeat method that tells the popup whether the file has 
+ * been injected into the page.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.greeting == "hello")
             sendResponse({message: "hi"});
 });
 
+/**
+ * Method that creates the HTML structure 
+ * for the grid.
+ */
 chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
    if(request.method == "create"){
@@ -30,7 +38,9 @@ chrome.runtime.onMessage.addListener(
   }
 });
 
-
+/**
+ * Method for removing the grid HTML from the page.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "destroy" && document.getElementsByClassName('cb-grid-lines').length){
@@ -39,7 +49,10 @@ chrome.runtime.onMessage.addListener(
         }
 });
 
-
+/**
+ * Adds the dynamically generated CSS for the grid
+ * into the head of the document. 
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "addCSS"){
@@ -51,9 +64,13 @@ chrome.runtime.onMessage.addListener(
 
             document.head.appendChild(customGridStyles); 
         }
-
 });
 
+
+/**
+ * Removes the dynamically generated CSS from the 
+ * head of the document.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "removeCSS"){
@@ -64,7 +81,11 @@ chrome.runtime.onMessage.addListener(
         }
 });
 
-
+/**
+ * Inserts the base CSS styles for the grid into 
+ * the head of the document. This is done by 
+ * adding a link tag with an href to the grid.css file.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
        
@@ -82,7 +103,10 @@ chrome.runtime.onMessage.addListener(
 
 });
 
-
+/**
+ * Notifies the popup whether the grid is  
+ * on or off.
+ */
 function respond(gridStatus) {
     chrome.runtime.sendMessage({status: gridStatus});
 }
