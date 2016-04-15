@@ -13,9 +13,14 @@ chrome.runtime.onInstalled.addListener(function(){
             if(chrome.runtime.lastError){
                console.warn("Whoops.. " + chrome.runtime.lastError.message);
             }else{
-                chrome.tabs.insertCSS(tabs[i].id, {file: "src/css/grid.css"});
-                chrome.tabs.executeScript(tabs[i].id, {file: "src/executedScripts/grid.js"});
-                chrome.tabs.executeScript(tabs[i].id, {file: "src/executedScripts/calcReport.js"});
+                if(tabs[i]){
+                    var currentId = tabs[i].id;
+                    chrome.tabs.executeScript(currentId, {file: "src/executedScripts/grid.js"}, function(){
+                        chrome.tabs.sendMessage(currentId, {method: "insertBaseCSS"}, function(res){
+                            chrome.tabs.executeScript(currentId, {file: "src/executedScripts/calcReport.js"});
+                        });
+                    });
+                }
             }
         } 
     });

@@ -50,11 +50,11 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         }
         else {
             console.log("Not there, inject contentscript");
-            chrome.tabs.insertCSS(tabs[0].id, {file: "src/css/grid.css"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/grid.js"});
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
         }
 
+        chrome.tabs.sendMessage(tabs[0].id, {method: "insertBaseCSS"});
         popup.init();
     });
 });
