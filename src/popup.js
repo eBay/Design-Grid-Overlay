@@ -67,11 +67,14 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
         if (response) {
             console.log("Already there");
+            reportController.calculateReport();
         }
         else {
             console.log("Not there, inject contentscript");
             chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/grid.js"});
-            chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"});
+            chrome.tabs.executeScript(tabs[0].id, {file: "src/executedScripts/calcReport.js"}, function(){
+            	reportController.calculateReport();
+            });
         }
 
         popup.init();
@@ -90,6 +93,7 @@ var popup = (function(){
 	 * made. 
 	 */
 	window.addEventListener('load', function() {
+
 
 	   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 
@@ -194,7 +198,7 @@ var popup = (function(){
             }
 			}, 1000));
 	   }
-
+	   save();
 	   load(inputs);
 	}
 
@@ -212,7 +216,7 @@ var popup = (function(){
 
 				options.forEach(function(option){
 					if(inputs[option].type == "number" || inputs[option].type == "text"){
-						if(items){
+						if(items && items[option]){
 							if(items[option].length > 0){
 								inputs[option].value = items[option];
 							}

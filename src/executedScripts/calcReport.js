@@ -1,5 +1,3 @@
-console.log('Calc report updated');
-
 /**
  * Listener that calls the fireCalc method when need 
  * to generate the values for the report.
@@ -7,7 +5,6 @@ console.log('Calc report updated');
 chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
  	if(request.method == "fireCalc"){
- 		console.log('Fired calc');
  		fireCalc(request.tabId);
  	}
  });
@@ -21,9 +18,9 @@ chrome.runtime.onMessage.addListener(
 function fireCalc(tabId){
 	chrome.storage.sync.get(tabId.toString(), function(items){
 		if(getWidth() <= parseInt(items[tabId]["smallWidth"])){
-			calculateReport((parseInt(items[tabId]["smallColumns"])));
+			calculateReport('small', items[tabId]);
 		}else{
-			calculateReport(parseInt(items[tabId]["largeColumns"]));
+			calculateReport('large', items[tabId]);
 		}
 	});
 }
@@ -34,26 +31,12 @@ function fireCalc(tabId){
  * sent to the popup via a message in order 
  * to be displayed in the report section of the popup 
  */
-function calculateReport(size){
-	if(!document.querySelectorAll(".grid-overlay-col").length) return;
-
-	var rec = document.querySelectorAll(".grid-overlay-col")[1].getBoundingClientRect();
-	var gutter = calculateGutter();
-	var output = '';
-
-	for(var i = 1; i <= size; i++){
-		var columnSetWidth = numberFormat(((gutter * (i - 1)) + (rec.width * i)), 2);
-
-		if(i == size){
-			output = output + columnSetWidth;
-		}else{
-			output = output + columnSetWidth + ',';
-		}
-	}
-
+function calculateReport(breakPoint, items){
 	chrome.runtime.sendMessage({
 			method: 'resize',
-			colSizes: output
+			items: items,
+			breakPoint: breakPoint,
+			width: document.documentElement.clientWidth
 		}
 	);
 }
