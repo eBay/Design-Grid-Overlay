@@ -59,10 +59,6 @@ var reportController = (function(){
 
 
 	var reportColWidthEquation = function(width, outerGutter, innerGutter, cols){
-		console.log(width);
-		console.log(outerGutter);
-		console.log(innerGutter);
-		console.log(cols);
 		return (((width - (outerGutter * 2)) - (innerGutter * (cols - 1))) / cols)
 	}
 

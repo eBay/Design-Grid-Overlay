@@ -134,6 +134,7 @@ var popup = (function(){
 	 */
 	gridToggle.addEventListener('click', function(){
 		gridController.updateGrid(save());
+		tabController.saveTabStates(currentChromeTab);
 		reportController.calculateReport(currentChromeTab);
 	});
 
