@@ -11,8 +11,12 @@
     "default_popup": "src/popup.html"
   },
   "background": {
-    "scripts": ["src/executedScripts/background.js"]
+    "scripts": ["src/executedScripts/background.js"],
+    "persistent": false
   },
+  "web_accessible_resources": [
+      "src/css/grid.css"
+  ],
   "permissions": [
     "tabs", 
     "http://*/*", 

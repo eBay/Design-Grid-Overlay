@@ -1,5 +1,12 @@
+/**
+ * Responsible for saving and retrieving the current state of
+ * tabs in the popup.
+ */
 var tabController = (function(){
 
+	/**
+	 * Saves the current tab a user is on the local storage
+	 */
 	function saveTabStates(){
 		var tabId = '';
 
@@ -29,6 +36,11 @@ var tabController = (function(){
 	}
 
 
+
+	/**
+	 * Retrieves the users previous tab state 
+	 * and sets that as the current tab
+	 */
 	function getCurrentTabState(tabId){
 		chrome.storage.sync.get(tabId.toString(), function(items){
 			items = items[tabId.toString()]; 

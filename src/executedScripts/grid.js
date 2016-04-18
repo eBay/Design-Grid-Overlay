@@ -1,11 +1,17 @@
-console.log('I updated hahah');
-
+/**
+ * Heartbeat method that tells the popup whether the file has 
+ * been injected into the page.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.greeting == "hello")
             sendResponse({message: "hi"});
 });
 
+/**
+ * Method that creates the HTML structure 
+ * for the grid.
+ */
 chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
    if(request.method == "create"){
@@ -32,7 +38,9 @@ chrome.runtime.onMessage.addListener(
   }
 });
 
-
+/**
+ * Method for removing the grid HTML from the page.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "destroy" && document.getElementsByClassName('cb-grid-lines').length){
@@ -41,10 +49,15 @@ chrome.runtime.onMessage.addListener(
         }
 });
 
-
+/**
+ * Adds the dynamically generated CSS for the grid
+ * into the head of the document. 
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "addCSS"){
+            insertBaseCSS();
+
             var customGridStyles = document.createElement('style');
             customGridStyles.id = "custom-grid-style";
             customGridStyles.appendChild(document.createTextNode(
@@ -53,9 +66,13 @@ chrome.runtime.onMessage.addListener(
 
             document.head.appendChild(customGridStyles); 
         }
-
 });
 
+
+/**
+ * Removes the dynamically generated CSS from the 
+ * head of the document.
+ */
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse){
         if(request.method == "removeCSS"){
@@ -66,7 +83,34 @@ chrome.runtime.onMessage.addListener(
         }
 });
 
+/**
+ * Inserts the base CSS styles for the grid into 
+ * the head of the document. This is done by 
+ * adding a link tag with an href to the grid.css file.
+ */
+function insertBaseCSS(){
+    var css = document.createElement('link');
+    css.id = "base-grid-styles";
+    css.rel = "stylesheet";
+    css.type = "text/css";
+    css.href = chrome.extension.getURL('src/css/grid.css');
+    
+    if(!document.getElementById('base-grid-styles')){
+        document.head.appendChild(css);
+    }
+}
 
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse){
+        if(request.method == "insertBaseCSS"){
+            insertBaseCSS();
+        }
+});
+
+/**
+ * Notifies the popup whether the grid is  
+ * on or off.
+ */
 function respond(gridStatus) {
     chrome.runtime.sendMessage({status: gridStatus});
 }
