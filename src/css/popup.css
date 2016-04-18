@@ -16,11 +16,17 @@ label {
     margin: 4px 5px 0 0;
 }
 
+fieldset {
+  padding: 8px;
+}
+
 legend {
-  background-color: #f0eeec;
-  padding: 3px 5px;
-  border: 1px solid #ccc;
-  border-radius: 2px;
+  float: left;
+  width: 100%;
+  font-weight: bold;
+  font-size: 13px;
+  position: relative;
+  padding: 0 0 5px;
   line-height: 1;
 }
 
