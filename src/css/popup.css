@@ -277,3 +277,8 @@ td, th {
 th {
   font-weight: 400;
 }
+
+.table-right {
+  text-align: right;
+  padding-right: 40%;
+}
