@@ -199,7 +199,7 @@ var popup = (function(){
             }
 			}, 1000));
 	   }
-	   //save();
+
 	   load(inputs);
 	}
 
@@ -227,6 +227,8 @@ var popup = (function(){
 						inputs[option].checked = items ? items[option] : inputs[option].checked
 					}
 				})
+
+				save();
 			});
 
 		});

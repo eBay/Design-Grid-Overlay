@@ -51,7 +51,7 @@ var reportController = (function(){
 
 
 			var num = numberFormat(((gutter * (i - 1)) + (colWidth * i)), 2)
-			output = output + '<tr><td style="width: 50%;">' + i + '</td><td>' + num + 'px</td></tr>';
+			output = output + '<tr><td style="width: 50%;">' + i + '</td><td class="table-right">' + num + 'px</td></tr>';
 		}
 
 		document.getElementById('report').innerHTML = output;
