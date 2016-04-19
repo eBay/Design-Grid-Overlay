@@ -199,7 +199,7 @@ var popup = (function(){
             }
 			}, 1000));
 	   }
-	   save();
+	   //save();
 	   load(inputs);
 	}
 
