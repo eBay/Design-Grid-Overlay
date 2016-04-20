@@ -13,7 +13,7 @@ A Chrome extension to overlay a design grid on your web page; configurable to fi
 * Once there, at the top click "Load unpacked extension".
 * Once click navagiate to the grid plugin folder on your computer and press select.
 * Once selected the plugin should appear at the top of your chrome browser.
-* Click the extenion image to activate it. 
+* Click the extenion image to activate it.
 
 ## Creators
 
@@ -21,3 +21,7 @@ A Chrome extension to overlay a design grid on your web page; configurable to fi
 * Chris Norman
 
 Props to [Carl Henderson](https://github.com/chuckhendo) whose [Chrome Bootstrap project](https://github.com/chuckhendo/chrome-bootstrap) was the original source, which we forked from.
+
+## Contribute
+
+[Contribution Guidelines](CONTRIBUTING.md)
