@@ -40,7 +40,7 @@
   top: 0px !important;
   right: 0px !important;
   left: 0px !important;
-  border-top: solid 2px rgba(255, 0, 9, 0.25);
+  border-top: solid 2px rgba(255, 0, 9, 0.4);
   pointer-events: none !important;
   z-index: 1000000 !important;
   -webkit-user-select: none !important;
@@ -55,12 +55,13 @@
   margin: 0px !important;
   font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,Roboto,sans-serif !important;
   font-size: 12px !important;
+  font-style: normal !important;
   font-weight: 500 !important;
   pointer-events: none !important;
   z-index: 1000000 !important;
   -webkit-user-select: none !important;
-  color: black !important;
-  background: rgba(255, 0, 9, 0.25) !important;
+  color: #ffffff !important;
+  background: rgba(255, 0, 9, 0.4) !important;
   border-radius: 0 0 4px 4px;
   box-sizing: content-box !important;
 }
