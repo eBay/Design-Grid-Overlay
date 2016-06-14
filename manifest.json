@@ -15,7 +15,8 @@
     "persistent": false
   },
   "web_accessible_resources": [
-      "src/css/grid.css"
+      "src/css/grid.css",
+      "src/css/report.css"
   ],
   "permissions": [
     "tabs",

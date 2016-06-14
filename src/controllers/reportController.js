@@ -8,7 +8,7 @@ var reportController = (function(){
 	 * Listens for the event that adds the report to popup
 	 */
 	chrome.runtime.onMessage.addListener(function(request) {
-	  if (request.method === 'resize') {
+	  if (request.method === 'updateGridReport') {
 	   	var colWidth = 0;
 
 	   	if(request.breakPoint == 'small'){
@@ -55,12 +55,12 @@ var reportController = (function(){
 		}
 
 		document.getElementById('report').innerHTML = output;
-	}
+	};
 
 
 	var reportColWidthEquation = function(width, outerGutter, innerGutter, cols){
 		return (((width - (outerGutter * 2)) - (innerGutter * (cols - 1))) / cols)
-	}
+	};
 
 	/**
 	 * Sends a message to get the column pixel widths
@@ -68,16 +68,65 @@ var reportController = (function(){
 	 * @param {int} tabId - The id of the current tab
 	 */
 	var calculateReport = function(tabId){
-		console.log('Fell into calculate');
-		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {method: "fireCalc", tabId: tabs[0].id});
-		});
-	}
+		chrome.tabs.sendMessage(tabId, {method: "fireCalc", tabId: tabId});
+	};
 
 	function numberFormat(val, decimalPlaces) {
 		var multiplier = Math.pow(10, decimalPlaces);
-   	return (Math.round(val * multiplier) / multiplier).toFixed(decimalPlaces);
+   		return (Math.round(val * multiplier) / multiplier).toFixed(decimalPlaces);
 	}
+
+
+	/**
+	 * Inject report CSS styling into the active tab
+	 *
+	 * @param currentTabId - currently active tab
+     */
+	var insertReportCSS = function(currentTabId){
+		chrome.tabs.sendMessage(currentTabId, { method: "addReportCSS"});
+
+	};
+
+	/**
+	 * Tell the in-page injected JS code for the grid report to create the report overlay
+	 *
+	 * @param currentTabId - currently active chrome tab
+     * @param reportOverlaySelector - The query selector that specifies the elements that will
+     * show a size overlay on the page
+	 */
+	var createReportOverlay = function(currentTabId, reportOverlaySelector){
+		chrome.tabs.sendMessage(currentTabId, {method: "createReportOverlay", tabId: currentTabId, reportOverlaySelector: reportOverlaySelector});
+
+	};
+
+	/**
+	 * Tell the in-page injected JS code for the grid report to remove the report overlay
+	 *
+	 * @param currentTabId - currently active chrome tab
+	 */
+	var removeReportOverlay = function(currentTabId){
+
+		chrome.tabs.sendMessage(currentTabId, {method: "removeReportOverlay", tabId: currentTabId});
+	};
+
+
+	/**
+	 * Report Controller API function used by popup.js to enable or disable the report overlay
+     *
+     *  @param currentTabId - currently active chrome tab
+	 *  @param gridToggleEnabled - Whether the master Grid overlay toggle is enabled
+	 *  @param options - configuration options for report
+     */
+	var updateReportOverlay = function(currentTabId, gridToggleEnabled, options){
+        if(options.reportOverlayToggle){
+            createReportOverlay(currentTabId, options.reportOverlaySelector);
+        }
+        else {
+            removeReportOverlay(currentTabId, options.reportOverlaySelector);
+        }
+
+        insertReportCSS(currentTabId);
+	};
 
 
 	/**
@@ -85,6 +134,7 @@ var reportController = (function(){
 	 */
 	return {
 		createReport:createReport,
-		calculateReport:calculateReport
+		calculateReport:calculateReport,
+		updateReportOverlay:updateReportOverlay
 	}
 })();

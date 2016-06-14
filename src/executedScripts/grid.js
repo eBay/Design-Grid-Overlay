@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(
  function(request, sender, sendResponse) {
    if(request.method == "create"){
     chrome.storage.sync.get(request.tabId.toString(), function(item) {
-        var numColumns = item[request.tabId.toString()].largeColumns || 16;       
+        var numColumns = item[request.tabId.toString()].formData.gridForm.settings.largeColumns || 16;
 
         var div = document.createElement('div');
         div.setAttribute("class", "cb-grid-lines"); 

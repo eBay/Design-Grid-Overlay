@@ -3,6 +3,7 @@
 }
 
 body {
+    height: 600px; /*Max height of chrome extension pop-up window */
     width: 250px;
     margin: 0;
 }
@@ -262,6 +263,16 @@ input[type=reset] {
     text-decoration: inherit;
 }
 
+.reportContainer {
+    padding: 0 8px 0 8px;
+    height: 345px;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+#reportForm {
+    margin-bottom: 8px;
+}
 
 table {
   text-align:left;

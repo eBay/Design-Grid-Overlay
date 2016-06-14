@@ -14,7 +14,7 @@
         </header>
         <div class="tabs">
             <div role="tablist" id="tabContainer">
-                <div aria-controls="panel1" role="tab" tabindex="0" aria-selected="true" id="tab1" class="tabLabel">
+                <div aria-controls="panel1" role="tab" tabindex="0" aria-selected="true" aria-hidden="false" id="tab1" class="tabLabel">
                     <span>Settings</span>
                 </div>
                 <div aria-controls="panel2" role="tab" tabindex="-1" aria-selected="false" id="tab2" class="tabLabel">
@@ -26,7 +26,7 @@
             </div>
             <div id="gridsettings">
                 <div id="panel1" role="tabpanel" aria-hidden="false" aria-labelledby="tab1" class="tab">
-                    <form name="gridsettings">
+                    <form id="gridForm" name="gridForm">
                         <fieldset class="gridsettings__columns">
                             <legend>Columns</legend>
                             <div>
@@ -96,26 +96,49 @@
                             Ignore scrollbar
                         </label>
                         <div>
-                            <input type="reset" id="resetToDefaults" value="Reset Settings">
+                            <input type="reset" id="resetToDefaults" value="Reset Grid Settings">
                         </div>
 
                     </form>
                 </div>
                 <div id="panel2" role="tabpanel" aria-hidden="true" aria-labelledby="tab2" class="tab">
-                    <table>
-                        <thead>
+                    <form id="reportForm" name="reportForm">
+                        <fieldset id="overlaySettings">
+                            <legend>Enable Size Overlay</legend>
+                            <div>
+                                <input type="checkbox" id="reportOverlayToggle">
+                                <label
+                                        info="Enable Element Size Overlay"
+                                        for="reportOverlayToggle"
+                                        class="tooltip">
+                                    Enable Size Overlay
+                                </label>
+                            </div>
+                            <div>
+                                <label for="reportOverlaySelector">Element Selector</label>
+                                <input type="text" id="reportOverlaySelector" value=".grid__cell">
+                            </div>
+                        </fieldset>
+                        <div class="reset">
+                            <input type="reset" value="Reset Report Settings">
+                        </div>
+                    </form>
+                    <div class="reportContainer">
+                        <table>
+                            <thead>
                             <tr>
                                 <th>#Cols</th>
                                 <th class="table-right">Width</th>
                             </tr>
-                        </thead>
-                        <tbody id="report">
+                            </thead>
+                            <tbody id="report">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div id="panel3" role="tabpanel" aria-hidden="true" aria-labelledby="tab3" class="tab">
-                    <form id="advancedForm">
+                    <form id="advancedForm" name="advancedForm">
                         <fieldset class="gridsettings__columns">
                             <legend>Columns</legend>
                             <div>
@@ -138,12 +161,10 @@
             </div>
         </div>
       </div>
-
         <script type="text/javascript" src="vendor/jquery-2.2.2.min.js"></script>
-        <script type="text/javascript" src="controllers/tabController.js"></script>
+        <script type="text/javascript" src="controllers/settingStorageController.js"></script>
         <script type="text/javascript" src="controllers/gridController.js"></script>
         <script type="text/javascript" src="controllers/reportController.js"></script>
         <script type="text/javascript" src="popup.js"></script>
-
     </body>
 </html>

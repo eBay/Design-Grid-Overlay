@@ -18,7 +18,7 @@ var gridController = (function(){
 		}else{
 			return '%';
 		}
-	}
+	};
 
 	/**
 	 * Creates the CSS class that sets the width of the 
@@ -32,15 +32,16 @@ var gridController = (function(){
 				+ "width: 100" + units 
 			+ "}";
 
-	}
+	};
 
 	/**
 	 * Creates the CSS that styles the grid columns 
 	 * on a large screen 
 	 *	
 	 * @param {object} options - The setting from whats stored in local storage.
+	 * @param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
 	 */
-	var createGridContainer = function(options){
+	var createGridContainer = function(options, advancedOptions){
 	
 		return  ".grid-overlay-container {"
 			  	+ "max-width:" + options.largeWidth + "px;"
@@ -50,7 +51,7 @@ var gridController = (function(){
 			+ ".grid-overlay-col {"
 				+ "width:" + calcColumnPercents(options.largeColumns) + "%;"
 				+ "margin: 0 " +  (options.gutters / 2) + "px;"
-				+ "background: " +  options.color + ";"
+				+ "background: " +  advancedOptions.color + ";"
 			+ "}"
 			+ ".grid-overlay-col:first-child {"
     			+ "margin-left:0px;"
@@ -58,7 +59,7 @@ var gridController = (function(){
 			+ ".grid-overlay-col:last-child {"
     			+ "margin-right:0px;"
 			+ "}"
-	}
+	};
 
 	/**
 	 * Creates the CSS for the small container.
@@ -66,14 +67,15 @@ var gridController = (function(){
 	 *	the value specified in the options argument. 
 	 *
 	 * @param {object} options - The setting from whats stored in local storage.
+	 * @param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
 	 */
-   var createSmallContainer = function(options){
+   var createSmallContainer = function(options, advancedOptions){
 	
 		return "@media (max-width:" + options.smallWidth + "px) {" 
 				+ ".grid-overlay-col {"
 				 	+ "width:" + calcColumnPercents(options.smallColumns) + "%;"
 				 	+ "margin: 0 " +  (options.mobileInnerGutters / 2) + "px;"
-				 	+ "background: " +  options.color + ";"
+				 	+ "background: " +  advancedOptions.color + ";"
 				+ "}"
 				+ ".grid-overlay-container {"
 					+ "padding:0px " + options.mobileOutterGutters + "px;"
@@ -89,7 +91,7 @@ var gridController = (function(){
 					+ "display:none;"
 				+ "}"
 			+ "}" 
-	}
+	};
 
 	/**
 	 * Calculates the percents of each column.
@@ -98,26 +100,27 @@ var gridController = (function(){
 	 */
 	var calcColumnPercents = function(columns){
 		return (100 / columns);
-	}
+	};
 
 	/**
 	 * Aggregates the CSS and sends a message to 
 	 * have it inserted onto the page
 	 *
-	 * @param {object} options - The setting from whats stored in local storage.		
+     * @param {number} currentTabId - Currently active Chrome Tab Id
+	 * @param {object} options - The setting from whats stored in local storage.
+	 * @param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
 	 */
-	var executeCSS = function(options){
+	var executeCSS = function(currentTabId, options, advancedOptions){
 
-		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			var unitWidth = checkIfViewPortIsSelected(options['viewports']);
 
-			chrome.tabs.sendMessage(tabs[0].id, { method: "addCSS",
-			 	css: createGridLinesCSS(unitWidth) + createGridContainer(options) + createSmallContainer(options)
-			});
+        var unitWidth = checkIfViewPortIsSelected(options['viewports']);
 
-		});
+        chrome.tabs.sendMessage(currentTabId, {
+            method: "addCSS",
+            css: createGridLinesCSS(unitWidth) + createGridContainer(options, advancedOptions) + createSmallContainer(options, advancedOptions)
+        });
 
-	}
+	};
 
 	/**
 	 * Sends a message to tell whether the grid is on or off 
@@ -125,64 +128,70 @@ var gridController = (function(){
 	 * @param {int} gridStatus - The status of the grid either 0 or 1 (off or on)
 	 */
 	var respond =  function(gridStatus) {
-    chrome.runtime.sendMessage({status: gridStatus});
-	}
+    	chrome.runtime.sendMessage({status: gridStatus});
+	};
 
 	/**
 	 * Sends a message to have the grid HTML added to the page. 
 	 * First a status saying the grid is on is sent. After a  
 	 *	message is sent to the grid content script that tell it
 	 * to create the grid HTML
+     *
+     *  @param {number} currentTabId - Currently active Chrome Tab Id
 	 */
-	var createGrid = function(){
-		respond(1);
-		 chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-	      chrome.tabs.sendMessage(tabs[0].id, {method: "create", tabId: tabs[0].id});
-	    });
-	}
+	var createGrid = function(currentTabId){
+        respond(1);
+        chrome.tabs.sendMessage(currentTabId, {method: "create", tabId: currentTabId});
+	};
 
 	/**
 	 * Used to turn the grid on and off when updating the 
 	 * settings in the popup.
 	 *
+     *  @param {number} currentTabId - Currently active Chrome Tab Id
 	 *	@param {object} options - The setting from whats stored in local storage.
+	 *	@param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
 	 */
-	var toggleGrid = function(options) {
+	var toggleGrid = function(currentTabId, options, advancedOptions) {
 		var gridToggle = document.getElementById('gridToggle');
 
 		if(gridToggle.checked){
-			removeGrid();
-			createGrid();
+			removeGrid(currentTabId);
+			createGrid(currentTabId);
 		}else{
-			removeGrid();
+			removeGrid(currentTabId);
 		}
 	
-	   executeCSS(options);
-	}
+	   executeCSS(currentTabId, options, advancedOptions);
+	};
 
 	/**
 	 * Used to turn the grid on and off when updating the 
 	 * settings in the popup.
 	 *
+     *  @param {number} currentTabId - Currently active Chrome Tab Id
 	 *	@param {object} options - The setting from whats stored in local storage.
+	 *  @param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
 	 */
-	var updateGrid = function(options){
-	   toggleGrid(options);
-	}
+	var updateGrid = function(currentTabId, options, advancedOptions){
+	   toggleGrid(currentTabId, options, advancedOptions);
+	};
 
 	/**
 	 * Removes the grid from the current tab.
 	 * Fires two events, destroy and removeCSS. 
-	 *	The message destroy removes the grid HTML.
-	 * The message removeCSS removes the old css for the grid 
+	 *The message destroy removes the grid HTML.
+	 * The message removeCSS removes the old css for the grid
+     *
+     *  @param {number} currentTabId - Currently active Chrome Tab Id
 	 */
-	var removeGrid = function(){
+	var removeGrid = function(currentTabId){
 		respond(0);
-		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-	      chrome.tabs.sendMessage(tabs[0].id, {method: "destroy", tabId: tabs[0].id});
-	      chrome.tabs.sendMessage(tabs[0].id, {method: "removeCSS", tabId: tabs[0].id});
-	   });
-	}
+
+        chrome.tabs.sendMessage(currentTabId, {method: "destroy", tabId: currentTabId});
+        chrome.tabs.sendMessage(currentTabId, {method: "removeCSS", tabId: currentTabId});
+
+	};
 
 
 	/**
