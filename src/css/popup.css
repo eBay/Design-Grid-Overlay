@@ -263,7 +263,7 @@ input[type=reset] {
 
 .reportContainer {
   padding: 0 8px 0 8px;
-  height: 345px;
+  height: 318px;
   overflow-y: scroll;
   width: 100%;
 }
@@ -308,4 +308,13 @@ th {
 
 #screenSizes input {
   width: calc(50% - 8px);
+}
+
+#reportForm input[type="text"] {
+  width: 100%;
+}
+
+#reportForm .overlaySettingsCheckboxes {
+  margin-bottom: 8px;
+
 }

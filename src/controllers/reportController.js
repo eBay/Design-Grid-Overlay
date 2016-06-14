@@ -93,12 +93,15 @@ var reportController = (function () {
      * @param currentTabId - currently active chrome tab
      * @param reportOverlaySelector - The query selector that specifies the elements that will
      * show a size overlay on the page
+     * @param matchEmptyElements - tell our overlay in-page JS code whether or not to add overlays to empty elements
+     * with no child elements inside them
      */
-    var createReportOverlay = function (currentTabId, reportOverlaySelector) {
+    var createReportOverlay = function (currentTabId, reportOverlaySelector, matchEmptyElements) {
         chrome.tabs.sendMessage(currentTabId, {
             method: "createReportOverlay",
             tabId: currentTabId,
-            reportOverlaySelector: reportOverlaySelector
+            reportOverlaySelector: reportOverlaySelector,
+            matchEmptyElements: matchEmptyElements
         });
 
     };
@@ -123,10 +126,10 @@ var reportController = (function () {
      */
     var updateReportOverlay = function (currentTabId, gridToggleEnabled, options) {
         if (options.reportOverlayToggle) {
-            createReportOverlay(currentTabId, options.reportOverlaySelector);
+            createReportOverlay(currentTabId, options.reportOverlaySelector, options.reportOverlayMatchEmptyElements);
         }
         else {
-            removeReportOverlay(currentTabId, options.reportOverlaySelector);
+            removeReportOverlay(currentTabId);
         }
 
         insertReportCSS(currentTabId);

@@ -49,7 +49,8 @@ chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.method === "createReportOverlay") {
             var selector = request.reportOverlaySelector || "grid__cell";
-            createReportOverlay(selector);
+            var matchEmptyElements = request.matchEmptyElements || false;
+            createReportOverlay(selector, matchEmptyElements);
 
         }
     });
@@ -71,6 +72,7 @@ chrome.runtime.onMessage.addListener(
  */
 var _designGridSizeOverlayConfig = {
     enabled: false,
+    matchEmptyElements: false,
     selector: undefined,
     overlayedElements: [],
     generatedOverlayArray: [], //Array of actual elements used to display sizes - one for each overlayedElement
@@ -89,10 +91,9 @@ var _designGridSizeOverlayConfig = {
 function updateOverlayValues() {
     if (_designGridSizeOverlayConfig.enabled) {
         for (var i = 0; i < _designGridSizeOverlayConfig.overlayedElements.length; i++) {
-            var elementWidth = _designGridSizeOverlayConfig.overlayedElements[i].element.getBoundingClientRect().width;
-            var paddingLeft = _designGridSizeOverlayConfig.overlayedElements[i].paddingLeft;
-            var paddingRight = _designGridSizeOverlayConfig.overlayedElements[i].paddingRight;
-            _designGridSizeOverlayConfig.generatedOverlayArray[i].firstChild.firstChild.innerHTML = (Math.round((elementWidth - paddingLeft - paddingRight)*100)/100) + "px";
+
+            var elemWidth = calculateElementInnerWidth(_designGridSizeOverlayConfig.overlayedElements[i]);
+            _designGridSizeOverlayConfig.generatedOverlayArray[i].firstChild.firstChild.innerHTML = numberFormat(elemWidth, 2) + "px";
         }
 
     }
@@ -107,10 +108,37 @@ function updateOverlayValues() {
  */
 function domChangeUpdate(mutations) {
 
+    // Save initialization options between destroy and re-creation
     var savedSelector = _designGridSizeOverlayConfig.selector;
-    removeReportOverlay();
-    createReportOverlay(savedSelector);
+    var savedMatchEmptyElements = _designGridSizeOverlayConfig.matchEmptyElements;
 
+    // Re-create our overlays
+    removeReportOverlay();
+    createReportOverlay(savedSelector, savedMatchEmptyElements);
+
+}
+
+
+/**
+ * Calculate the inner content width of an element, which
+ * removes padding on the left and right, and borders on the left and right
+ *
+ * @param element - HTMLElement for which we wish to compute an inner width
+ * @returns {number}
+ */
+function calculateElementInnerWidth(element) {
+    var elementWidth = element.getBoundingClientRect().width;
+
+    // Calculate updated style, then grab padding values
+    var computedStyle = getComputedStyle(element);
+    var paddingLeft = parseFloat(computedStyle.getPropertyValue('padding-left'));
+    var paddingRight = parseFloat(computedStyle.getPropertyValue('padding-right'));
+
+    // Grab border values
+    var borderLeft = parseFloat(computedStyle.getPropertyValue('border-left-width'));
+    var borderRight = parseFloat(computedStyle.getPropertyValue('border-right-width'));
+
+    return (elementWidth - paddingLeft - paddingRight - borderLeft - borderRight);
 }
 
 
@@ -124,8 +152,9 @@ function domChangeUpdate(mutations) {
  *
  * @param selector - Document query selector that specifies
  * the elements which will have a size overlay
+ * @param matchEmptyElements - Boolean that says whether to add our overlay to elements that have no child elements (empty)
  */
-function createReportOverlay(selector) {
+function createReportOverlay(selector, matchEmptyElements) {
 
     // This function may be activated directly by the chrome extension as well as from in-page code, so we
     // always need to verify the current state of the overlay according this page's stored values
@@ -136,16 +165,18 @@ function createReportOverlay(selector) {
     try {
         var foundElements = document.querySelectorAll(selector) || [];
 
-
         for(var k = 0; k < foundElements.length; k++) {
 
-            var computedStyle = getComputedStyle(foundElements[k], null);
+            // If we are matching empty elements, automatically add the element. If we are NOT matching empty
+            // elements, then first check if the element has at least 1 child element
+            if(
+                matchEmptyElements ||
+                (!matchEmptyElements && (foundElements[k].children.length > 0))
+            ) {
+                // Store element
+                _designGridSizeOverlayConfig.overlayedElements.push(foundElements[k]);
+            }
 
-            _designGridSizeOverlayConfig.overlayedElements.push({
-                element: foundElements[k],
-                paddingLeft: parseFloat(computedStyle.getPropertyValue('padding-left')),
-                paddingRight: parseFloat(computedStyle.getPropertyValue('padding-right'))
-            });
         }
 
     }
@@ -156,6 +187,7 @@ function createReportOverlay(selector) {
 
     _designGridSizeOverlayConfig.enabled = true;
     _designGridSizeOverlayConfig.selector = selector;
+    _designGridSizeOverlayConfig.matchEmptyElements = matchEmptyElements;
 
     for (var i = 0; i < _designGridSizeOverlayConfig.overlayedElements.length; i++) {
 
@@ -163,15 +195,13 @@ function createReportOverlay(selector) {
         //Create label div to be inserted into selected elements
         var labelElement = document.createElement('div');
         labelElement.className = "grid-report-size-overlay";
-        var elementWidth = _designGridSizeOverlayConfig.overlayedElements[i].element.getBoundingClientRect().width;
-        var paddingLeft = _designGridSizeOverlayConfig.overlayedElements[i].paddingLeft;
-        var paddingRight = _designGridSizeOverlayConfig.overlayedElements[i].paddingRight;
 
-        labelElement.innerHTML = "<div class='size-content'><span>" + (Math.round((elementWidth - paddingLeft - paddingRight)*100)/100) + "px" + "</span></div>";
+        var elemWidth = calculateElementInnerWidth(_designGridSizeOverlayConfig.overlayedElements[i]);
+        labelElement.innerHTML = "<div class='size-content'><span>" + numberFormat(elemWidth, 2) + "px" + "</span></div>";
 
         // Prepend label as first child of selected element
-        _designGridSizeOverlayConfig.overlayedElements[i].element.insertBefore(
-            labelElement, _designGridSizeOverlayConfig.overlayedElements[i].element.firstChild);
+        _designGridSizeOverlayConfig.overlayedElements[i].insertBefore(
+            labelElement, _designGridSizeOverlayConfig.overlayedElements[i].firstChild);
 
         // Keep track of this generated label elements
         _designGridSizeOverlayConfig.generatedOverlayArray.push(labelElement);
@@ -197,7 +227,7 @@ function removeReportOverlay() {
         _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
 
         for (var i = 0; i < _designGridSizeOverlayConfig.overlayedElements.length; i++) {
-            _designGridSizeOverlayConfig.overlayedElements[i].element.removeChild(_designGridSizeOverlayConfig.generatedOverlayArray[i]);
+            _designGridSizeOverlayConfig.overlayedElements[i].removeChild(_designGridSizeOverlayConfig.generatedOverlayArray[i]);
 
         }
 
@@ -282,7 +312,6 @@ function getWidth() {
  */
 function numberFormat(val, decimalPlaces) {
     var multiplier = Math.pow(10, decimalPlaces);
-    return (Math.round(val * multiplier) / multiplier).toFixed(decimalPlaces);
+    return (Math.round(val * multiplier) / multiplier).toFixed(2);
 }
-
 

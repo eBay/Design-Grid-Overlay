@@ -54,7 +54,8 @@ var settingStorageController = (function () {
                 settings: {
                     // Each of these settings keys maps to an input HTML element with the same id
                     reportOverlayToggle: EMPTY_VALUE,
-                    reportOverlaySelector: EMPTY_VALUE
+                    reportOverlaySelector: EMPTY_VALUE,
+                    reportOverlayMatchEmptyElements: EMPTY_VALUE
                 }
             },
             //Form data for advanced settings

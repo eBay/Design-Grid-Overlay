@@ -104,14 +104,22 @@
                 <div id="panel2" role="tabpanel" aria-hidden="true" aria-labelledby="tab2" class="tab">
                     <form id="reportForm" name="reportForm">
                         <fieldset id="overlaySettings">
-                            <legend>Enable Container Overlay</legend>
-                            <div>
+                            <legend>Container Size Overlay</legend>
+                            <div class="overlaySettingsCheckboxes">
                                 <input type="checkbox" id="reportOverlayToggle">
                                 <label
-                                        info="Enable Container Size Overlay"
+                                        info="Enable Overlay"
                                         for="reportOverlayToggle"
                                         class="tooltip">
-                                    Enable Size Overlay
+                                    Enable Overlay
+                                </label>
+                                <br />
+                                <input type="checkbox" id="reportOverlayMatchEmptyElements">
+                                <label
+                                    info="Overlay Empty Container"
+                                    for="reportOverlayMatchEmptyElements"
+                                    class="tooltip">
+                                    Overlay Empty Containers
                                 </label>
                             </div>
                             <div>
