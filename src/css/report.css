@@ -22,6 +22,8 @@
 */
 .grid-report-size-overlay {
   height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   position: relative !important;
   pointer-events: none !important;
   z-index: 1000000 !important;
@@ -31,14 +33,27 @@
   line-height: normal !important;
   display: block !important;
   position: absolute !important;
-  padding: 3px !important;
+  padding: 0 !important;
+  margin: 0 !important;
   top: 0px !important;
   right: 0px !important;
   left: 0px !important;
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  background: rgba(255, 0, 9, 0.39) !important;
+  border-top: solid 2px rgba(255, 107, 112, 0.75);
   pointer-events: none !important;
   z-index: 1000000 !important;
   -webkit-user-select: none !important;
+}
+
+.size-content span {
+  line-height: normal !important;
+  display: inline !important;
+  padding: 2px 4px 3px 4px !important;
+  margin: 0px !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  pointer-events: none !important;
+  z-index: 1000000 !important;
+  -webkit-user-select: none !important;
+  background: rgba(255, 107, 112, 0.75) !important;
+  border-radius: 0 0 4px 4px;
 }

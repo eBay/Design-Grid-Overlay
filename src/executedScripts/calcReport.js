@@ -72,8 +72,7 @@ chrome.runtime.onMessage.addListener(
 var _designGridSizeOverlayConfig = {
     enabled: false,
     selector: undefined,
-    sizeOverlaySelector: undefined,
-    overlayedElements: undefined,
+    overlayedElements: [],
     generatedOverlayArray: [], //Array of actual elements used to display sizes - one for each overlayedElement
     bodyMutationObserver: new MutationObserver(domChangeUpdate),
     bodyMutObsConfig: {
@@ -90,8 +89,10 @@ var _designGridSizeOverlayConfig = {
 function updateOverlayValues() {
     if (_designGridSizeOverlayConfig.enabled) {
         for (var i = 0; i < _designGridSizeOverlayConfig.overlayedElements.length; i++) {
-            var elementWidth = Math.round(_designGridSizeOverlayConfig.overlayedElements[i].getBoundingClientRect().width);
-            _designGridSizeOverlayConfig.generatedOverlayArray[i].firstChild.innerHTML = elementWidth + "px";
+            var elementWidth = _designGridSizeOverlayConfig.overlayedElements[i].element.getBoundingClientRect().width;
+            var paddingLeft = _designGridSizeOverlayConfig.overlayedElements[i].paddingLeft;
+            var paddingRight = _designGridSizeOverlayConfig.overlayedElements[i].paddingRight;
+            _designGridSizeOverlayConfig.generatedOverlayArray[i].firstChild.firstChild.innerHTML = (Math.round((elementWidth - paddingLeft - paddingRight)*100)/100) + "px";
         }
 
     }
@@ -132,22 +133,47 @@ function createReportOverlay(selector) {
         removeReportOverlay();
     }
 
+    try {
+        var foundElements = document.querySelectorAll(selector) || [];
+
+
+        for(var k = 0; k < foundElements.length; k++) {
+
+            var computedStyle = getComputedStyle(foundElements[k], null);
+
+            _designGridSizeOverlayConfig.overlayedElements.push({
+                element: foundElements[k],
+                paddingLeft: parseFloat(computedStyle.getPropertyValue('padding-left')),
+                paddingRight: parseFloat(computedStyle.getPropertyValue('padding-right'))
+            });
+        }
+
+    }
+    catch(e) {
+        console.error("Design Grid Overlay Error: Invalid Query Selector '" + selector + "'");
+        return;
+    }
+
     _designGridSizeOverlayConfig.enabled = true;
     _designGridSizeOverlayConfig.selector = selector;
-    _designGridSizeOverlayConfig.overlayedElements = document.querySelectorAll(selector) || [];
-    _designGridSizeOverlayConfig.generatedOverlayArray = [];
 
     for (var i = 0; i < _designGridSizeOverlayConfig.overlayedElements.length; i++) {
 
 
+        //Create label div to be inserted into selected elements
         var labelElement = document.createElement('div');
         labelElement.className = "grid-report-size-overlay";
-        var elementWidth = Math.round(_designGridSizeOverlayConfig.overlayedElements[i].getBoundingClientRect().width);
-        labelElement.innerHTML = "<div class='size-content'>" + elementWidth + "px" + "</div>";
+        var elementWidth = _designGridSizeOverlayConfig.overlayedElements[i].element.getBoundingClientRect().width;
+        var paddingLeft = _designGridSizeOverlayConfig.overlayedElements[i].paddingLeft;
+        var paddingRight = _designGridSizeOverlayConfig.overlayedElements[i].paddingRight;
 
-        // Prepend it
-        _designGridSizeOverlayConfig.overlayedElements[i].insertBefore(labelElement, _designGridSizeOverlayConfig.overlayedElements[i].firstChild);
+        labelElement.innerHTML = "<div class='size-content'><span>" + (Math.round((elementWidth - paddingLeft - paddingRight)*100)/100) + "px" + "</span></div>";
 
+        // Prepend label as first child of selected element
+        _designGridSizeOverlayConfig.overlayedElements[i].element.insertBefore(
+            labelElement, _designGridSizeOverlayConfig.overlayedElements[i].element.firstChild);
+
+        // Keep track of this generated label elements
         _designGridSizeOverlayConfig.generatedOverlayArray.push(labelElement);
 
     }
@@ -171,15 +197,15 @@ function removeReportOverlay() {
         _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
 
         for (var i = 0; i < _designGridSizeOverlayConfig.overlayedElements.length; i++) {
-            _designGridSizeOverlayConfig.overlayedElements[i].removeChild(_designGridSizeOverlayConfig.generatedOverlayArray[i]);
+            _designGridSizeOverlayConfig.overlayedElements[i].element.removeChild(_designGridSizeOverlayConfig.generatedOverlayArray[i]);
 
         }
 
         window.removeEventListener('resize', updateOverlayValues);
 
         _designGridSizeOverlayConfig.selector = undefined;
-        _designGridSizeOverlayConfig.overlayedElements = undefined;
-        _designGridSizeOverlayConfig.generatedOverlayArray = undefined;
+        _designGridSizeOverlayConfig.overlayedElements = [];
+        _designGridSizeOverlayConfig.generatedOverlayArray = [];
         _designGridSizeOverlayConfig.enabled = false;
     }
 
@@ -193,11 +219,14 @@ function removeReportOverlay() {
  * values to have the correct report generated
  */
 function fireCalc(tabId) {
-    chrome.storage.sync.get(tabId.toString(), function (items) {
-        if (getWidth() <= parseInt(items[tabId].formData.gridForm.settings["smallWidth"])) {
-            calculateReport('small', items[tabId].formData.gridForm.settings);
-        } else {
-            calculateReport('large', items[tabId].formData.gridForm.settings);
+    var strTabId = tabId.toString();
+    chrome.storage.sync.get(strTabId, function (items) {
+        if(items[strTabId]) {
+            if (getWidth() <= parseInt(items[strTabId].formData.gridForm.settings["smallWidth"])) {
+                calculateReport('small', items[strTabId].formData.gridForm.settings);
+            } else {
+                calculateReport('large', items[strTabId].formData.gridForm.settings);
+            }
         }
     });
 }
@@ -252,10 +281,8 @@ function getWidth() {
  * report to a certain number of decimal places.
  */
 function numberFormat(val, decimalPlaces) {
-
     var multiplier = Math.pow(10, decimalPlaces);
     return (Math.round(val * multiplier) / multiplier).toFixed(decimalPlaces);
 }
-
 
 
