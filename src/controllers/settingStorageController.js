@@ -2,7 +2,7 @@
  * Responsible for generating the report in
  * the popup.
  */
-var settingStorageController = (function(){
+var settingStorageController = (function () {
 
     /**
      * A placeholder value to put into our globalSettings in order for each
@@ -73,7 +73,7 @@ var settingStorageController = (function(){
      * @param dataToStoreObject - Data storage object to put Tab UI state into
      * @returns the tab state data pulled from the HTML UI and put into the given data storage object
      */
-    function saveTabStates(dataToStoreObject){
+    function saveTabStates(dataToStoreObject) {
 
         var activeTabPanel = tabContentContainer.querySelector("div[aria-hidden='false']");
         var activeTabLabel = tabLabelContainer.querySelector("div[aria-selected='true']");
@@ -93,7 +93,7 @@ var settingStorageController = (function(){
      */
     function loadTabState(loadedObjectData) {
 
-        if(loadedObjectData.activeTabPanelId &&  loadedObjectData.activeTabLabelId){
+        if (loadedObjectData.activeTabPanelId && loadedObjectData.activeTabLabelId) {
 
             var activeTabPanel = document.getElementById(loadedObjectData.activeTabPanelId);
             var activeTabLabel = document.getElementById(loadedObjectData.activeTabLabelId);
@@ -103,11 +103,11 @@ var settingStorageController = (function(){
             var allTabPanels = tabContentContainer.getElementsByClassName('tab');
             var allTabLabels = tabLabelContainer.getElementsByClassName('tabLabel');
 
-            for(var i = 0; i < allTabPanels.length; i++){
+            for (var i = 0; i < allTabPanels.length; i++) {
                 allTabPanels[i].setAttribute('aria-hidden', true);
             }
 
-            for(var j=0; j< allTabLabels.length; j++) {
+            for (var j = 0; j < allTabLabels.length; j++) {
                 allTabLabels[j].setAttribute('aria-selected', false);
             }
 
@@ -125,7 +125,7 @@ var settingStorageController = (function(){
      * that any default settings are also saved into chrome's local storage
      */
     function loadSettings(currentChromeTabId, callback) {
-        chrome.storage.sync.get(currentChromeTabId.toString(), function(storedData) {
+        chrome.storage.sync.get(currentChromeTabId.toString(), function (storedData) {
 
 
             //Override the local var with the actual data we want to load, which is for this specific tab
@@ -142,13 +142,13 @@ var settingStorageController = (function(){
 
 
                 // Fill in stored data with blank data if no settings found
-                if(!storedData.formData[formName]) {
-                    storedData.formData[formName] = { settings: {}};
+                if (!storedData.formData[formName]) {
+                    storedData.formData[formName] = {settings: {}};
 
                 }
 
 
-                var storedFormData =  storedData.formData[formName].settings;
+                var storedFormData = storedData.formData[formName].settings;
                 var formData = globalSettings.formData[formName];
                 var formElement = formData.formElement;
                 var htmlInputs = formElement.getElementsByTagName('input');
@@ -157,14 +157,14 @@ var settingStorageController = (function(){
                 // don't exist in the stored data
                 for (var settingId in formData.settings) {
 
-                    if(htmlInputs[settingId].type == "number" || htmlInputs[settingId].type == "text"){
-                        if(storedFormData && storedFormData[settingId]){
-                            if(storedFormData[settingId].length > 0){
+                    if (htmlInputs[settingId].type == "number" || htmlInputs[settingId].type == "text") {
+                        if (storedFormData && storedFormData[settingId]) {
+                            if (storedFormData[settingId].length > 0) {
                                 htmlInputs[settingId].value = storedFormData[settingId];
                             }
                         }
                     }
-                    else if(htmlInputs[settingId].type == "checkbox"){
+                    else if (htmlInputs[settingId].type == "checkbox") {
                         htmlInputs[settingId].checked = storedFormData ? storedFormData[settingId] : htmlInputs[settingId].checked
                     }
 
@@ -176,7 +176,7 @@ var settingStorageController = (function(){
             // This save call will also sync our UI state with our in-memory global settings object
             saveSettings(currentChromeTabId);
 
-            if(callback) {
+            if (callback) {
                 callback(globalSettings);
             }
         });
@@ -193,7 +193,7 @@ var settingStorageController = (function(){
      *   id of the setting, which is the same as the HTML element id, and the state of that setting
      * @returns Filled in form data mapping pulled from our form UI
      */
-    function saveSettings(currentChromeTabId){
+    function saveSettings(currentChromeTabId) {
 
         var dataToStore = {};
 
@@ -210,7 +210,6 @@ var settingStorageController = (function(){
         globalSettings.activeTabPanelId = dataToStore[currentChromeTabId].activeTabPanelId;
 
 
-
         //Go through each settings ID in each form and pull the data from the HTML state into an object for storage
         for (var formName in globalSettings.formData) {
 
@@ -225,10 +224,10 @@ var settingStorageController = (function(){
 
             // Pull all HTML UI state into settings fields for storage, as well as into in-memory settings object
             for (var settingId in inMemoryFormData.settings) {
-                if(htmlInputs[settingId].type == "number" || htmlInputs[settingId].type == "text") {
+                if (htmlInputs[settingId].type == "number" || htmlInputs[settingId].type == "text") {
                     storedFormData.settings[settingId] = htmlInputs[settingId].value;
                 }
-                else if(htmlInputs[settingId].type == "checkbox") {
+                else if (htmlInputs[settingId].type == "checkbox") {
                     storedFormData.settings[settingId] = htmlInputs[settingId].checked || false;
                 }
 

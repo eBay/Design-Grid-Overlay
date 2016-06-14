@@ -11,6 +11,3 @@ if (document.getElementsByClassName('cb-grid-lines').length) {
 function respond(gridStatus) {
     chrome.runtime.sendMessage({status: gridStatus});
 }
-
-
-

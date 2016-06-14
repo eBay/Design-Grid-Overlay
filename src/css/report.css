@@ -1,20 +1,19 @@
 /* Pseudo-element label method */
 /*.grid-report-size-overlay:before {*/
-    /*width: 100px;*/
-    /*height: 0;*/
-    /*pointer-events: none;*/
-    /*font-weight: 700;*/
-    /*color:black;*/
-    /*border-left: 1px solid black;*/
-    /*!*border-top: 1px solid black;*!*/
-    /*!*border-right: 50px solid transparent;*!*/
-    /*!*border-top: 50px solid red;*!*/
-    /*position: relative;*/
-    /*content: attr(overlay-size);*/
-    /*top: 0px;*/
-    /*left: 0px;*/
+/*width: 100px;*/
+/*height: 0;*/
+/*pointer-events: none;*/
+/*font-weight: 700;*/
+/*color:black;*/
+/*border-left: 1px solid black;*/
+/*!*border-top: 1px solid black;*!*/
+/*!*border-right: 50px solid transparent;*!*/
+/*!*border-top: 50px solid red;*!*/
+/*position: relative;*/
+/*content: attr(overlay-size);*/
+/*top: 0px;*/
+/*left: 0px;*/
 /*}*/
-
 
 /*
   All CSS Attributes here are marked as important to force
@@ -22,24 +21,24 @@
   injecting our overlay
 */
 .grid-report-size-overlay {
-    height: 0 !important;
-    position: relative !important;
-    pointer-events: none !important;
-    z-index: 1000000 !important;
- }
+  height: 0 !important;
+  position: relative !important;
+  pointer-events: none !important;
+  z-index: 1000000 !important;
+}
 
 .grid-report-size-overlay .size-content {
-    line-height: normal !important;
-    display: block !important;
-    position: absolute !important;
-    padding: 3px !important;
-    top: 0px !important;
-    right: 0px !important;
-    left: 0px !important;
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    background: rgba(255, 0, 9, 0.39) !important;
-    pointer-events: none !important;
-    z-index: 1000000 !important;
-    -webkit-user-select: none !important;
+  line-height: normal !important;
+  display: block !important;
+  position: absolute !important;
+  padding: 3px !important;
+  top: 0px !important;
+  right: 0px !important;
+  left: 0px !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 0, 9, 0.39) !important;
+  pointer-events: none !important;
+  z-index: 1000000 !important;
+  -webkit-user-select: none !important;
 }

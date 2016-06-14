@@ -1,11 +1,11 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    height: 600px; /*Max height of chrome extension pop-up window */
-    width: 250px;
-    margin: 0;
+  height: 600px; /*Max height of chrome extension pop-up window */
+  width: 250px;
+  margin: 0;
 }
 
 header {
@@ -13,8 +13,8 @@ header {
 }
 
 label {
-    color: #555;
-    margin: 4px 5px 0 0;
+  color: #555;
+  margin: 4px 5px 0 0;
 }
 
 fieldset {
@@ -39,74 +39,73 @@ h3 {
 }
 
 .switch {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 #main {
-  display:flex;
+  display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .switch > label {
-    padding: .875rem 0;
-    flex: 1;
+  padding: .875rem 0;
+  flex: 1;
 }
 
 .switch > input {
-    position: absolute;
-    flex: 2;
-    z-index: 5;
-    width: 2.25rem;
-    height: 1.5rem;
-    padding: 0;
-    margin: .625rem 0 .625rem 1rem;
-    cursor: pointer;
-    opacity: 0;
+  position: absolute;
+  flex: 2;
+  z-index: 5;
+  width: 2.25rem;
+  height: 1.5rem;
+  padding: 0;
+  margin: .625rem 0 .625rem 1rem;
+  cursor: pointer;
+  opacity: 0;
 }
 
 .switch > input + span {
-    position: relative;
-    display: block;
-    width: 2.5rem;
-    height: 1.5rem;
-    margin: .625rem;
-    color: transparent;
-    text-indent: 100%;
-    cursor: pointer;
-    background: #B9B8B8 none repeat scroll 0 0;
-    border-radius: 25rem;
-    transition: left 0.15s ease-out 0s;
+  position: relative;
+  display: block;
+  width: 2.5rem;
+  height: 1.5rem;
+  margin: .625rem;
+  color: transparent;
+  text-indent: 100%;
+  cursor: pointer;
+  background: #B9B8B8 none repeat scroll 0 0;
+  border-radius: 25rem;
+  transition: left 0.15s ease-out 0s;
 }
 
 .switch > input:checked {
-    margin-left: 0.75rem;
+  margin-left: 0.75rem;
 }
 
 .switch input:checked + span {
-    background: #0554BA none repeat scroll 0 0;
+  background: #0554BA none repeat scroll 0 0;
 }
 
-
 .switch > input + span::after {
-    position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    background: #ffffff none repeat scroll 0 0;
-    border-radius: 50%;
-    content: "";
-    transform: translate3d(0, 0, 0);
-    transition: left 0.15s ease-out 0s;
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background: #ffffff none repeat scroll 0 0;
+  border-radius: 50%;
+  content: "";
+  transform: translate3d(0, 0, 0);
+  transition: left 0.15s ease-out 0s;
 }
 
 .switch input:checked + span::after {
-    left: 1.25rem;
+  left: 1.25rem;
 }
 
 #tabContainer {
@@ -121,11 +120,11 @@ h3 {
 }
 
 input[type=number] {
-    border-radius: 3px;
-    color: rgb(85, 85, 85);
-    border: 1px solid #d3d3d3;
-    width: 100%;
-    padding: 3px 0 3px 5px;
+  border-radius: 3px;
+  color: rgb(85, 85, 85);
+  border: 1px solid #d3d3d3;
+  width: 100%;
+  padding: 3px 0 3px 5px;
 }
 
 input[type=number].fillCol {
@@ -133,8 +132,8 @@ input[type=number].fillCol {
 }
 
 #gridsettings input:focus {
-    border-color: #0654BA;
-    outline: 0 none;
+  border-color: #0654BA;
+  outline: 0 none;
 }
 
 fieldset {
@@ -145,27 +144,27 @@ fieldset {
 
 input[type=button],
 input[type=reset] {
-    width: 100%;
-    display: block;
-    font-size: 14px;
-    padding: 8px 0;
-    margin: 0 auto 8px;
-    border-width: 1px;
-    color: rgb(6, 84, 186);
-    border-color: rgb(204,204,204);
-    border-style: solid;
-    border-radius: 3px;
-    background-color: rgb(255,255,255);
-    text-align: center;
-    cursor: pointer;
-    -webkit-appearance: button;
+  width: 100%;
+  display: block;
+  font-size: 14px;
+  padding: 8px 0;
+  margin: 0 auto 8px;
+  border-width: 1px;
+  color: rgb(6, 84, 186);
+  border-color: rgb(204, 204, 204);
+  border-style: solid;
+  border-radius: 3px;
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: button;
 }
 
 input[type=reset] {
-    margin-top: 8px;
-    color: #555555;
-    border: 1px solid #999999;
-    background-color: rgba(240, 238, 236, 0.5);
+  margin-top: 8px;
+  color: #555555;
+  border: 1px solid #999999;
+  background-color: rgba(240, 238, 236, 0.5);
 }
 
 .gridsettings__columns div,
@@ -191,35 +190,35 @@ input[type=reset] {
   padding: 0 8px 0 0;
 }
 
-.tooltip{
-    display: inline;
-    position: relative;
+.tooltip {
+  display: inline;
+  position: relative;
 }
 
-.tooltip:hover:after{
-    background: none repeat scroll 0 0 #ffffff;
-    border: 1px solid #dddddd;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.35);
-    bottom: 26px;
-    color: #333333;
-    content: attr(info);
-    left: 10%;
-    padding: 5px 15px;
-    position: absolute;
-    z-index: 98;
-    width: 150px;
+.tooltip:hover:after {
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.35);
+  bottom: 26px;
+  color: #333333;
+  content: attr(info);
+  left: 10%;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 150px;
 }
 
-.tooltip:hover:before{
-    border: solid;
-    border-color: #fff transparent;
-    border-width: 6px 6px 0 6px;
-    bottom: 21px;
-    content: "";
-    left: 50%;
-    position: absolute;
-    z-index: 99;
+.tooltip:hover:before {
+  border: solid;
+  border-color: #fff transparent;
+  border-width: 6px 6px 0 6px;
+  bottom: 21px;
+  content: "";
+  left: 50%;
+  position: absolute;
+  z-index: 99;
 }
 
 .tabs {
@@ -229,56 +228,55 @@ input[type=reset] {
 }
 
 .tabs > div:last-child {
-    padding: 0;
+  padding: 0;
 }
 
 .tabs div[role=tablist] {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .tabs div[role=tab] > span {
-    padding: .75rem 0 0.45rem;
-    color: #999999;
+  padding: .75rem 0 0.45rem;
+  color: #999999;
 }
 
-
 .tabs div[role=tab]:focus {
-    outline: 0;
-    z-index: 10;
-    /*border: 1px solid rgba(6,84,186,.5);
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;*/
+  outline: 0;
+  z-index: 10;
+  /*border: 1px solid rgba(6,84,186,.5);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;*/
 }
 
 .reset {
-    position: absolute;
-    bottom: 0;
-    width: calc(100% - 16px);
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 16px);
 }
 
 #github-icon {
-    display: block;
-    text-align: center;
-    margin-top: 50%;
-    text-decoration: inherit;
+  display: block;
+  text-align: center;
+  margin-top: 50%;
+  text-decoration: inherit;
 }
 
 .reportContainer {
-    padding: 0 8px 0 8px;
-    height: 345px;
-    overflow-y: scroll;
-    width: 100%;
+  padding: 0 8px 0 8px;
+  height: 345px;
+  overflow-y: scroll;
+  width: 100%;
 }
 
 #reportForm {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 table {
-  text-align:left;
+  text-align: left;
   font-size: 100%;
   border-collapse: collapse;
-  width:100%;
+  width: 100%;
 }
 
 tr {

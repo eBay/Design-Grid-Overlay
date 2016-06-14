@@ -1,10 +1,10 @@
-.cb-grid-lines { 
+.cb-grid-lines {
   height: 100%;
   top: 0;
   left: 0;
   position: fixed;
   pointer-events: none;
-  background: rgba(99,99,99,0.1);
+  background: rgba(99, 99, 99, 0.1);
   z-index: 16777271;
   margin: 0;
 }
@@ -15,7 +15,7 @@
   height: 100%;
   margin: 0 auto;
   position: relative;
-  background: rgba(99,99,99,0.2);
+  background: rgba(99, 99, 99, 0.2);
   display: flex;
   flex-direction: row;
 }
@@ -23,11 +23,10 @@
 .grid-overlay-col {
   height: 100%;
   pointer-events: none;
-  opacity: 0.31; 
+  opacity: 0.31;
   margin: 0 8px;
   display: inline-block;
 }
-
 
 .grid-overlay-row {
   pointer-events: none;

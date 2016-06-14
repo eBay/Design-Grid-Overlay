@@ -7,6 +7,7 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
 .tabs {
   width: 100%;
 }
+
 .tabs div[role=tablist] {
   display: -webkit-box;
   display: -webkit-flex;
@@ -15,22 +16,24 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 .tabs div[role=tab] {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   box-sizing: border-box;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   cursor: pointer;
 }
+
 .tabs div[role=tab] > span {
   font-size: 1rem;
   font-weight: 300;
@@ -40,27 +43,33 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
   display: block;
   text-align: center;
 }
+
 .tabs div[role=tab][aria-selected=true] {
   border-bottom: 0.125rem solid #333333;
   -webkit-transition: color 0.1s ease;
-          transition: color 0.1s ease;
+  transition: color 0.1s ease;
 }
+
 .tabs div[role=tab][aria-selected=true] > span {
   color: #333333;
   font-weight: 400;
 }
+
 .tabs > div:last-child {
   box-sizing: border-box;
   background-color: #ffffff;
   padding: 1rem;
   margin: 0;
 }
+
 .tabs div[role=tabpanel][aria-hidden=true] {
   display: none;
 }
+
 .tabs div[role=tabpanel][aria-hidden=false] {
   display: block;
 }
+
 .tabs--faux > ul {
   display: -webkit-box;
   display: -webkit-flex;
@@ -69,21 +78,23 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 .tabs--faux > ul > li {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   box-sizing: border-box;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -ms-flex: 1;
+  flex: 1;
 }
+
 .tabs--faux > ul > li > a {
   font-size: 1rem;
   font-weight: 300;
@@ -93,15 +104,18 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
   display: block;
   text-align: center;
 }
+
 .tabs--faux > ul > li.tabs__selected {
   border-bottom: 0.125rem solid #333333;
   -webkit-transition: color 0.1s ease;
-          transition: color 0.1s ease;
+  transition: color 0.1s ease;
 }
+
 .tabs--faux > ul > li.tabs__selected > a {
   color: #333333;
   font-weight: 400;
 }
+
 .tabs--hijax ul[role=tablist] {
   display: -webkit-box;
   display: -webkit-flex;
@@ -110,22 +124,24 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 .tabs--hijax li[role=tab] {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   box-sizing: border-box;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   cursor: pointer;
 }
+
 .tabs--hijax li[role=tab] > a[role=presentation] {
   font-size: 1rem;
   font-weight: 300;
@@ -135,11 +151,13 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
   display: block;
   text-align: center;
 }
+
 .tabs--hijax li[role=tab][aria-selected=true] {
   border-bottom: 0.125rem solid #333333;
   -webkit-transition: color 0.1s ease;
-          transition: color 0.1s ease;
+  transition: color 0.1s ease;
 }
+
 .tabs--hijax li[role=tab][aria-selected=true] > a[role=presentation] {
   color: #333333;
   font-weight: 400;
