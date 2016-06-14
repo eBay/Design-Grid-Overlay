@@ -108,7 +108,7 @@
                             <div class="overlaySettingsCheckboxes">
                                 <input type="checkbox" id="reportOverlayToggle">
                                 <label
-                                        info="Enable Overlay"
+                                        info="Enable container size overlay, which shows the pixel inner content widths of selected container elements"
                                         for="reportOverlayToggle"
                                         class="tooltip">
                                     Enable Overlay
@@ -116,14 +116,19 @@
                                 <br />
                                 <input type="checkbox" id="reportOverlayMatchEmptyElements">
                                 <label
-                                    info="Overlay Empty Container"
+                                    info="Include size overlays for empty containers"
                                     for="reportOverlayMatchEmptyElements"
                                     class="tooltip">
-                                    Overlay Empty Containers
+                                    Include Empty Containers
                                 </label>
                             </div>
                             <div>
-                                <label for="reportOverlaySelector">Container Element Selector</label>
+                                <label
+                                    info="Enter query selector string for containers to overlay"
+                                    for="reportOverlaySelector"
+                                    class="tooltip">
+                                    Container Element Selector
+                                </label>
                                 <input type="text" id="reportOverlaySelector" value=".grid__cell">
                             </div>
                         </fieldset>
