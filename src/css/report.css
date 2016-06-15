@@ -1,54 +1,44 @@
-/* Pseudo-element label method */
-/*.grid-report-size-overlay:before {*/
-/*width: 100px;*/
-/*height: 0;*/
-/*pointer-events: none;*/
-/*font-weight: 700;*/
-/*color:black;*/
-/*border-left: 1px solid black;*/
-/*!*border-top: 1px solid black;*!*/
-/*!*border-right: 50px solid transparent;*!*/
-/*!*border-top: 50px solid red;*!*/
-/*position: relative;*/
-/*content: attr(overlay-size);*/
-/*top: 0px;*/
-/*left: 0px;*/
-/*}*/
-
 /*
   All CSS Attributes here are marked as important to force
   the override of existing CSS styling from the page into which we are
   injecting our overlay
 */
-.grid-report-size-overlay {
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  position: relative !important;
-  pointer-events: none !important;
-  z-index: 1000000 !important;
-  box-sizing: content-box !important;
-}
 
-.grid-report-size-overlay .size-content {
-  font-size: 0 !important;
-  line-height: 0 !important;
-  display: block !important;
-  position: absolute !important;
-  padding: 0 !important;
-  margin: 0 !important;
+#grid-report-size-fullpage-overlay {
+  position: absolute;
   top: 0px !important;
-  right: 0px !important;
   left: 0px !important;
-  border-top: solid 2px rgba(255, 0, 9, 0.4);
-  pointer-events: none !important;
-  z-index: 1000000 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 10000000 !important;
   -webkit-user-select: none !important;
-  text-align: right !important;
-  box-sizing: content-box !important;
+  pointer-events: none !important;
+  /*box-sizing: border-box !important;*/
+  /*height: 100% !important;*/
+  /*width: 100% !important;*/
+  /*margin: 0 auto !important;*/
+  /*position: relative !important;*/
+  /*background: transparent !important;*/
+  /*display: block !important;*/
 }
 
-.size-content span {
+.grid-report-size-overlay-element {
+
+  top: 0 !important;
+  left: 0 !important;
+  position: absolute !important;
+  border-top: solid 2px rgba(255, 0, 9, 0.4) !important;
+  pointer-events: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: right !important;
+}
+
+
+.grid-report-size-overlay-element span {
+  text-wrap: none;
   line-height: normal !important;
   display: inline !important;
   padding: 0px 4px 3px 4px !important;
@@ -58,7 +48,6 @@
   font-style: normal !important;
   font-weight: 500 !important;
   pointer-events: none !important;
-  z-index: 1000000 !important;
   -webkit-user-select: none !important;
   color: #ffffff !important;
   background: rgba(255, 0, 9, 0.4) !important;
