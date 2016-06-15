@@ -264,16 +264,19 @@ var chrome = chrome || {};
 
             for(var i = 0; i < foundElements.length; i++) {
 
-                // If we are matching empty elements, automatically add the element. If we are NOT matching empty
-                // elements, then first check if the element has at least 1 child element
-                if(
-                    matchEmptyElements ||
-                    (!matchEmptyElements && (foundElements[i].children.length > 0))
-                ) {
-                    // Store element
-                    _designGridSizeOverlayConfig.overlayedElements.push(foundElements[i]);
-                }
+                //Ignore our own overlay element:
+                if(foundElements[i].id !== "grid-report-size-fullpage-overlay") {
 
+                    // If we are matching empty elements, automatically add the element. If we are NOT matching empty
+                    // elements, then first check if the element has at least 1 child element
+                    if(
+                        matchEmptyElements ||
+                        (!matchEmptyElements && (foundElements[i].children.length > 0))
+                    ) {
+                        // Store element
+                        _designGridSizeOverlayConfig.overlayedElements.push(foundElements[i]);
+                    }
+                }
             }
 
         }
