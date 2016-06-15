@@ -109,7 +109,7 @@ var chrome = chrome || {};
             //Therefore we only need to stop listeners that depend on browser events, not chrome runtime messages.
 
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
-            window.removeEventListener('resize', updateOverlayValues);
+            window.removeEventListener('resize', requestResizeUpdate);
             console.log("Design Grid Overlay Extension: Shut Down DOM event listeners on Orphaned Script.");
             return false;
         }
@@ -169,7 +169,6 @@ var chrome = chrome || {};
         if (
             _designGridSizeOverlayConfig.enabled &&
             thisOverlayScriptIsActive(_designGridSizeOverlayConfig.fullPageContainer)) {
-
             // NOTE: Any changes to the DOM that occur within this function will not trigger this callback again
 
             // Save initialization options between destroy and re-creation
@@ -240,6 +239,21 @@ var chrome = chrome || {};
     }
 
     /**
+     * Method that checks whether a given element is part of our size overlay
+     * @param element - HTML element
+     * @returns {boolean}
+     */
+    function isOverlayElement(element) {
+        "use strict";
+
+        return (
+            (element.id === "grid-report-size-fullpage-overlay") ||
+            element.classList.contains("grid-report-size-overlay-element") ||
+            element.classList.contains("grid-report-size-overlay-span")
+            );
+    }
+
+    /**
      * Method that creates the size overlays for all
      * elements captured by the given selector input,
      * and creates both the window resize and
@@ -265,7 +279,7 @@ var chrome = chrome || {};
             for(var i = 0; i < foundElements.length; i++) {
 
                 //Ignore our own overlay element:
-                if(foundElements[i].id !== "grid-report-size-fullpage-overlay") {
+                if(!isOverlayElement(foundElements[i])) {
 
                     // If we are matching empty elements, automatically add the element. If we are NOT matching empty
                     // elements, then first check if the element has at least 1 child element
@@ -330,7 +344,7 @@ var chrome = chrome || {};
             //Node to clone:
             var newLabelElement = document.createElement('div');
             newLabelElement.className = "grid-report-size-overlay-element";
-            newLabelElement.innerHTML = "<span></span>";
+            newLabelElement.innerHTML = "<span class='grid-report-size-overlay-span'></span>";
 
             // Our batch of nodes to add, stored as a DocumentFragment for efficient DOM insertion
             var labelsDocFrag = document.createDocumentFragment();
@@ -384,7 +398,7 @@ var chrome = chrome || {};
         if (_designGridSizeOverlayConfig.enabled) {
 
             //Disconnect DOM event handlers
-            window.removeEventListener('resize', updateOverlayValues);
+            window.removeEventListener('resize', requestResizeUpdate);
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
 
 

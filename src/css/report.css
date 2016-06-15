@@ -15,17 +15,11 @@
   z-index: 10000000 !important;
   -webkit-user-select: none !important;
   pointer-events: none !important;
-  /*box-sizing: border-box !important;*/
-  /*height: 100% !important;*/
-  /*width: 100% !important;*/
-  /*margin: 0 auto !important;*/
-  /*position: relative !important;*/
-  /*background: transparent !important;*/
-  /*display: block !important;*/
+  line-height: 1 !important;
 }
 
 .grid-report-size-overlay-element {
-
+  line-height: 1 !important;
   top: 0 !important;
   left: 0 !important;
   position: absolute !important;
@@ -37,9 +31,9 @@
 }
 
 
-.grid-report-size-overlay-element span {
+.grid-report-size-overlay-element .grid-report-size-overlay-span {
   text-wrap: none;
-  line-height: normal !important;
+  line-height: 1 !important;
   display: inline !important;
   padding: 0px 4px 3px 4px !important;
   margin: 0px !important;
