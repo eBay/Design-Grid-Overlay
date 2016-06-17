@@ -53,7 +53,7 @@ var chrome = chrome || {};
             if (request.method === "createReportOverlay") {
                 var selector = request.reportOverlaySelector || "grid__cell";
                 var matchEmptyElements = request.matchEmptyElements || false;
-                createReportOverlay(selector, matchEmptyElements);
+                createReportOverlay(selector, matchEmptyElements, false);
 
             }
         });
@@ -65,7 +65,7 @@ var chrome = chrome || {};
     chrome.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
             if (request.method == "removeReportOverlay") {
-                removeReportOverlay();
+                removeReportOverlay(false);
             }
         });
 
@@ -109,27 +109,28 @@ var chrome = chrome || {};
             //Therefore we only need to stop listeners that depend on browser events, not chrome runtime messages.
 
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
-            window.removeEventListener('resize', requestResizeUpdate);
+            window.removeEventListener('resize', requestOverlayUpdate);
+            window.removeEventListener('scroll', requestOverlayUpdate);
             console.log("Design Grid Overlay Extension: Shut Down DOM event listeners on Orphaned Script.");
             return false;
         }
     }
 
     /**
-     * Variable that keeps track of whether we are already in the middle of a dom resize event
+     * Variable that keeps track of whether we are already in the middle of processing a dom event
      * @type {boolean}
      */
-    var _resizeUpdating = false;
+    var _overlayValuesUpdating = false;
 
     /**
      * The wrapper for our window resize handler that throttles the event handler
      * to wait for the next available frame for rendering, by using requestAnimationFrame
      */
-    function requestResizeUpdate() {
-        if(!_resizeUpdating) {
+    function requestOverlayUpdate() {
+        if(!_overlayValuesUpdating) {
             requestAnimationFrame(updateOverlayValues);
         }
-        _resizeUpdating = true;
+        _overlayValuesUpdating = true;
     }
 
     /**
@@ -153,7 +154,7 @@ var chrome = chrome || {};
             //Restart our dom observer now that we are done changing the DOM
             _designGridSizeOverlayConfig.bodyMutationObserver.observe(document.body, _designGridSizeOverlayConfig.bodyMutObsConfig);
         }
-        _resizeUpdating = false;
+        _overlayValuesUpdating = false;
     }
 
     //var domChangeTimeout = undefined;
@@ -175,9 +176,9 @@ var chrome = chrome || {};
             var savedSelector = _designGridSizeOverlayConfig.selector;
             var savedMatchEmptyElements = _designGridSizeOverlayConfig.matchEmptyElements;
 
-            // Re-create our overlays
-            removeReportOverlay();
-            createReportOverlay(savedSelector, savedMatchEmptyElements);
+            // Re-build our overlays
+            removeReportOverlay(true);
+            createReportOverlay(savedSelector, savedMatchEmptyElements, true);
         }
     }
 
@@ -210,7 +211,7 @@ var chrome = chrome || {};
         return {
             width: elementTotalWidth,
             height: elementTotalHeight,
-            contentWidth: (elementTotalWidth - paddingLeft - paddingRight - borderLeft - borderRight),
+            contentWidth: (elementTotalWidth == 0 ? 0 : (elementTotalWidth - paddingLeft - paddingRight - borderLeft - borderRight)),
             left: (boundingRect.left + window.scrollX + borderLeft + paddingLeft),
             top: (boundingRect.top + window.scrollY + paddingTop +  borderTop),
             display: computedStyle.getPropertyValue('display')
@@ -264,13 +265,15 @@ var chrome = chrome || {};
      * @param selector - Document query selector that specifies
      * the elements which will have a size overlay
      * @param matchEmptyElements - Boolean that says whether to add our overlay to elements that have no child elements (empty)
+     * @param rebuildingOverlay - Boolean flag indicating if we are just rebuilding the overlay, instead of
+     * removing it
      */
-    function createReportOverlay(selector, matchEmptyElements) {
+    function createReportOverlay(selector, matchEmptyElements, rebuildingOverlay) {
 
         // This function may be activated directly by the chrome extension as well as from in-page code, so we
         // always need to verify the current state of the overlay according this page's stored values
         if (_designGridSizeOverlayConfig.enabled) {
-            removeReportOverlay();
+            removeReportOverlay(true);
         }
 
         try {
@@ -308,6 +311,12 @@ var chrome = chrome || {};
             fullPageOverlay.id = "grid-report-size-fullpage-overlay";
             document.body.appendChild(fullPageOverlay);
         }
+        else if(!rebuildingOverlay) {
+            // We are re-using an overlay that was previously hidden by a remove command
+            fullPageOverlay.style.removeProperty("display");
+        }
+
+
 
         //Flag this overlay as ours, to stop any other orphaned scripts from using it
         fullPageOverlay.setAttribute("unique-overlay-id", _designGridSizeOverlayConfig.uniqueScriptId);
@@ -383,24 +392,34 @@ var chrome = chrome || {};
         _designGridSizeOverlayConfig.bodyMutationObserver.observe(document.body, _designGridSizeOverlayConfig.bodyMutObsConfig);
 
         //If the window is resized, we want to update this overlay
-        window.addEventListener('resize', requestResizeUpdate, false);
+        window.addEventListener('resize', requestOverlayUpdate, false);
+        window.addEventListener('scroll', requestOverlayUpdate, false);
     }
 
     /**
      * Method that removes the size overlays
      * and disconnects both the window resize and
      * DOMMutation event listeners
+     *
+     * @param rebuildingOverlay - Boolean flag indicating if we are just rebuilding the overlay, instead of
+     * removing it
      */
-    function removeReportOverlay() {
+    function removeReportOverlay(rebuildingOverlay) {
 
         // This function may be activated directly by the chrome extension as well as from in-page code, so we
         // always need to verify the current state of the overlay according this page's stored values
         if (_designGridSizeOverlayConfig.enabled) {
 
             //Disconnect DOM event handlers
-            window.removeEventListener('resize', requestResizeUpdate);
+            window.removeEventListener('resize', requestOverlayUpdate);
+            window.removeEventListener('scroll', requestOverlayUpdate);
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
 
+
+            if(!rebuildingOverlay) {
+                //If we are actually removing the overlay, then we want to hide it
+                _designGridSizeOverlayConfig.fullPageContainer.style.display = "none";
+            }
 
             //Reset our data structures
             _designGridSizeOverlayConfig.selector = undefined;
