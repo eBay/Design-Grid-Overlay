@@ -62,7 +62,10 @@ var settingStorageController = (function () {
             advancedForm: {
                 formElement: undefined, //Stored HTML element for this form - set by init() func, but not stored into chrome sync local storage
                 settings: {
-                    color: EMPTY_VALUE
+                    // Each of these settings keys maps to an input HTML element with the same id
+                    color: EMPTY_VALUE,
+                    overlayLabelColor: EMPTY_VALUE,
+                    overlayTextColor: EMPTY_VALUE
                 }
             }
         }

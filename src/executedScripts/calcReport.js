@@ -53,7 +53,9 @@ var chrome = chrome || {};
             if (request.method === "createReportOverlay") {
                 var selector = request.reportOverlaySelector || "grid__cell";
                 var matchEmptyElements = request.matchEmptyElements || false;
-                createReportOverlay(selector, matchEmptyElements, false);
+                var overlayLabelColor = request.overlayLabelColor;
+                var overlayTextColor = request.overlayTextColor;
+                createReportOverlay(selector, matchEmptyElements, overlayLabelColor, overlayTextColor, false);
 
             }
         });
@@ -78,6 +80,8 @@ var chrome = chrome || {};
                                                   //this instance of the script
         enabled: false,
         matchEmptyElements: false,
+        overlayLabelColor: undefined,
+        overlayTextColor: undefined,
         selector: undefined,
         fullPageContainer: undefined,
         overlayedElements: [],
@@ -148,6 +152,7 @@ var chrome = chrome || {};
 
                 // Style/insert data into the label for our target element
                 var labelToUse = _designGridSizeOverlayConfig.generatedOverlayArray[i];
+                //Don't update coloring on this pass - leave out color params
                 labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[i]);
             }
 
@@ -175,10 +180,12 @@ var chrome = chrome || {};
             // Save initialization options between destroy and re-creation
             var savedSelector = _designGridSizeOverlayConfig.selector;
             var savedMatchEmptyElements = _designGridSizeOverlayConfig.matchEmptyElements;
+            var savedOverlayLabelColor = _designGridSizeOverlayConfig.overlayLabelColor;
+            var savedOverlayTextColor = _designGridSizeOverlayConfig.overlayTextColor;
 
             // Re-build our overlays
             removeReportOverlay(true);
-            createReportOverlay(savedSelector, savedMatchEmptyElements, true);
+            createReportOverlay(savedSelector, savedMatchEmptyElements,  savedOverlayLabelColor, savedOverlayTextColor, true);
         }
     }
 
@@ -218,7 +225,17 @@ var chrome = chrome || {};
         };
     }
 
-    function styleLabelElement(labelElement, targetElement) {
+    /**
+     * Method That styles the overlay label based on the given paramenters, and the target element that is
+     * being analyzed
+     *
+     * @param labelElement - Existing HTML element that is being styled
+     * @param targetElement - Target HTML element that is being analyzed
+     * @param labelColor - Optional, Color of the label element
+     * @param textColor - Optional, Text color of the label element
+     * @returns {*}
+     */
+    function styleLabelElement(labelElement, targetElement, labelColor, textColor) {
 
         var targetElemStats = calculateElementLocationAndSize(targetElement);
 
@@ -226,7 +243,15 @@ var chrome = chrome || {};
         //labelToUse.style.top = elemStats.top + "px";
         labelElement.style.transform = "translate(" + targetElemStats.left + "px, " + targetElemStats.top + "px)";
         labelElement.style.width = targetElemStats.contentWidth + "px";
+        if(labelColor) {
+            labelElement.style['border-top'] = "solid 2px " + labelColor;
+        }
+
         labelElement.firstChild.innerHTML = numberFormat(targetElemStats.contentWidth, 2) + "px";
+        if(textColor) {
+            labelElement.firstChild.style.background = labelColor;
+            labelElement.firstChild.style.color = textColor;
+        }
 
         // Hide label if element is hidden by display:none
         if (targetElemStats.display === "none") {
@@ -265,10 +290,12 @@ var chrome = chrome || {};
      * @param selector - Document query selector that specifies
      * the elements which will have a size overlay
      * @param matchEmptyElements - Boolean that says whether to add our overlay to elements that have no child elements (empty)
+     * @param overlayLabelColor - text user input for custom overlay label color
+     * @param overlayTextColor - text user input for custom overlay text color
      * @param rebuildingOverlay - Boolean flag indicating if we are just rebuilding the overlay, instead of
      * removing it
      */
-    function createReportOverlay(selector, matchEmptyElements, rebuildingOverlay) {
+    function createReportOverlay(selector, matchEmptyElements, overlayLabelColor, overlayTextColor, rebuildingOverlay) {
 
         // This function may be activated directly by the chrome extension as well as from in-page code, so we
         // always need to verify the current state of the overlay according this page's stored values
@@ -326,6 +353,8 @@ var chrome = chrome || {};
         _designGridSizeOverlayConfig.enabled = true;
         _designGridSizeOverlayConfig.selector = selector;
         _designGridSizeOverlayConfig.matchEmptyElements = matchEmptyElements;
+        _designGridSizeOverlayConfig.overlayLabelColor = overlayLabelColor;
+        _designGridSizeOverlayConfig.overlayTextColor = overlayTextColor;
 
 
         //Remove extra children already in the DOM
@@ -381,7 +410,7 @@ var chrome = chrome || {};
 
             // Apply our styling and data to label for our target element
             var labelToUse = _designGridSizeOverlayConfig.fullPageContainer.children[l];
-            labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[l]);
+            labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[l], _designGridSizeOverlayConfig.overlayLabelColor, _designGridSizeOverlayConfig.overlayTextColor);
 
             // Keep track of this generated label elements
             _designGridSizeOverlayConfig.generatedOverlayArray.push(labelToUse);
@@ -427,6 +456,8 @@ var chrome = chrome || {};
             _designGridSizeOverlayConfig.generatedOverlayArray = [];
             _designGridSizeOverlayConfig.enabled = false;
             _designGridSizeOverlayConfig.matchEmptyElements = false;
+            _designGridSizeOverlayConfig.overlayLabelColor = undefined;
+            _designGridSizeOverlayConfig.overlayTextColor = undefined;
         }
     }
 

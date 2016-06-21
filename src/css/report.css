@@ -23,28 +23,30 @@
   top: 0 !important;
   left: 0 !important;
   position: absolute !important;
-  border-top: solid 2px rgba(255, 0, 9, 0.4) !important;
+  border-top: solid 2px rgb(255, 0, 9);
+  opacity: 0.4 !important;
   pointer-events: none !important;
   padding: 0 !important;
   margin: 0 !important;
   text-align: right !important;
+  white-space: nowrap;
 }
 
 
 .grid-report-size-overlay-element .grid-report-size-overlay-span {
-  text-wrap: none;
   line-height: 1 !important;
   display: inline !important;
-  padding: 0px 4px 3px 4px !important;
-  margin: 0px !important;
+  padding: 1px 4px 3px 4px !important;
+  margin: 0 !important;
   font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,Roboto,sans-serif !important;
   font-size: 12px !important;
   font-style: normal !important;
   font-weight: 500 !important;
   pointer-events: none !important;
   -webkit-user-select: none !important;
-  color: #ffffff !important;
-  background: rgba(255, 0, 9, 0.4) !important;
+  color: #ffffff;
+  background: rgb(255, 0, 9);
   border-radius: 0 0 4px 4px;
   box-sizing: content-box !important;
+  float: initial !important;
 }

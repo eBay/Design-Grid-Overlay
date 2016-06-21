@@ -95,13 +95,17 @@ var reportController = (function () {
      * show a size overlay on the page
      * @param matchEmptyElements - tell our overlay in-page JS code whether or not to add overlays to empty elements
      * with no child elements inside them
+     * @param overlayLabelColor - text user input for custom overlay label color
+     * @param overlayTextColor - text user input for custom overlay text color
      */
-    var createReportOverlay = function (currentTabId, reportOverlaySelector, matchEmptyElements) {
+    var createReportOverlay = function (currentTabId, reportOverlaySelector, matchEmptyElements, overlayLabelColor, overlayTextColor) {
         chrome.tabs.sendMessage(currentTabId, {
             method: "createReportOverlay",
             tabId: currentTabId,
             reportOverlaySelector: reportOverlaySelector,
-            matchEmptyElements: matchEmptyElements
+            matchEmptyElements: matchEmptyElements,
+            overlayLabelColor: overlayLabelColor,
+            overlayTextColor: overlayTextColor
         });
 
     };
@@ -123,10 +127,12 @@ var reportController = (function () {
      *  @param currentTabId - currently active chrome tab
      *  @param gridToggleEnabled - Whether the master Grid overlay toggle is enabled
      *  @param options - configuration options for report
+     *  @param advancedOptions - additional configuration options from advanced tab
      */
-    var updateReportOverlay = function (currentTabId, gridToggleEnabled, options) {
+    var updateReportOverlay = function (currentTabId, gridToggleEnabled, options, advancedOptions) {
         if (options.reportOverlayToggle) {
-            createReportOverlay(currentTabId, options.reportOverlaySelector, options.reportOverlayMatchEmptyElements);
+            createReportOverlay(currentTabId, options.reportOverlaySelector, options.reportOverlayMatchEmptyElements,
+                advancedOptions.overlayLabelColor, advancedOptions.overlayTextColor);
         }
         else {
             removeReportOverlay(currentTabId);
