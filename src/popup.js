@@ -249,8 +249,9 @@ var popup = (function () {
         for (var i = 0; i < gridFormInputs.length; i++) {
             gridFormInputs[i].addEventListener("change", throttle(function (event) {
                 if (event.target.id !== 'gridToggle') {
-                    //Updated just grid and
+                    //Updated just grid and report calculations
                     var settings = settingStorageController.saveSettings(currentChromeTabId);
+                    gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     reportController.calculateReport(currentChromeTabId);
                 }
             }, 1000));
