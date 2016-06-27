@@ -163,11 +163,31 @@
                         <fieldset>
                             <legend>Container Size Overlay</legend>
                             <div>
-                                <label for="overlayLabelColor">Label Color</label>
+
+                                <label
+                                    info="Primary color for size overlay labels."
+                                    for="overlayLabelColor"
+                                    class="tooltip">
+                                    Label Color
+                                </label>
                                 <input type="text" id="overlayLabelColor" value="#ff0009">
                                 <br>
-                                <label for="overlayTextColor">Text Color</label>
+                                <label
+                                    info="Text color for size overlay labels."
+                                    for="overlayTextColor"
+                                    class="tooltip">
+                                    Text Color
+                                </label>
                                 <input type="text" id="overlayTextColor" value="#ffffff">
+                            </div>
+                            <div>
+                                <input type="checkbox" id="hideHiddenElementOverlays">
+                                <label
+                                    info="Do not show size overlays for hidden containers. This feature is experimental."
+                                    for="hideHiddenElementOverlays"
+                                    class="tooltip">
+                                    Disable overlays for hidden containers
+                                </label>
                             </div>
                         </fieldset>
                         <a href="https://github.com/eBay/Design-Grid-Overlay/issues" id="github-icon">

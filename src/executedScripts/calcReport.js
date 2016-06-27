@@ -53,9 +53,10 @@ var chrome = chrome || {};
             if (request.method === "createReportOverlay") {
                 var selector = request.reportOverlaySelector || "grid__cell";
                 var matchEmptyElements = request.matchEmptyElements || false;
+                var hideHiddenElementOverlays = request.hideHiddenElementOverlays || false;
                 var overlayLabelColor = request.overlayLabelColor;
                 var overlayTextColor = request.overlayTextColor;
-                createReportOverlay(selector, matchEmptyElements, overlayLabelColor, overlayTextColor, false);
+                createReportOverlay(selector, matchEmptyElements, hideHiddenElementOverlays, overlayLabelColor, overlayTextColor, false);
 
             }
         });
@@ -80,6 +81,7 @@ var chrome = chrome || {};
                                                   //this instance of the script
         enabled: false,
         matchEmptyElements: false,
+        hideHiddenElementOverlays: false,
         overlayLabelColor: undefined,
         overlayTextColor: undefined,
         selector: undefined,
@@ -153,7 +155,8 @@ var chrome = chrome || {};
                 // Style/insert data into the label for our target element
                 var labelToUse = _designGridSizeOverlayConfig.generatedOverlayArray[i];
                 //Don't update coloring on this pass - leave out color params
-                labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[i]);
+                labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[i],
+                    _designGridSizeOverlayConfig.hideHiddenElementOverlays);
             }
 
             //Restart our dom observer now that we are done changing the DOM
@@ -180,13 +183,32 @@ var chrome = chrome || {};
             // Save initialization options between destroy and re-creation
             var savedSelector = _designGridSizeOverlayConfig.selector;
             var savedMatchEmptyElements = _designGridSizeOverlayConfig.matchEmptyElements;
+            var savedHideHiddenElementOverlays = _designGridSizeOverlayConfig.hideHiddenElementOverlays;
             var savedOverlayLabelColor = _designGridSizeOverlayConfig.overlayLabelColor;
             var savedOverlayTextColor = _designGridSizeOverlayConfig.overlayTextColor;
 
             // Re-build our overlays
             removeReportOverlay(true);
-            createReportOverlay(savedSelector, savedMatchEmptyElements,  savedOverlayLabelColor, savedOverlayTextColor, true);
+            createReportOverlay(savedSelector, savedMatchEmptyElements, savedHideHiddenElementOverlays, savedOverlayLabelColor, savedOverlayTextColor, true);
         }
+    }
+
+    /**
+     *  If all four corners of element are hidden, then the entire element is considered hidden
+     *
+     * @param element - Target HTML element to check
+     * @param elemBoundingRect - BoundingRect for given element (so this function doesn't need to compute it again)
+     * @returns {boolean} - Whether element is hidden or not
+     */
+    function elementHidden(element, elemBoundingRect) {
+
+        return (
+            (element != document.elementFromPoint(elemBoundingRect.left, elemBoundingRect.top)) && //Upper left
+            (element != document.elementFromPoint(elemBoundingRect.left, elemBoundingRect.bottom - 1)) && //Lower left
+            (element != document.elementFromPoint(elemBoundingRect.right - 1, elemBoundingRect.top)) && //Upper right
+            (element != document.elementFromPoint(elemBoundingRect.right - 1, elemBoundingRect.bottom - 1)) //Lower right
+        );
+
     }
 
 
@@ -195,9 +217,10 @@ var chrome = chrome || {};
      * removes padding on the left and right, and borders on the left and right
      *
      * @param element - HTMLElement for which we wish to compute an inner width
-     * @returns {number}
+     * @param hideHiddenElementOverlays - Boolean to tell whether to check for hidden target elements
+     * @returns {object} - Aggregated element sizing, location and visibility object
      */
-    function calculateElementLocationAndSize(element) {
+    function calculateElementLocationAndSize(element, hideHiddenElementOverlays) {
 
         var boundingRect = element.getBoundingClientRect();
 
@@ -221,7 +244,8 @@ var chrome = chrome || {};
             contentWidth: (elementTotalWidth == 0 ? 0 : (elementTotalWidth - paddingLeft - paddingRight - borderLeft - borderRight)),
             left: (boundingRect.left + window.scrollX + borderLeft + paddingLeft),
             top: (boundingRect.top + window.scrollY + paddingTop +  borderTop),
-            display: computedStyle.getPropertyValue('display')
+            display: computedStyle.getPropertyValue('display'),
+            hiddenByOtherElement: (hideHiddenElementOverlays ? elementHidden(element, boundingRect) : false)
         };
     }
 
@@ -231,13 +255,15 @@ var chrome = chrome || {};
      *
      * @param labelElement - Existing HTML element that is being styled
      * @param targetElement - Target HTML element that is being analyzed
+     * @param hideHiddenElementOverlays - Boolean to tell whether to hide labels for target elements that are hidden
+     * under other elements, or offscreen
      * @param labelColor - Optional, Color of the label element
      * @param textColor - Optional, Text color of the label element
      * @returns {*}
      */
-    function styleLabelElement(labelElement, targetElement, labelColor, textColor) {
+    function styleLabelElement(labelElement, targetElement, hideHiddenElementOverlays, labelColor, textColor) {
 
-        var targetElemStats = calculateElementLocationAndSize(targetElement);
+        var targetElemStats = calculateElementLocationAndSize(targetElement, hideHiddenElementOverlays);
 
         //labelToUse.style.left = elemStats.left + "px";
         //labelToUse.style.top = elemStats.top + "px";
@@ -253,8 +279,8 @@ var chrome = chrome || {};
             labelElement.firstChild.style.color = textColor;
         }
 
-        // Hide label if element is hidden by display:none
-        if (targetElemStats.display === "none") {
+        // Hide label if element is hidden by display:none, or hidden by another element
+        if (targetElemStats.display === "none" || targetElemStats.hiddenByOtherElement) {
             labelElement.style.display = "none";
         }
         else {
@@ -279,6 +305,8 @@ var chrome = chrome || {};
             );
     }
 
+
+
     /**
      * Method that creates the size overlays for all
      * elements captured by the given selector input,
@@ -290,12 +318,14 @@ var chrome = chrome || {};
      * @param selector - Document query selector that specifies
      * the elements which will have a size overlay
      * @param matchEmptyElements - Boolean that says whether to add our overlay to elements that have no child elements (empty)
+     * @param hideHiddenElementOverlays - Boolean that says whether to hide our overlays for target elements that are hidden
+     * underneath other elements, or off screen.
      * @param overlayLabelColor - text user input for custom overlay label color
      * @param overlayTextColor - text user input for custom overlay text color
      * @param rebuildingOverlay - Boolean flag indicating if we are just rebuilding the overlay, instead of
      * removing it
      */
-    function createReportOverlay(selector, matchEmptyElements, overlayLabelColor, overlayTextColor, rebuildingOverlay) {
+    function createReportOverlay(selector, matchEmptyElements, hideHiddenElementOverlays, overlayLabelColor, overlayTextColor, rebuildingOverlay) {
 
         // This function may be activated directly by the chrome extension as well as from in-page code, so we
         // always need to verify the current state of the overlay according this page's stored values
@@ -308,7 +338,7 @@ var chrome = chrome || {};
 
             for(var i = 0; i < foundElements.length; i++) {
 
-                //Ignore our own overlay element:
+                //Ignore our own overlay element
                 if(!isOverlayElement(foundElements[i])) {
 
                     // If we are matching empty elements, automatically add the element. If we are NOT matching empty
@@ -353,6 +383,7 @@ var chrome = chrome || {};
         _designGridSizeOverlayConfig.enabled = true;
         _designGridSizeOverlayConfig.selector = selector;
         _designGridSizeOverlayConfig.matchEmptyElements = matchEmptyElements;
+        _designGridSizeOverlayConfig.hideHiddenElementOverlays = hideHiddenElementOverlays;
         _designGridSizeOverlayConfig.overlayLabelColor = overlayLabelColor;
         _designGridSizeOverlayConfig.overlayTextColor = overlayTextColor;
 
@@ -410,7 +441,9 @@ var chrome = chrome || {};
 
             // Apply our styling and data to label for our target element
             var labelToUse = _designGridSizeOverlayConfig.fullPageContainer.children[l];
-            labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[l], _designGridSizeOverlayConfig.overlayLabelColor, _designGridSizeOverlayConfig.overlayTextColor);
+            labelToUse = styleLabelElement(labelToUse, _designGridSizeOverlayConfig.overlayedElements[l],
+                _designGridSizeOverlayConfig.hideHiddenElementOverlays, _designGridSizeOverlayConfig.overlayLabelColor,
+                _designGridSizeOverlayConfig.overlayTextColor);
 
             // Keep track of this generated label elements
             _designGridSizeOverlayConfig.generatedOverlayArray.push(labelToUse);
@@ -456,6 +489,7 @@ var chrome = chrome || {};
             _designGridSizeOverlayConfig.generatedOverlayArray = [];
             _designGridSizeOverlayConfig.enabled = false;
             _designGridSizeOverlayConfig.matchEmptyElements = false;
+            _designGridSizeOverlayConfig.hideHiddenElementOverlays = false;
             _designGridSizeOverlayConfig.overlayLabelColor = undefined;
             _designGridSizeOverlayConfig.overlayTextColor = undefined;
         }

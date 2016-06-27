@@ -95,15 +95,18 @@ var reportController = (function () {
      * show a size overlay on the page
      * @param matchEmptyElements - tell our overlay in-page JS code whether or not to add overlays to empty elements
      * with no child elements inside them
+     * @param hideHiddenElementOverlays - Tell our overlay in-page JS code whether to hide overlay elements for target
+     * elements that are not visible (underneath another element, or off-screen)
      * @param overlayLabelColor - text user input for custom overlay label color
      * @param overlayTextColor - text user input for custom overlay text color
      */
-    var createReportOverlay = function (currentTabId, reportOverlaySelector, matchEmptyElements, overlayLabelColor, overlayTextColor) {
+    var createReportOverlay = function (currentTabId, reportOverlaySelector, matchEmptyElements, hideHiddenElementOverlays, overlayLabelColor, overlayTextColor) {
         chrome.tabs.sendMessage(currentTabId, {
             method: "createReportOverlay",
             tabId: currentTabId,
             reportOverlaySelector: reportOverlaySelector,
             matchEmptyElements: matchEmptyElements,
+            hideHiddenElementOverlays: hideHiddenElementOverlays,
             overlayLabelColor: overlayLabelColor,
             overlayTextColor: overlayTextColor
         });
@@ -132,7 +135,7 @@ var reportController = (function () {
     var updateReportOverlay = function (currentTabId, gridToggleEnabled, options, advancedOptions) {
         if (options.reportOverlayToggle) {
             createReportOverlay(currentTabId, options.reportOverlaySelector, options.reportOverlayMatchEmptyElements,
-                advancedOptions.overlayLabelColor, advancedOptions.overlayTextColor);
+                advancedOptions.hideHiddenElementOverlays, advancedOptions.overlayLabelColor, advancedOptions.overlayTextColor);
         }
         else {
             removeReportOverlay(currentTabId);

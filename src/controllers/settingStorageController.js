@@ -65,7 +65,8 @@ var settingStorageController = (function () {
                     // Each of these settings keys maps to an input HTML element with the same id
                     color: EMPTY_VALUE,
                     overlayLabelColor: EMPTY_VALUE,
-                    overlayTextColor: EMPTY_VALUE
+                    overlayTextColor: EMPTY_VALUE,
+                    hideHiddenElementOverlays: EMPTY_VALUE
                 }
             }
         }
