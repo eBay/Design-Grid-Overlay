@@ -36,7 +36,7 @@
 .grid-report-size-overlay-element .grid-report-size-overlay-span {
   line-height: 1 !important;
   display: inline !important;
-  padding: 1px 4px 3px 4px !important;
+  padding: 0px 4px 3px 4px !important;
   margin: 0 !important;
   font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,Roboto,sans-serif !important;
   font-size: 12px !important;
