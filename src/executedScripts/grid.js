@@ -1,7 +1,10 @@
 (function () {
-
-
-    var listeners = [];
+    /**
+     * Array of function references to our Chrome Runtime Message Listeners. We use this
+     * array for later clean-up of these listeners.
+     * @type {Array}
+     */
+    var chromeMessageListeners = [];
 
     /**
      * Heartbeat method that tells the popup whether the file has
@@ -13,7 +16,7 @@
             sendResponse({message: "hi"});
     }
     chrome.runtime.onMessage.addListener(helloListener);
-    listeners.push(helloListener);
+    chromeMessageListeners.push(helloListener);
 
     /**
      * Method that creates the HTML structure
@@ -45,7 +48,7 @@
 
     }
     chrome.runtime.onMessage.addListener(createListener);
-    listeners.push(createListener);
+    chromeMessageListeners.push(createListener);
 
     /**
      * Method for removing the grid HTML from the page.
@@ -58,7 +61,7 @@
         }
     }
     chrome.runtime.onMessage.addListener(destroyListener);
-    listeners.push(destroyListener);
+    chromeMessageListeners.push(destroyListener);
 
     /**
      * Adds the dynamically generated CSS for the grid
@@ -78,7 +81,7 @@
         }
     }
     chrome.runtime.onMessage.addListener(addCSSListener);
-    listeners.push(addCSSListener);
+    chromeMessageListeners.push(addCSSListener);
 
     /**
      * Removes the dynamically generated CSS from the
@@ -93,7 +96,7 @@
         }
     }
     chrome.runtime.onMessage.addListener(removeCSSListener);
-    listeners.push(removeCSSListener);
+    chromeMessageListeners.push(removeCSSListener);
 
     /**
      * Inserts the base CSS styles for the grid into
@@ -118,7 +121,7 @@
         }
     }
     chrome.runtime.onMessage.addListener(insertBaseCSSListener);
-    listeners.push(insertBaseCSSListener);
+    chromeMessageListeners.push(insertBaseCSSListener);
 
     /**
      * Notifies the popup whether the grid is
@@ -128,19 +131,22 @@
         chrome.runtime.sendMessage({status: gridStatus});
     }
 
+    /**
+     * Listener that cleans up all listeners if a cleanup message is received
+     * NOTE: This function is currently unused, since injected scripts have no
+     * current way of knowing if they are "orphaned" from their extension after
+     * an update/reload/etc
+     */
     function cleanUpListener(request, sender, sendResponse) {
         if(request.method == "cleanUp") {
-            console.log("CLEANING UP!");
-            listeners.forEach(function(lst){
+            chromeMessageListeners.forEach(function(lst){
                 "use strict";
                 chrome.runtime.onMessage.removeListener(lst);
-
             });
         }
     }
     chrome.runtime.onMessage.addListener(cleanUpListener);
-    listeners.push(cleanUpListener);
-
+    chromeMessageListeners.push(cleanUpListener);
 })();
 
 

@@ -1,17 +1,24 @@
 var chrome = chrome || {};
 
 (function () {
+    /**
+     * Array of function references to our Chrome Runtime Message Listeners. We use this
+     * array for later clean-up of these listeners.
+     * @type {Array}
+     */
+    var chromeMessageListeners = [];
 
     /**
      * Listener that calls the fireCalc method when need
      * to generate the values for the report.
      */
-    chrome.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            if (request.method == "fireCalc") {
-                fireCalc(request.tabId);
-            }
-        });
+    function fireCalcListener(request, sender, sendResponse) {
+        if (request.method == "fireCalc") {
+            fireCalc(request.tabId);
+        }
+    }
+    chrome.runtime.onMessage.addListener(fireCalcListener);
+    chromeMessageListeners.push(fireCalcListener);
 
 
     /**
@@ -36,41 +43,61 @@ var chrome = chrome || {};
      * Event handler that adds the report size overlay styles to the page in response
      * to the chrome runtime message with method "addReportCSS"
      */
-    chrome.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            if (request.method === "addReportCSS") {
-                insertReportCSS();
-            }
-        });
+    function addReportCSSListener(request, sender, sendResponse) {
+        if (request.method === "addReportCSS") {
+            insertReportCSS();
+        }
+    }
+    chrome.runtime.onMessage.addListener(addReportCSSListener);
+    chromeMessageListeners.push(addReportCSSListener);
 
     /**
      * Event handler that enables the report overlay in response
      * to the chrome runtime message with method "createReportOverlay"
      * and a given query selector string
      */
-    chrome.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            if (request.method === "createReportOverlay") {
-                var selector = request.reportOverlaySelector || "grid__cell";
-                var matchEmptyElements = request.matchEmptyElements || false;
-                var hideHiddenElementOverlays = request.hideHiddenElementOverlays || false;
-                var overlayLabelColor = request.overlayLabelColor;
-                var overlayTextColor = request.overlayTextColor;
-                createReportOverlay(selector, matchEmptyElements, hideHiddenElementOverlays, overlayLabelColor, overlayTextColor, false);
-
-            }
-        });
+    function createReportOverlayListener(request, sender, sendResponse) {
+        if (request.method === "createReportOverlay") {
+            var selector = request.reportOverlaySelector || "grid__cell";
+            var matchEmptyElements = request.matchEmptyElements || false;
+            var hideHiddenElementOverlays = request.hideHiddenElementOverlays || false;
+            var overlayLabelColor = request.overlayLabelColor;
+            var overlayTextColor = request.overlayTextColor;
+            createReportOverlay(selector, matchEmptyElements, hideHiddenElementOverlays, overlayLabelColor, overlayTextColor, false);
+        }
+    }
+    chrome.runtime.onMessage.addListener(createReportOverlayListener);
+    chromeMessageListeners.push(createReportOverlayListener);
 
     /**
      * Event handler that disables the report overlay in response
      * to the chrome runtime message with method "removeReportOverlay"
      */
-    chrome.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            if (request.method == "removeReportOverlay") {
-                removeReportOverlay(false);
-            }
-        });
+    function removeReportOverlayListener(request, sender, sendResponse) {
+        if (request.method == "removeReportOverlay") {
+            removeReportOverlay(false);
+        }
+    }
+    chrome.runtime.onMessage.addListener(removeReportOverlayListener);
+    chromeMessageListeners.push(removeReportOverlayListener);
+
+    /**
+     * Listener that cleans up all listeners if a cleanup message is received
+     * NOTE: This function is currently unused, since injected scripts have no
+     * current way of knowing if they are "orphaned" from their extension after
+     * an update/reload/etc
+     */
+    function cleanUpListener(request, sender, sendResponse) {
+        if(request.method == "cleanUp") {
+            chromeMessageListeners.forEach(function(lst){
+                "use strict";
+                chrome.runtime.onMessage.removeListener(lst);
+
+            });
+        }
+    }
+    chrome.runtime.onMessage.addListener(cleanUpListener);
+    chromeMessageListeners.push(cleanUpListener);
 
     /**
      * A set of configurations for our Size Overlay used by the various size overlay methods
@@ -78,22 +105,23 @@ var chrome = chrome || {};
      */
     var _designGridSizeOverlayConfig = {
         uniqueScriptId: Date.now().toString(), //Used to ensure that only interact with an overlay that belongs to
-                                                  //this instance of the script
-        enabled: false,
-        matchEmptyElements: false,
-        hideHiddenElementOverlays: false,
-        overlayLabelColor: undefined,
-        overlayTextColor: undefined,
-        selector: undefined,
-        fullPageContainer: undefined,
-        overlayedElements: [],
-        generatedOverlayArray: [], //Array of actual elements used to display sizes - one for each overlayedElement
-        bodyMutationObserver: new MutationObserver(domChangeUpdate),
-        bodyMutObsConfig: {
-            attributes: true, // Listen to attribute changes, including class changes
-            childList: true, // Listen for direct child node list changes
+                                               //this instance of the script
+        enabled: false,                //Flag to signify if overlay is enabled
+        matchEmptyElements: false,     //User-set Flag to match elements that have no child nodes
+        hideHiddenElementOverlays: false, //User-set Flag to hide overlays for elements that are hidden under
+                                          // other elements, or otherwise not visible
+        overlayLabelColor: undefined,//User-customizable color of overlay background
+        overlayTextColor: undefined, //User-customizable color of overlay text
+        selector: undefined,         //User-customizer query selector string to locate our target elements to measure
+        fullPageContainer: undefined,//Reference to our overlay container
+        overlayedElements: [],       //Array of target elements that are being measured
+        generatedOverlayArray: [],   //Array of label elements used to display sizes - one for each overlayedElement
+        bodyMutationObserver: new MutationObserver(domChangeUpdate), //Observer that will update labels when DOM changes
+        bodyMutObsConfig: {      //Configuration for our DOM Observer
+            attributes: true,    //Listen to attribute changes, including class changes
+            childList: true,     //Listen for direct child node list changes
             characterData: true, // Ignore character data changes
-            subtree: true // Listen recursively on entire subtree
+            subtree: true        // Listen recursively on entire subtree
         }
     };
 
@@ -110,8 +138,8 @@ var chrome = chrome || {};
             return true;
         }
         else {
-            //Clean up our non-chrome extension api listeners - when extensions are reloaded an injected scripts are "orphaned",
-            //Chrome prevents any more messages to the orphaned scripts from the other extension code.
+            //Clean up our non-chrome extension api listeners - when extensions are reloaded an injected scripts are
+            //"orphaned", Chrome prevents any more messages to the orphaned scripts from the other extension code.
             //Therefore we only need to stop listeners that depend on browser events, not chrome runtime messages.
 
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
@@ -165,7 +193,6 @@ var chrome = chrome || {};
         _overlayValuesUpdating = false;
     }
 
-    //var domChangeTimeout = undefined;
     /**
      * Method that is fired when any element in the document body is added, deleted, or attributes are modified.
      * We use this event to signal that we need to regenerate our overlay to handle any new potential HTML elements to
