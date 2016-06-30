@@ -378,7 +378,7 @@ var chrome = chrome || {};
                     // elements, then first check if the element has at least 1 child element or text content
                     if(
                         matchEmptyElements ||
-                        (!matchEmptyElements && ((foundElements[i].children.length > 0) || (foundElements[i].textContent.length > 0)))
+                        (!matchEmptyElements && ((foundElements[i].children.length > 0) || (foundElements[i].textContent.trim().length > 0)))
                     ) {
                         // Store element
                         _designGridSizeOverlayConfig.overlayedElements.push(foundElements[i]);
