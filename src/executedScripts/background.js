@@ -40,4 +40,26 @@
 //         }
 //     });
 // });
-//
+
+
+//On installation, clear all non-global data
+chrome.runtime.onInstalled.addListener(function () {
+
+    chrome.storage.sync.get(function(allData){
+
+        var globalSettings = allData['global'];
+
+        chrome.storage.sync.clear(function(){
+            if(globalSettings) {
+                chrome.storage.sync.set({'global': globalSettings});
+            }
+        });
+
+    });
+});
+
+
+//Clear tab sync storage when it is closed
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+    chrome.storage.sync.remove(tabId.toString());
+});
