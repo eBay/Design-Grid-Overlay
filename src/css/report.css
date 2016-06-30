@@ -23,6 +23,9 @@
   top: 0 !important;
   left: 0 !important;
   position: absolute !important;
+  font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,Roboto,sans-serif !important;
+  font-size: 12px !important;
+  font-style: normal !important;
   border-top: solid 2px rgb(255, 0, 9);
   opacity: 0.5 !important;
   pointer-events: none !important;
