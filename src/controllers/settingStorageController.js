@@ -5,12 +5,18 @@
 var settingStorageController = (function () {
 
     /**
-     * A placeholder value to put into our globalSettings in order for each
+     * A placeholder value to put into our settings in order for each
      * key to show up in our data structure (rather than 'undefined') when
      * we fill those values in from chrome local storage
      *
      */
     var EMPTY_VALUE = "EMPTY_VALUE";
+
+    /**
+     * Key used to store common global defaults for our extension
+     * @type {string}
+     */
+    var DEFAULT_SETTINGS_KEY = "default";
 
     /**
      * HTML Element that contains our tab buttons
@@ -26,7 +32,7 @@ var settingStorageController = (function () {
      * below
      *
      */
-    var globalSettings = {
+    var settings = {
         // UI Tab stored state
         activeTabPanelId: EMPTY_VALUE,
         activeTabLabelId: EMPTY_VALUE,
@@ -126,16 +132,23 @@ var settingStorageController = (function () {
      * Goes into local storage and pulls out settings that are saved in the current
      * tab. If no settings are saved, the default value is used that is specified in the html
      * for the popup. After loading, the state is saved immediately,
-     * which syncs the loaded UI state with our in-memory globalSettings object, and ensures
+     * which syncs the loaded UI state with our in-memory settings object, and ensures
      * that any default settings are also saved into chrome's local storage
+     * @param currentChromeTabId {number} - Tab ID of currently active tab, for retrieving data for this session
+     * @param callback - callback function to call after we have loaded the settings data
      */
     function loadSettings(currentChromeTabId, callback) {
-        chrome.storage.sync.get(currentChromeTabId.toString(), function (storedData) {
+
+        currentChromeTabId = currentChromeTabId.toString();
+
+        chrome.storage.sync.get([currentChromeTabId, DEFAULT_SETTINGS_KEY], function (storedData) {
 
 
             //Override the local var with the actual data we want to load, which is for this specific tab
             //The local data storage is stored by keys that are our TabID's given to us by chrome
-            storedData = storedData[currentChromeTabId.toString()] || {formData: {}};
+            //This call retrieves from the global defaults data as a backup if no tab data is present, and if no default
+            //has been stored, it reverts to a blank data object to be filled in.
+            storedData = storedData[currentChromeTabId] || storedData[DEFAULT_SETTINGS_KEY] || {formData: {}};
 
 
             // Load active UI tab data
@@ -143,7 +156,7 @@ var settingStorageController = (function () {
 
             // Look at our global settings formData for list of all forms we are synchronizing,
             // As well as the names of each setting ID for mapping to HTML element id
-            for (var formName in globalSettings.formData) {
+            for (var formName in settings.formData) {
 
 
                 // Fill in stored data with blank data if no settings found
@@ -154,7 +167,7 @@ var settingStorageController = (function () {
 
 
                 var storedFormData = storedData.formData[formName].settings;
-                var formData = globalSettings.formData[formName];
+                var formData = settings.formData[formName];
                 var formElement = formData.formElement;
                 var htmlInputs = formElement.getElementsByTagName('input');
 
@@ -179,10 +192,10 @@ var settingStorageController = (function () {
 
             // Save our data structure back to storage, to store any default values
             // This save call will also sync our UI state with our in-memory global settings object
-            saveSettings(currentChromeTabId);
+            saveSettings(currentChromeTabId, false);
 
             if (callback) {
-                callback(globalSettings);
+                callback(settings);
             }
         });
 
@@ -191,15 +204,15 @@ var settingStorageController = (function () {
     /**
      * Saves all UI settings state into chrome local storage as well
      *
-     * @param formDataMapping - Object with with this structure:
-     *   {formName: { formElement: <HTMLElement>, settings: {<settingId>: <settingValue>} }, formName2: {..}, ...}
-     *   formName keys are the stored name of the form data, the formElement
-     *   is the form HTML element that contains our UI form, and setting is an object storing the
-     *   id of the setting, which is the same as the HTML element id, and the state of that setting
-     * @returns Filled in form data mapping pulled from our form UI
+     * @param currentChromeTabId {number} - Tab Id of current active tab, to store/retrieve settings for this session
+     * @param saveToStoredDefaultSettings {boolean} - Flag requesting whether to save the tab settings to global default
+     *   stored settings as well
+     * @returns {object} - Filled in form data mapping pulled from our form UI
      */
-    function saveSettings(currentChromeTabId) {
 
+    function saveSettings(currentChromeTabId, saveToStoredDefaultSettings) {
+
+        currentChromeTabId = currentChromeTabId.toString();
         var dataToStore = {};
 
         dataToStore[currentChromeTabId] = {
@@ -211,14 +224,14 @@ var settingStorageController = (function () {
         dataToStore[currentChromeTabId] = saveTabStates(dataToStore[currentChromeTabId]);
 
         // Sync the UI tab state to our in-memory data while we are saving it
-        globalSettings.activeTabLabelId = dataToStore[currentChromeTabId].activeTabLabelId;
-        globalSettings.activeTabPanelId = dataToStore[currentChromeTabId].activeTabPanelId;
+        settings.activeTabLabelId = dataToStore[currentChromeTabId].activeTabLabelId;
+        settings.activeTabPanelId = dataToStore[currentChromeTabId].activeTabPanelId;
 
 
         //Go through each settings ID in each form and pull the data from the HTML state into an object for storage
-        for (var formName in globalSettings.formData) {
+        for (var formName in settings.formData) {
 
-            var inMemoryFormData = globalSettings.formData[formName];
+            var inMemoryFormData = settings.formData[formName];
             var formElement = inMemoryFormData.formElement;
             var htmlInputs = formElement.getElementsByTagName('input');
 
@@ -243,13 +256,22 @@ var settingStorageController = (function () {
             dataToStore[currentChromeTabId].formData[formName] = storedFormData;
         }
 
+        //Save form data to defaults if requested
+        if(saveToStoredDefaultSettings) {
+
+            //A deep clone/copy is required for chrome storage API - no duplicate objects (references) are allowed or stored
+            var deepClonedSettings = {formData: (JSON.parse(JSON.stringify(dataToStore[currentChromeTabId].formData)))};
+
+            dataToStore[DEFAULT_SETTINGS_KEY] =  deepClonedSettings;
+        }
+
         chrome.storage.sync.set(dataToStore);
 
         return dataToStore[currentChromeTabId];
     }
 
     function getSettings() {
-        return globalSettings;
+        return settings;
     }
 
     /**
@@ -264,9 +286,9 @@ var settingStorageController = (function () {
      */
     function init(gridFormElement, reportFormElement, advancedFormElement, tabContentContainerElem, tabLabelContainerElem) {
 
-        globalSettings.formData.gridForm.formElement = gridFormElement;
-        globalSettings.formData.reportForm.formElement = reportFormElement;
-        globalSettings.formData.advancedForm.formElement = advancedFormElement;
+        settings.formData.gridForm.formElement = gridFormElement;
+        settings.formData.reportForm.formElement = reportFormElement;
+        settings.formData.advancedForm.formElement = advancedFormElement;
         tabContentContainer = tabContentContainerElem;
         tabLabelContainer = tabLabelContainerElem;
     }

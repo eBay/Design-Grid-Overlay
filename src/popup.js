@@ -70,7 +70,7 @@ var popup = (function () {
 
             document.getElementById('tabContainer').addEventListener('click', function () {
                 //Save UI state, which includes tab state
-                settingStorageController.saveSettings(currentChromeTabId);
+                settingStorageController.saveSettings(currentChromeTabId, false);
             });
 
             //Initialize state
@@ -108,7 +108,7 @@ var popup = (function () {
      * off the grid based on the popup values.
      */
     gridToggle.addEventListener('click', function () {
-        var settings = settingStorageController.saveSettings(currentChromeTabId);
+        var settings = settingStorageController.saveSettings(currentChromeTabId, false);
         gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
         reportController.calculateReport(currentChromeTabId);
     });
@@ -125,7 +125,7 @@ var popup = (function () {
         // SetTimeout is used to delay the execution of this code and storage of the DOM state until AFTER the reset
         // event has finished resetting the form values - this reset event is fired BEFORE the DOM state has changed
         setTimeout(function () {
-            var settings = settingStorageController.saveSettings(currentChromeTabId);
+            var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.calculateReport(currentChromeTabId);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
@@ -144,7 +144,7 @@ var popup = (function () {
         // SetTimeout is used to delay the execution of this code and storage of the DOM state until AFTER the reset
         // event has finished resetting the form values - this reset event is fired BEFORE the DOM state has changed
         setTimeout(function () {
-            var settings = settingStorageController.saveSettings(currentChromeTabId);
+            var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.calculateReport(currentChromeTabId);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
@@ -165,7 +165,7 @@ var popup = (function () {
         // SetTimeout is used to delay the execution of this code and storage of the DOM state until AFTER the reset
         // event has finished resetting the form values - this reset event is fired BEFORE the DOM state has changed
         setTimeout(function () {
-            var settings = settingStorageController.saveSettings(currentChromeTabId);
+            var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.calculateReport(currentChromeTabId);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
@@ -250,7 +250,7 @@ var popup = (function () {
             gridFormInputs[i].addEventListener("change", throttle(function (event) {
                 if (event.target.id !== 'gridToggle') {
                     //Updated just grid and report calculations
-                    var settings = settingStorageController.saveSettings(currentChromeTabId);
+                    var settings = settingStorageController.saveSettings(currentChromeTabId, true);
                     gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     reportController.calculateReport(currentChromeTabId);
                 }
@@ -263,7 +263,7 @@ var popup = (function () {
             reportFormInputs[i].addEventListener("change", throttle(function (event) {
                 if (event.target.id !== 'gridToggle') {
                     //Update just report overlay
-                    var settings = settingStorageController.saveSettings(currentChromeTabId);
+                    var settings = settingStorageController.saveSettings(currentChromeTabId, true);
                     reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                         settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                 }
@@ -276,7 +276,7 @@ var popup = (function () {
             advancedFormInputs[i].addEventListener("change", throttle(function (event) {
                 if (event.target.id !== 'gridToggle') {
                     //Update grid, report, report overlay
-                    var settings = settingStorageController.saveSettings(currentChromeTabId);
+                    var settings = settingStorageController.saveSettings(currentChromeTabId, true);
                     reportController.calculateReport(currentChromeTabId);
                     gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,

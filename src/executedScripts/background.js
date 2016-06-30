@@ -42,16 +42,15 @@
 // });
 
 
-//On installation, clear all non-global data
+//On installation, clear all non-default extension settings data
 chrome.runtime.onInstalled.addListener(function () {
-
     chrome.storage.sync.get(function(allData){
 
-        var globalSettings = allData['global'];
+        var defaultSettings = allData['default'];
 
         chrome.storage.sync.clear(function(){
-            if(globalSettings) {
-                chrome.storage.sync.set({'global': globalSettings});
+            if(defaultSettings) {
+                chrome.storage.sync.set({'default': defaultSettings});
             }
         });
 
