@@ -122,7 +122,8 @@ var chrome = chrome || {};
             childList: true,     //Listen for direct child node list changes
             characterData: true, // Ignore character data changes
             subtree: true        // Listen recursively on entire subtree
-        }
+        },
+        updateIntervalId: undefined //ID that keeps track of our periodic overlay update setInterval() call
     };
 
 
@@ -142,6 +143,11 @@ var chrome = chrome || {};
             //"orphaned", Chrome prevents any more messages to the orphaned scripts from the other extension code.
             //Therefore we only need to stop listeners that depend on browser events, not chrome runtime messages.
 
+            _designGridSizeOverlayConfig.enabled = false;
+            if(_designGridSizeOverlayConfig.updateIntervalId) {
+                window.clearInterval(_designGridSizeOverlayConfig.updateIntervalId);
+                _designGridSizeOverlayConfig.updateIntervalId = undefined;
+            }
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
             window.removeEventListener('resize', requestOverlayUpdate);
             window.removeEventListener('scroll', requestOverlayUpdate);
@@ -369,10 +375,10 @@ var chrome = chrome || {};
                 if(!isOverlayElement(foundElements[i])) {
 
                     // If we are matching empty elements, automatically add the element. If we are NOT matching empty
-                    // elements, then first check if the element has at least 1 child element
+                    // elements, then first check if the element has at least 1 child element or text content
                     if(
                         matchEmptyElements ||
-                        (!matchEmptyElements && (foundElements[i].children.length > 0))
+                        (!matchEmptyElements && ((foundElements[i].children.length > 0) || (foundElements[i].textContent.length > 0)))
                     ) {
                         // Store element
                         _designGridSizeOverlayConfig.overlayedElements.push(foundElements[i]);
@@ -483,6 +489,17 @@ var chrome = chrome || {};
         //If the window is resized, we want to update this overlay
         window.addEventListener('resize', requestOverlayUpdate, false);
         window.addEventListener('scroll', requestOverlayUpdate, false);
+
+        if(_designGridSizeOverlayConfig.hideHiddenElementOverlays) {
+            //If we are detecting visibility of elements, we need periodic visibility checks and updates to deal with
+            // long-running CSS animations or other delayed layout rendering that affects visibility
+            _designGridSizeOverlayConfig.updateIntervalId = window.setInterval(
+                function(){
+                    //Request idle callback to prevent overloading CPU with work
+                    window.requestIdleCallback(requestOverlayUpdate);
+                }, 750);
+        }
+
     }
 
     /**
@@ -500,6 +517,11 @@ var chrome = chrome || {};
         if (_designGridSizeOverlayConfig.enabled) {
 
             //Disconnect DOM event handlers
+
+            if(_designGridSizeOverlayConfig.updateIntervalId) {
+                window.clearInterval(_designGridSizeOverlayConfig.updateIntervalId);
+                _designGridSizeOverlayConfig.updateIntervalId = undefined;
+            }
             window.removeEventListener('resize', requestOverlayUpdate);
             window.removeEventListener('scroll', requestOverlayUpdate);
             _designGridSizeOverlayConfig.bodyMutationObserver.disconnect();
