@@ -375,10 +375,12 @@ var chrome = chrome || {};
                 if(!isOverlayElement(foundElements[i])) {
 
                     // If we are matching empty elements, automatically add the element. If we are NOT matching empty
-                    // elements, then first check if the element has at least 1 child element or text content
+                    // elements, then first check if the element has at least 1 child element or non whitespace text content
                     if(
                         matchEmptyElements ||
-                        (!matchEmptyElements && ((foundElements[i].children.length > 0) || (foundElements[i].textContent.trim().length > 0)))
+                        (!matchEmptyElements &&
+                            ((foundElements[i].children.length > 0) || (foundElements[i].textContent.trim().length > 0))
+                        )
                     ) {
                         // Store element
                         _designGridSizeOverlayConfig.overlayedElements.push(foundElements[i]);
