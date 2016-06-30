@@ -170,7 +170,7 @@ var settingStorageController = (function () {
                         }
                     }
                     else if (htmlInputs[settingId].type == "checkbox") {
-                        htmlInputs[settingId].checked = storedFormData ? storedFormData[settingId] : htmlInputs[settingId].checked
+                        htmlInputs[settingId].checked = storedFormData[settingId] ? storedFormData[settingId] : htmlInputs[settingId].checked
                     }
 
                 }
