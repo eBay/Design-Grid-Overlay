@@ -124,12 +124,12 @@
                             </div>
                             <div>
                                 <label
-                                    info="Enter query selector string for container elements to measure"
+                                    info="CSS selector string that chooses the container elements to measure. Use multiple selectors by separating each with a comma."
                                     for="reportOverlaySelector"
                                     class="tooltip">
                                     Selector
-                                </label>
-                                <input type="text" id="reportOverlaySelector" value=".grid__cell">
+                                </label>(<a href="https://css-tricks.com/how-css-selectors-work/" class="extlink">help</a>)
+                                <input type="text" id="reportOverlaySelector" value="body, h1, h2, .grid__cell">
                             </div>
                         </fieldset>
                         <div class="reset">
@@ -155,17 +155,18 @@
                         <fieldset>
                             <legend>Grid</legend>
                             <div>
-                                <label for="color">Column Color</label>
+                                <label  info="Color of grid columns. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
+                                        class="tooltip" for="color">Column Color</label>
                                 <input type="text" id="color" value="#f4ae01">
                             </div>
                         </fieldset>
                         <br>
                         <fieldset>
                             <legend>Container Size Overlay</legend>
-                            <div>
+                            <div class="overlaySettingsCheckboxes">
 
                                 <label
-                                    info="Primary color for size overlay labels."
+                                    info="Primary color for size overlay labels. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
                                     for="overlayLabelColor"
                                     class="tooltip">
                                     Label Color
@@ -173,7 +174,7 @@
                                 <input type="text" id="overlayLabelColor" value="#ff0009">
                                 <br>
                                 <label
-                                    info="Text color for size overlay labels."
+                                    info="Text color for size overlay labels. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
                                     for="overlayTextColor"
                                     class="tooltip">
                                     Text Color
@@ -190,7 +191,7 @@
                                 </label>
                             </div>
                         </fieldset>
-                        <a href="https://github.com/eBay/Design-Grid-Overlay/issues" id="github-icon">
+                        <a href="https://github.com/eBay/Design-Grid-Overlay/issues" class="extlink" id="github-icon">
                             <p>Feedback?</p>
                             <img src="../icons/GitHub-Mark-32px.png">
                         </a>

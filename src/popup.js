@@ -31,16 +31,16 @@ var popup = (function () {
     setTabAction('tabs', 'tab3', 'panel3');
 
     /**
-     * Allows a user to click the github icon and
-     * be taken directly to the eBaay grid issue page
+     * Allows a user to click any of our external links and open a tab
      */
-    var git = document.getElementById('github-icon');
-    git.addEventListener('click', function (e) {
-        if (this.href !== undefined) {
-            chrome.tabs.create({url: this.href})
-        }
-    });
-
+    var externalLinks = document.getElementsByClassName("extlink");
+    for (var i = 0; i < externalLinks.length; i++) {
+        externalLinks[i].addEventListener('click', function(e){
+            if (this.href !== undefined) {
+                chrome.tabs.create({url: this.href})
+            }
+        });
+    }
 
     /**
      * Will stop the advanced form from submitting

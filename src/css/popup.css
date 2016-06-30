@@ -14,7 +14,7 @@ header {
 
 label {
   color: #555;
-  margin: 4px 5px 0 0;
+
 }
 
 fieldset {
@@ -176,7 +176,12 @@ input[type=reset] {
   float: left;
 }
 
+#gridForm label {
+  margin: 4px 5px 0 0;
+}
+
 .gridsettings__columns label, .gridsettings__gutters label {
+
   width: 32px;
   flex-shrink: 0;
   display: inline-block;
@@ -273,6 +278,10 @@ input[type=reset] {
   margin-bottom: 8px;
 }
 
+#reportForm label {
+  margin: 4px 0 0 0;
+}
+
 table {
   text-align: left;
   font-size: 100%;
@@ -315,7 +324,7 @@ th {
   width: 100%;
 }
 
-#reportForm .overlaySettingsCheckboxes {
+.overlaySettingsCheckboxes {
   margin-bottom: 8px;
 
 }
