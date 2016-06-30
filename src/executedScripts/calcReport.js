@@ -488,7 +488,7 @@ var chrome = chrome || {};
 
         //If the window is resized, we want to update this overlay
         window.addEventListener('resize', requestOverlayUpdate, false);
-        window.addEventListener('scroll', requestOverlayUpdate, false);
+        window.addEventListener('scroll', requestOverlayUpdate, true);
 
         if(_designGridSizeOverlayConfig.hideHiddenElementOverlays) {
             //If we are detecting visibility of elements, we need periodic visibility checks and updates to deal with
