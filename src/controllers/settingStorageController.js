@@ -263,6 +263,10 @@ var settingStorageController = (function () {
             var deepClonedSettings = {formData: (JSON.parse(JSON.stringify(dataToStore[currentChromeTabId].formData)))};
 
             dataToStore[DEFAULT_SETTINGS_KEY] =  deepClonedSettings;
+
+            //Special case where the default setting for the size overlay is always off (since it is a special setting that
+            //applies to each session, and not as a default configuration option)
+            dataToStore[DEFAULT_SETTINGS_KEY].formData.reportForm.settings.reportOverlayToggle = false;
         }
 
         chrome.storage.sync.set(dataToStore);
