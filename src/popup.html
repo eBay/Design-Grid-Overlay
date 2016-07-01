@@ -103,30 +103,30 @@
                 <div id="panel2" role="tabpanel" aria-hidden="true" aria-labelledby="tab2" class="tab">
                     <form id="reportForm" name="reportForm">
                         <fieldset id="overlaySettings">
-                            <legend>Container Size Overlay</legend>
+                            <legend>Content Width Labels</legend>
                             <div class="overlaySettingsCheckboxes">
                                 <input type="checkbox" id="reportOverlayToggle">
                                 <label
-                                        info="Enable container size overlay, which measures and displays the inner content widths, in pixels, of specific selected container elements"
+                                        info="Show content width labels, which measure and display the inner widths (in pixels) for elements chosen by the CSS selector below."
                                         for="reportOverlayToggle"
                                         class="tooltip">
-                                    Enable Overlay
+                                    Show Labels
                                 </label>
                                 <br />
                                 <input type="checkbox" id="reportOverlayMatchEmptyElements">
                                 <label
-                                    info="Include size overlays for empty containers"
+                                    info="Include content width labels for elements that contain no text or other elements"
                                     for="reportOverlayMatchEmptyElements"
                                     class="tooltip">
-                                    Include Empty Containers
+                                    Label Empty Elements
                                 </label>
                             </div>
                             <div>
                                 <label
-                                    info="CSS selector string that chooses the container elements to measure. Use multiple selectors by separating each with a comma."
+                                    info="CSS selector that chooses the elements to measure. Use multiple selectors by separating each with a comma."
                                     for="reportOverlaySelector"
                                     class="tooltip">
-                                    Selector
+                                    Element Selector
                                 </label>(<a href="https://css-tricks.com/how-css-selectors-work/" class="extlink">help</a>)
                                 <input type="text" id="reportOverlaySelector" value="body, h1, a, .grid__cell">
                             </div>
@@ -161,11 +161,11 @@
                         </fieldset>
                         <br>
                         <fieldset>
-                            <legend>Container Size Overlay</legend>
+                            <legend>Content Width Labels</legend>
                             <div class="overlaySettingsCheckboxes">
 
                                 <label
-                                    info="Primary color for size overlay labels. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
+                                    info="Primary color for content width labels. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
                                     for="overlayLabelColor"
                                     class="tooltip">
                                     Label Color
@@ -173,7 +173,7 @@
                                 <input type="text" id="overlayLabelColor" value="#ff0009">
                                 <br>
                                 <label
-                                    info="Text color for size overlay labels. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
+                                    info="Text color for content width labels. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
                                     for="overlayTextColor"
                                     class="tooltip">
                                     Text Color
@@ -183,10 +183,10 @@
                             <div>
                                 <input type="checkbox" id="hideHiddenElementOverlays">
                                 <label
-                                    info="Do not show size overlays for hidden containers. This feature is experimental."
+                                    info="Do not show content width labels for hidden containers. This feature is experimental."
                                     for="hideHiddenElementOverlays"
                                     class="tooltip">
-                                    Disable overlays for hidden containers
+                                    Hide labels for hidden containers
                                 </label>
                             </div>
                         </fieldset>
