@@ -8,32 +8,35 @@ var reportController = (function () {
      * Listens for the event that adds the report to popup
      */
     chrome.runtime.onMessage.addListener(function (request) {
+
         if (request.method === 'updateGridReport') {
+            var gridSettings = settingStorageController.getSettings().formData.gridForm.settings;
             var colWidth = 0;
+            var largeWidth = gridSettings.largeWidth;
 
             if (request.breakPoint == 'small') {
                 colWidth = reportColWidthEquation(
                     request.width,
-                    request.items['mobileOutterGutters'],
-                    request.items['mobileInnerGutters'],
-                    request.items['smallColumns']
+                    gridSettings.mobileOutterGutters,
+                    gridSettings.mobileInnerGutters,
+                    gridSettings.smallColumns
                 );
 
-                createReport(colWidth, request.items['smallColumns'], request.items['mobileInnerGutters']);
+                createReport(colWidth, gridSettings.smallColumns, gridSettings.mobileInnerGutters);
             } else {
-                if (request.width < request.items['largeWidth']) {
-                    request.items['largeWidth'] = request.width;
+                if (request.width < largeWidth) {
+                    largeWidth = request.width;
                 }
 
                 colWidth = reportColWidthEquation(
-                    request.items['largeWidth'],
-                    request.items['outterGutters'],
-                    request.items['gutters'],
-                    request.items['largeColumns']
+                    largeWidth,
+                    gridSettings.outterGutters,
+                    gridSettings.gutters,
+                    gridSettings.largeColumns
                 );
 
 
-                createReport(colWidth, request.items['largeColumns'], request.items['gutters']);
+                createReport(colWidth, gridSettings.largeColumns, gridSettings.gutters);
             }
         }
     });
@@ -41,8 +44,9 @@ var reportController = (function () {
     /**
      * Creates the report
      *
-     * @param {int} columns - The numbers of columns of the grid
-     * @param {Array} valuesArray - the array of values for the table
+     * @param {int} colWidth - Width of each column
+     * @param {int} cols - The numbers of columns of the grid
+     * @param {int} gutter - Gutter width
      */
     var createReport = function (colWidth, cols, gutter) {
         var output = '';
@@ -66,9 +70,10 @@ var reportController = (function () {
      * Sends a message to get the column pixel widths
      *
      * @param {int} tabId - The id of the current tab
+     * @param {object} gridSettings - Grid options object, needed for report calculation
      */
-    var calculateReport = function (tabId) {
-        chrome.tabs.sendMessage(tabId, {method: "fireCalc", tabId: tabId});
+    var calculateReport = function (tabId, gridSettings) {
+        chrome.tabs.sendMessage(tabId, {method: "fireCalc", tabId: tabId, smallWidth: gridSettings.smallWidth, ignoreScrollbar: gridSettings.viewports});
     };
 
     function numberFormat(val, decimalPlaces) {

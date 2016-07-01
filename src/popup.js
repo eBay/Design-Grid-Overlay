@@ -76,10 +76,12 @@ var popup = (function () {
             //Initialize state
             popup.init();
 
+            chrome.tabs.executeScript(currentChromeTabId, {file: 'src/executedScripts/gridStatus.js'});
+
             //tabController.getCurrentTabState(tabs[0].id);
         });
 
-        chrome.tabs.executeScript(null, {file: 'src/executedScripts/gridStatus.js'});
+
 
 
     });
@@ -90,10 +92,9 @@ var popup = (function () {
      */
     chrome.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
-            if (request.status) {
-                console.log('Grid already enabled on page');
-
+            if (request.status !== undefined) {
                 if (request.status === 1 && gridToggle.checked === false) {
+                    console.log('Grid already enabled on page');
                     gridToggle.checked = true;
                 } else if (request.status === 0 && gridToggle.checked === true) {
                     gridToggle.checked = false;
@@ -110,7 +111,7 @@ var popup = (function () {
     gridToggle.addEventListener('click', function () {
         var settings = settingStorageController.saveSettings(currentChromeTabId, false);
         gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-        reportController.calculateReport(currentChromeTabId);
+        reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
     });
 
 
@@ -127,7 +128,7 @@ var popup = (function () {
         setTimeout(function () {
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-            reportController.calculateReport(currentChromeTabId);
+            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
         }, 0);
@@ -146,7 +147,7 @@ var popup = (function () {
         setTimeout(function () {
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-            reportController.calculateReport(currentChromeTabId);
+            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
 
@@ -167,7 +168,7 @@ var popup = (function () {
         setTimeout(function () {
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-            reportController.calculateReport(currentChromeTabId);
+            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
 
@@ -220,10 +221,10 @@ var popup = (function () {
 
             if (response) {
                 console.log("Design Grid Overlay JS already injected.");
-                reportController.calculateReport(currentChromeTabId);
 
                 // Load all stored settings from chrome local storage, and then update the report overlay
                 settingStorageController.loadSettings(currentChromeTabId, function (settings) {
+                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
                     reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                         settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                 });
@@ -232,10 +233,11 @@ var popup = (function () {
                 console.log("Design Grid Overlay JS not already injected, injecting now.");
                 chrome.tabs.executeScript(currentChromeTabId, {file: "src/executedScripts/grid.js"});
                 chrome.tabs.executeScript(currentChromeTabId, {file: "src/executedScripts/calcReport.js"}, function () {
-                    reportController.calculateReport(currentChromeTabId);
+
 
                     // Load all stored settings from chrome local storage, and then update the report overlay
                     settingStorageController.loadSettings(currentChromeTabId, function (settings) {
+                        reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
                         reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                             settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                     });
@@ -252,7 +254,7 @@ var popup = (function () {
                     //Updated just grid and report calculations
                     var settings = settingStorageController.saveSettings(currentChromeTabId, true);
                     gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-                    reportController.calculateReport(currentChromeTabId);
+                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
                 }
             }, 1000));
         }
@@ -277,7 +279,7 @@ var popup = (function () {
                 if (event.target.id !== 'gridToggle') {
                     //Update grid, report, report overlay
                     var settings = settingStorageController.saveSettings(currentChromeTabId, true);
-                    reportController.calculateReport(currentChromeTabId);
+                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
                     gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                         settings.formData.reportForm.settings, settings.formData.advancedForm.settings);

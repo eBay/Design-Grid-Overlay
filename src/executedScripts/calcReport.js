@@ -14,7 +14,7 @@ var chrome = chrome || {};
      */
     function fireCalcListener(request, sender, sendResponse) {
         if (request.method == "fireCalc") {
-            fireCalc(request.tabId);
+            fireCalc(request.smallWidth, request.ignoreScrollbar);
         }
     }
     chrome.runtime.onMessage.addListener(fireCalcListener);
@@ -552,18 +552,19 @@ var chrome = chrome || {};
      * Method that checks whether the width
      * is small or large, and pass the appropriate
      * values to have the correct report generated
+     *
+     * @param {number} smallWidth - breakpoint where small grid is enabled (<= smallWidth)
+     * @param {boolean} ignoreScrollbar - whether to take into account the scroll bar in calculating window width
      */
-    function fireCalc(tabId) {
-        var strTabId = tabId.toString();
-        chrome.storage.sync.get(strTabId, function (items) {
-            if(items[strTabId]) {
-                if (getWidth() <= parseInt(items[strTabId].formData.gridForm.settings["smallWidth"])) {
-                    calculateReport('small', items[strTabId].formData.gridForm.settings);
-                } else {
-                    calculateReport('large', items[strTabId].formData.gridForm.settings);
-                }
-            }
-        });
+    function fireCalc(smallWidth, ignoreScrollbar) {
+
+        var docWidth = getWidth(ignoreScrollbar);
+        if (docWidth <= parseInt(smallWidth)) {
+            calculateReport('small', docWidth);
+        } else {
+            calculateReport('large', docWidth);
+        }
+
     }
 
     /**
@@ -571,13 +572,15 @@ var chrome = chrome || {};
      * and creates a report. The values are then
      * sent to the popup via a message in order
      * to be displayed in the report section of the popup
+     *
+     * @param {string} breakPoint - 'small' or 'large' breakpoint setting
+     * @param {number} docWidth - width of viewport
      */
-    function calculateReport(breakPoint, items) {
+    function calculateReport(breakPoint, docWidth) {
         chrome.runtime.sendMessage({
                 method: 'updateGridReport',
-                items: items,
                 breakPoint: breakPoint,
-                width: document.documentElement.clientWidth
+                width: docWidth
             }
         );
     }
@@ -595,19 +598,17 @@ var chrome = chrome || {};
     }
 
     /**
-     * Calculates the width of the of a given column
+     * Method to calculate viewport width, with optional consideration of scrollbar
+     *
+     * @param {boolean} ignoreScrollbar - Whether to take into account the scroll bar in calculating the viewport width
+     * @returns {number} - Width of window
      */
-    function getWidth() {
-        if (self.innerHeight) {
-            return self.innerWidth;
+    function getWidth(ignoreScrollbar) {
+        if(ignoreScrollbar) {
+            return window.innerWidth;
         }
-
-        if (document.documentElement && document.documentElement.clientWidth) {
+        else {
             return document.documentElement.clientWidth;
-        }
-
-        if (document.body) {
-            return document.body.clientWidth;
         }
     }
 
