@@ -60,12 +60,14 @@ h3 {
   position: absolute;
   flex: 2;
   z-index: 5;
-  width: 2.25rem;
+  width: 2.8rem;
   height: 1.5rem;
   padding: 0;
-  margin: .625rem 0 .625rem 1rem;
+  margin: .625rem 0.6rem .625rem 0;
   cursor: pointer;
   opacity: 0;
+  right: 0;
+  top: 0;
 }
 
 .switch > input + span {
