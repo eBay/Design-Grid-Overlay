@@ -2,6 +2,19 @@ var chrome = chrome || {};
 
 var popup = (function () {
 
+    var service = analytics.getService('Design_Grid_Overlay');
+    service.getConfig().addCallback(initAnalyticsConfig);
+    var tracker = service.getTracker('UA-80131763-3');
+    tracker.sendAppView('MainView');
+
+    function initAnalyticsConfig(config) {
+        var checkbox = document.getElementById('tracking-permitted');
+        checkbox.checked = config.isTrackingPermitted();
+        checkbox.onchange = function() {
+            config.setTrackingPermitted(checkbox.checked);
+        };
+    }
+
     var gridForm = document.getElementById('gridForm');
     var gridToggle = document.getElementById('gridToggle');
     var reportForm = document.getElementById('reportForm');
