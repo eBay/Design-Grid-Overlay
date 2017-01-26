@@ -42,6 +42,24 @@
 
                 div.innerHTML = output;
                 document.body.appendChild(div);
+
+                // if horizontal lines displays
+                if (item[request.tabId.toString()].formData.gridForm.settings.showHorizontalLines) {
+                    var gridOverlayContainer = document.querySelector('.grid-overlay-container');
+                    var documentScrollListener = function (e) {
+                        // emulate static position for container background (horizontal lines)
+                        var initialOffset = gridOverlayContainer.dataset.hloffset || 0;
+                        gridOverlayContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
+                    }
+
+                    // remember initial (user) offset
+                    gridOverlayContainer.dataset.hloffset = item[request.tabId.toString()].formData.gridForm.settings.horizontalLinesOffset || 0;
+
+                    // refresh listener. Not sure that it's right...
+                    window.removeEventListener('scroll', documentScrollListener, false);
+                    window.addEventListener('scroll', documentScrollListener, false);
+                }
+
                 respond(1);
             });
         }

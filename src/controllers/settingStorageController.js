@@ -51,7 +51,11 @@ var settingStorageController = (function () {
                     outterGutters: EMPTY_VALUE,
                     mobileInnerGutters: EMPTY_VALUE,
                     mobileOutterGutters: EMPTY_VALUE,
-                    offsetX: EMPTY_VALUE
+                    offsetX: EMPTY_VALUE,
+                    // settings for horizontal lines
+                    showHorizontalLines: EMPTY_VALUE,
+                    horizontalLinesHeight: EMPTY_VALUE,
+                    horizontalLinesOffset: EMPTY_VALUE
                 }
             },
             //Form data for report settings (size overlay)

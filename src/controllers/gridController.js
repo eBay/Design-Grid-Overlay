@@ -42,11 +42,16 @@ var gridController = (function () {
      * @param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
      */
     var createGridContainer = function (options, advancedOptions) {
-
         return ".grid-overlay-container {"
             + "max-width:" + options.largeWidth + "px;"
             + "padding:0px " + options.outterGutters + "px;"
             + "left:" + options.offsetX + "px;"
+            + (options.showHorizontalLines  // draw horizontal lines if they are on
+                ? "background-image: linear-gradient(to top, rgba(0,0,0,0.25) 1px, transparent 1px);"
+                + "background-size: 100% " + options.horizontalLinesHeight + "px;"
+                + "background-repeat-y: repeat;"
+                + "background-position-y: " + options.horizontalLinesOffset + "px;"
+                : "")
             + "}"
             + ".grid-overlay-col {"
             + "width:" + calcColumnPercents(options.largeColumns) + "%;"

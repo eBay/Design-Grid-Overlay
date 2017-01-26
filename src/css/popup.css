@@ -178,6 +178,14 @@ input[type=reset] {
   float: left;
 }
 
+/*
+ * After adding horizontal lines fieldset, reset button has been broked (as all form)
+ * The next rule fixed it
+ */
+#gridForm {
+  position: relative;
+  padding-bottom: 50px;
+}
 #gridForm label {
   margin: 4px 5px 0 0;
 }
