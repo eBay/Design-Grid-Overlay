@@ -114,6 +114,14 @@ var popup = (function () {
                     gridToggle.checked = false;
                 }
             }
+            if (request.horizontalLinesStatus !== undefined) {
+                if (request.horizontalLinesStatus === 1 && horizontalLinesToggle.checked === false) {
+                    console.log('Horizontal lines already enabled on page');
+                    horizontalLinesToggle.checked = true;
+                } else if (request.horizontalLinesStatus === 0 && horizontalLinesToggle.checked === true) {
+                    horizontalLinesToggle.checked = false;
+                }
+            }
         }
     );
 

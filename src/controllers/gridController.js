@@ -135,6 +135,9 @@ var gridController = (function () {
     var respond = function (gridStatus) {
         chrome.runtime.sendMessage({status: gridStatus});
     };
+    var respondHorizontalLines = function (horizontalLinesStatus) {
+        chrome.runtime.sendMessage({horizontalLinesStatus: horizontalLinesStatus});
+    };
 
     /**
      * Sends a message to have the grid HTML added to the page.
@@ -150,9 +153,11 @@ var gridController = (function () {
     };
 
     var enableHorizontalLines = function (currentTabId) {
+        respondHorizontalLines(1);
         chrome.tabs.sendMessage(currentTabId, {method: "enableHorizontalLines", tabId: currentTabId});
     };
     var disableHorizontalLines = function (currentTabId) {
+        respondHorizontalLines(0);
         chrome.tabs.sendMessage(currentTabId, {method: "disableHorizontalLines", tabId: currentTabId});
     };
 

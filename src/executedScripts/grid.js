@@ -115,6 +115,7 @@
 
                 gridOverlayContainer.classList.add('grid-overlay-container-horizontal');
                 window.addEventListener('scroll', documentScrollListener, false);
+                respondHorizontalLines(1);
             });
         }
     }
@@ -126,6 +127,7 @@
         if (request.method == "disableHorizontalLines" && gridOverlayContainer) {
               gridOverlayContainer.classList.remove('grid-overlay-container-horizontal');
               window.removeEventListener('scroll', documentScrollListener, false);
+              respondHorizontalLines(0);
         }
     }
     chrome.runtime.onMessage.addListener(disableHorizontalLinesListener);
@@ -162,6 +164,9 @@
      */
     function respond(gridStatus) {
         chrome.runtime.sendMessage({status: gridStatus});
+    }
+    function respondHorizontalLines(horizontalLinesStatus) {
+        chrome.runtime.sendMessage({horizontalLinesStatus: horizontalLinesStatus});
     }
 
     /**

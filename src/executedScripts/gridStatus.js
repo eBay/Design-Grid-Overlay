@@ -11,8 +11,18 @@ var chrome = chrome || {};
         respond(0);
     }
 
+    if (document.getElementsByClassName('grid-overlay-container-horizontal').length) {
+        respondHorizontalLines(1);
+    } else {
+        respondHorizontalLines(0);
+    }
+
     function respond(gridStatus) {
         chrome.runtime.sendMessage({status: gridStatus});
+    }
+
+    function respondHorizontalLines(horizontalLinesStatus) {
+        chrome.runtime.sendMessage({horizontalLinesStatus: horizontalLinesStatus});
     }
 
 })();
