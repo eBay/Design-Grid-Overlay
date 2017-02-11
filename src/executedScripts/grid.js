@@ -30,7 +30,7 @@
                 var div = document.createElement('div');
                 div.setAttribute("class", "cb-grid-lines");
 
-                var output = '<div class="grid-overlay-container"> \
+                var output = '<div class="grid-overlay-container'+(request.horizontalLines ? ' grid-overlay-container-horizontal' : '')+'"> \
                     <div class="grid-overlay-row">';
 
                 for (var i = 0; i < numColumns; i += 1) {
@@ -42,23 +42,6 @@
 
                 div.innerHTML = output;
                 document.body.appendChild(div);
-
-                // if horizontal lines displays
-                if (item[request.tabId.toString()].formData.gridForm.settings.showHorizontalLines) {
-                    var gridOverlayContainer = document.querySelector('.grid-overlay-container');
-                    var documentScrollListener = function (e) {
-                        // emulate static position for container background (horizontal lines)
-                        var initialOffset = gridOverlayContainer.dataset.hloffset || 0;
-                        gridOverlayContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
-                    }
-
-                    // remember initial (user) offset
-                    gridOverlayContainer.dataset.hloffset = item[request.tabId.toString()].formData.gridForm.settings.horizontalLinesOffset || 0;
-
-                    // refresh listener. Not sure that it's right...
-                    window.removeEventListener('scroll', documentScrollListener, false);
-                    window.addEventListener('scroll', documentScrollListener, false);
-                }
 
                 respond(1);
             });
@@ -116,6 +99,38 @@
     chrome.runtime.onMessage.addListener(removeCSSListener);
     chromeMessageListeners.push(removeCSSListener);
 
+    var gridOverlayContainer;
+    var documentScrollListener = function (e) {
+        // emulate static position for container background (horizontal lines)
+        var initialOffset = gridOverlayContainer.dataset.hloffset || 0;
+        gridOverlayContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
+    }
+    
+    function enableHorizontalLinesListener(request, sender, sendResponse) {
+        gridOverlayContainer = document.querySelector('.grid-overlay-container');
+        if (request.method == "enableHorizontalLines" && gridOverlayContainer) {
+            chrome.storage.sync.get(request.tabId.toString(), function (item) {
+                // remember initial (user) offset
+                gridOverlayContainer.dataset.hloffset = item[request.tabId.toString()].formData.gridForm.settings.offsetY;
+
+                gridOverlayContainer.classList.add('grid-overlay-container-horizontal');
+                window.addEventListener('scroll', documentScrollListener, false);
+            });
+        }
+    }
+    chrome.runtime.onMessage.addListener(enableHorizontalLinesListener);
+    chromeMessageListeners.push(enableHorizontalLinesListener);
+    
+    function disableHorizontalLinesListener(request, sender, sendResponse) {
+        gridOverlayContainer = document.querySelector('.grid-overlay-container');
+        if (request.method == "disableHorizontalLines" && gridOverlayContainer) {
+              gridOverlayContainer.classList.remove('grid-overlay-container-horizontal');
+              window.removeEventListener('scroll', documentScrollListener, false);
+        }
+    }
+    chrome.runtime.onMessage.addListener(disableHorizontalLinesListener);
+    chromeMessageListeners.push(disableHorizontalLinesListener);
+
     /**
      * Inserts the base CSS styles for the grid into
      * the head of the document. This is done by
@@ -166,5 +181,3 @@
     chrome.runtime.onMessage.addListener(cleanUpListener);
     chromeMessageListeners.push(cleanUpListener);
 })();
-
-

@@ -46,12 +46,6 @@ var gridController = (function () {
             + "max-width:" + options.largeWidth + "px;"
             + "padding:0px " + options.outterGutters + "px;"
             + "left:" + options.offsetX + "px;"
-            + (options.showHorizontalLines  // draw horizontal lines if they are on
-                ? "background-image: linear-gradient(to top, rgba(0,0,0,0.25) 1px, transparent 1px);"
-                + "background-size: 100% " + options.horizontalLinesHeight + "px;"
-                + "background-repeat-y: repeat;"
-                + "background-position-y: " + options.horizontalLinesOffset + "px;"
-                : "")
             + "}"
             + ".grid-overlay-col {"
             + "width:" + calcColumnPercents(options.largeColumns) + "%;"
@@ -64,6 +58,12 @@ var gridController = (function () {
             + ".grid-overlay-col:last-child {"
             + "margin-right:0px;"
             + "}"
+            + ".grid-overlay-container-horizontal {"
+            + "background-image: linear-gradient(to top, rgba(0,0,0,0.25) 1px, transparent 1px);"
+            + "background-size: 100% " + options.rowGutters + "px;"
+            + "background-repeat-y: repeat;"
+            + "background-position-y: " + options.offsetY + "px;"
+            + "} ";
     };
 
     /**
@@ -146,7 +146,14 @@ var gridController = (function () {
      */
     var createGrid = function (currentTabId) {
         respond(1);
-        chrome.tabs.sendMessage(currentTabId, {method: "create", tabId: currentTabId});
+        chrome.tabs.sendMessage(currentTabId, {method: "create", tabId: currentTabId, horizontalLines: document.getElementById('horizontalLinesToggle').checked});
+    };
+
+    var enableHorizontalLines = function (currentTabId) {
+        chrome.tabs.sendMessage(currentTabId, {method: "enableHorizontalLines", tabId: currentTabId});
+    };
+    var disableHorizontalLines = function (currentTabId) {
+        chrome.tabs.sendMessage(currentTabId, {method: "disableHorizontalLines", tabId: currentTabId});
     };
 
     /**
@@ -168,6 +175,14 @@ var gridController = (function () {
         }
 
         executeCSS(currentTabId, options, advancedOptions);
+
+        // var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
+        // 
+        // if (horizontalLinesToggle.checked) {
+        //     enableHorizontalLines(currentTabId);
+        // } else {
+        //     disableHorizontalLines(currentTabId);
+        // }
     };
 
     /**
@@ -205,7 +220,9 @@ var gridController = (function () {
     return {
         toggleGrid: toggleGrid,
         updateGrid: updateGrid,
-        removeGrid: removeGrid
+        removeGrid: removeGrid,
+        disableHorizontalLines: disableHorizontalLines,
+        enableHorizontalLines: enableHorizontalLines
     }
 
 })();

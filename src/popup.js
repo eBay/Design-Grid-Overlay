@@ -17,6 +17,7 @@ var popup = (function () {
 
     var gridForm = document.getElementById('gridForm');
     var gridToggle = document.getElementById('gridToggle');
+    var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
     var reportForm = document.getElementById('reportForm');
     var advancedForm = document.getElementById('advancedForm');
     var tabContentContainer = document.getElementById('gridsettings');
@@ -125,6 +126,14 @@ var popup = (function () {
         var settings = settingStorageController.saveSettings(currentChromeTabId, false);
         gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
         reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+    });
+    
+    horizontalLinesToggle.addEventListener('click', function () {
+        if (horizontalLinesToggle.checked) {
+            gridController.enableHorizontalLines(currentChromeTabId);
+        } else {
+            gridController.disableHorizontalLines(currentChromeTabId);
+        }
     });
 
 
