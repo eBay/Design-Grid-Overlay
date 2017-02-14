@@ -59,7 +59,7 @@ var gridController = (function () {
             + "margin-right:0px;"
             + "}"
             + ".grid-overlay-horizontal {"
-            + "background-image: linear-gradient(to top, rgba(0,0,0,0.25) 1px, transparent 1px);"
+            + "background-image: linear-gradient(to top, " + advancedOptions.horizontalLinesColor + " 1px, transparent 1px);"
             + "background-size: 100% " + options.rowGutters + "px;"
             + "background-repeat-y: repeat;"
             + "background-position-y: " + options.offsetY + "px;"
