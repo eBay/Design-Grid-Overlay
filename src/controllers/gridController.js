@@ -118,7 +118,7 @@ var gridController = (function () {
     var executeCSS = function (currentTabId, options, advancedOptions) {
 
 
-        var unitWidth = checkIfViewPortIsSelected(options['viewports']);
+        var unitWidth = checkIfViewPortIsSelected(advancedOptions['viewports']);
 
         chrome.tabs.sendMessage(currentTabId, {
             method: "addCSS",

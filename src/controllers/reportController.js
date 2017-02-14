@@ -72,8 +72,8 @@ var reportController = (function () {
      * @param {int} tabId - The id of the current tab
      * @param {object} gridSettings - Grid options object, needed for report calculation
      */
-    var calculateReport = function (tabId, gridSettings) {
-        chrome.tabs.sendMessage(tabId, {method: "fireCalc", tabId: tabId, smallWidth: gridSettings.smallWidth, ignoreScrollbar: gridSettings.viewports});
+    var calculateReport = function (tabId, gridSettings, advancedOptions) {
+        chrome.tabs.sendMessage(tabId, {method: "fireCalc", tabId: tabId, smallWidth: gridSettings.smallWidth, ignoreScrollbar: advancedOptions.viewports});
     };
 
     function numberFormat(val, decimalPlaces) {

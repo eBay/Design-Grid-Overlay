@@ -133,7 +133,7 @@ var popup = (function () {
     gridToggle.addEventListener('click', function () {
         var settings = settingStorageController.saveSettings(currentChromeTabId, false);
         gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-        reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+        reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
     });
     
     horizontalLinesToggle.addEventListener('click', function () {
@@ -155,7 +155,7 @@ var popup = (function () {
         setTimeout(function () {
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
         }, 0);
@@ -174,7 +174,7 @@ var popup = (function () {
         setTimeout(function () {
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
 
@@ -195,7 +195,7 @@ var popup = (function () {
         setTimeout(function () {
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+            reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
 
@@ -251,7 +251,7 @@ var popup = (function () {
 
                 // Load all stored settings from chrome local storage, and then update the report overlay
                 settingStorageController.loadSettings(currentChromeTabId, function (settings) {
-                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                         settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                 });
@@ -264,7 +264,7 @@ var popup = (function () {
 
                     // Load all stored settings from chrome local storage, and then update the report overlay
                     settingStorageController.loadSettings(currentChromeTabId, function (settings) {
-                        reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+                        reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                         reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                             settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                     });
@@ -281,7 +281,7 @@ var popup = (function () {
                     //Updated just grid and report calculations
                     var settings = settingStorageController.saveSettings(currentChromeTabId, true);
                     gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
-                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                 }
             }, 1000));
         }
@@ -306,7 +306,7 @@ var popup = (function () {
                 if (event.target.id !== 'gridToggle') {
                     //Update grid, report, report overlay
                     var settings = settingStorageController.saveSettings(currentChromeTabId, true);
-                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings);
+                    reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
                     reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                         settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
