@@ -42,7 +42,6 @@ var gridController = (function () {
      * @param {object} advancedOptions - Additional settings from the advanced tab of the popup UI
      */
     var createGridContainer = function (options, advancedOptions) {
-
         return ".grid-overlay-container {"
             + "max-width:" + options.largeWidth + "px;"
             + "padding:0px " + options.outterGutters + "px;"
@@ -59,6 +58,12 @@ var gridController = (function () {
             + ".grid-overlay-col:last-child {"
             + "margin-right:0px;"
             + "}"
+            + ".grid-overlay-horizontal {"
+            + "background-image: linear-gradient(to top, " + advancedOptions.horizontalLinesColor + " 1px, transparent 1px);"
+            + "background-size: 100% " + options.rowGutters + "px;"
+            + "background-repeat-y: repeat;"
+            + "background-position-y: " + options.offsetY + "px;"
+            + "} ";
     };
 
     /**
@@ -113,7 +118,7 @@ var gridController = (function () {
     var executeCSS = function (currentTabId, options, advancedOptions) {
 
 
-        var unitWidth = checkIfViewPortIsSelected(options['viewports']);
+        var unitWidth = checkIfViewPortIsSelected(advancedOptions['viewports']);
 
         chrome.tabs.sendMessage(currentTabId, {
             method: "addCSS",
@@ -130,6 +135,9 @@ var gridController = (function () {
     var respond = function (gridStatus) {
         chrome.runtime.sendMessage({status: gridStatus});
     };
+    var respondHorizontalLines = function (horizontalLinesStatus) {
+        chrome.runtime.sendMessage({horizontalLinesStatus: horizontalLinesStatus});
+    };
 
     /**
      * Sends a message to have the grid HTML added to the page.
@@ -142,6 +150,15 @@ var gridController = (function () {
     var createGrid = function (currentTabId) {
         respond(1);
         chrome.tabs.sendMessage(currentTabId, {method: "create", tabId: currentTabId});
+    };
+
+    var enableHorizontalLines = function (currentTabId) {
+        respondHorizontalLines(1);
+        chrome.tabs.sendMessage(currentTabId, {method: "enableHorizontalLines", tabId: currentTabId});
+    };
+    var disableHorizontalLines = function (currentTabId) {
+        respondHorizontalLines(0);
+        chrome.tabs.sendMessage(currentTabId, {method: "disableHorizontalLines", tabId: currentTabId});
     };
 
     /**
@@ -160,6 +177,14 @@ var gridController = (function () {
             createGrid(currentTabId);
         } else {
             removeGrid(currentTabId);
+        }
+
+        var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
+        
+        if (horizontalLinesToggle.checked) {
+            enableHorizontalLines(currentTabId);
+        } else {
+            disableHorizontalLines(currentTabId);
         }
 
         executeCSS(currentTabId, options, advancedOptions);
@@ -189,8 +214,6 @@ var gridController = (function () {
         respond(0);
 
         chrome.tabs.sendMessage(currentTabId, {method: "destroy", tabId: currentTabId});
-        chrome.tabs.sendMessage(currentTabId, {method: "removeCSS", tabId: currentTabId});
-
     };
 
 
@@ -200,7 +223,9 @@ var gridController = (function () {
     return {
         toggleGrid: toggleGrid,
         updateGrid: updateGrid,
-        removeGrid: removeGrid
+        removeGrid: removeGrid,
+        disableHorizontalLines: disableHorizontalLines,
+        enableHorizontalLines: enableHorizontalLines
     }
 
 })();

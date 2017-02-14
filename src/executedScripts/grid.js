@@ -42,6 +42,7 @@
 
                 div.innerHTML = output;
                 document.body.appendChild(div);
+
                 respond(1);
             });
         }
@@ -98,12 +99,60 @@
     chrome.runtime.onMessage.addListener(removeCSSListener);
     chromeMessageListeners.push(removeCSSListener);
 
+    var horizontalLinesContainer;
+    var documentScrollListener = function (e) {
+        // emulate static position for container background (horizontal lines)
+        var initialOffset = horizontalLinesContainer.dataset.hloffset || 0;
+        horizontalLinesContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
+    }
+    
+    function enableHorizontalLinesListener(request, sender, sendResponse) {
+        if (request.method == "enableHorizontalLines") {
+            chrome.storage.sync.get(request.tabId.toString(), function (item) {
+                horizontalLinesContainer = document.querySelector('.grid-overlay-horizontal');
+
+                if (!horizontalLinesContainer) {
+                    horizontalLinesContainer = document.createElement('div');
+                    horizontalLinesContainer.setAttribute("class", "grid-overlay-horizontal");
+                    document.body.appendChild(horizontalLinesContainer);
+                }
+
+                // remember initial (user) offset
+                horizontalLinesContainer.dataset.hloffset = item[request.tabId.toString()].formData.gridForm.settings.offsetY;
+
+                window.addEventListener('scroll', documentScrollListener, false);
+                respondHorizontalLines(1);
+            });
+        }
+    }
+    chrome.runtime.onMessage.addListener(enableHorizontalLinesListener);
+    chromeMessageListeners.push(enableHorizontalLinesListener);
+    
+    function disableHorizontalLinesListener(request, sender, sendResponse) {
+        if (request.method == "disableHorizontalLines") {
+            horizontalLinesContainer = document.querySelector('.grid-overlay-horizontal');
+            
+            if (horizontalLinesContainer) {
+                document.body.removeChild(document.getElementsByClassName('grid-overlay-horizontal')[0]);
+            }
+            window.removeEventListener('scroll', documentScrollListener, false);
+            respondHorizontalLines(0);
+        }
+    }
+    chrome.runtime.onMessage.addListener(disableHorizontalLinesListener);
+    chromeMessageListeners.push(disableHorizontalLinesListener);
+
     /**
      * Inserts the base CSS styles for the grid into
      * the head of the document. This is done by
      * adding a link tag with an href to the grid.css file.
      */
     function insertBaseCSS() {
+        var customGridStyles = document.getElementById("custom-grid-style");
+        if (customGridStyles) {
+            customGridStyles.parentNode.removeChild(customGridStyles);
+        }
+
         var css = document.createElement('link');
         css.id = "base-grid-styles";
         css.rel = "stylesheet";
@@ -130,6 +179,9 @@
     function respond(gridStatus) {
         chrome.runtime.sendMessage({status: gridStatus});
     }
+    function respondHorizontalLines(horizontalLinesStatus) {
+        chrome.runtime.sendMessage({horizontalLinesStatus: horizontalLinesStatus});
+    }
 
     /**
      * Listener that cleans up all listeners if a cleanup message is received
@@ -148,5 +200,3 @@
     chrome.runtime.onMessage.addListener(cleanUpListener);
     chromeMessageListeners.push(cleanUpListener);
 })();
-
-

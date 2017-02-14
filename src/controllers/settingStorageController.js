@@ -45,13 +45,14 @@ var settingStorageController = (function () {
                     largeWidth: EMPTY_VALUE,
                     largeColumns: EMPTY_VALUE,
                     smallColumns: EMPTY_VALUE,
-                    viewports: EMPTY_VALUE,
                     smallWidth: EMPTY_VALUE,
                     gutters: EMPTY_VALUE,
                     outterGutters: EMPTY_VALUE,
                     mobileInnerGutters: EMPTY_VALUE,
                     mobileOutterGutters: EMPTY_VALUE,
-                    offsetX: EMPTY_VALUE
+                    rowGutters: EMPTY_VALUE,
+                    offsetX: EMPTY_VALUE,
+                    offsetY: EMPTY_VALUE
                 }
             },
             //Form data for report settings (size overlay)
@@ -70,9 +71,11 @@ var settingStorageController = (function () {
                 settings: {
                     // Each of these settings keys maps to an input HTML element with the same id
                     color: EMPTY_VALUE,
+                    horizontalLinesColor: EMPTY_VALUE,
                     overlayLabelColor: EMPTY_VALUE,
                     overlayTextColor: EMPTY_VALUE,
-                    hideHiddenElementOverlays: EMPTY_VALUE
+                    hideHiddenElementOverlays: EMPTY_VALUE,
+                    viewports: EMPTY_VALUE
                 }
             }
         }

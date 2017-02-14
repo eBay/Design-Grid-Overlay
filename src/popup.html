@@ -6,11 +6,16 @@
     <body>
       <div id="main">
         <header>
-           <div class="switch">
-                  <label for="gridToggle">Grid Overlay</label>
-                  <input id="gridToggle" type="checkbox" name="gridToggle" />
-                  <span></span>
-              </div>
+            <div class="switch">
+                <label for="gridToggle">Vertical Grid Overlay</label>
+                <input id="gridToggle" type="checkbox" name="gridToggle" />
+                <span></span>
+            </div>
+            <div class="switch">
+                <label for="horizontalLinesToggle">Horizontal Lines Overlay</label>
+                <input id="horizontalLinesToggle" type="checkbox" name="horizontalLinesToggle" />
+                <span></span>
+            </div>
         </header>
         <div class="tabs">
             <div role="tablist" id="tabContainer">
@@ -43,7 +48,7 @@
 
                         <fieldset class="gridsettings__gutters">
                             <legend>Gutters</legend>
-                            <h3>Large</h3>
+                            <h3>Vertical &ndash; Large</h3>
                             <div>
                                 <label for="gutters">Inner</label>
                                 <input type="number" id="gutters" value="16">
@@ -52,7 +57,7 @@
                                 <label for="outterGutters">Outer</label>
                                 <input type="number" id="outterGutters" value="16">
                             </div>
-                            <h3>Small</h3>
+                            <h3>Vertical &ndash; Small</h3>
                             <div>
                                 <label for="mobileInnerGutters">Inner</label>
                                 <input type="number" id="mobileInnerGutters" value="8">
@@ -60,6 +65,11 @@
                             <div>
                                 <label for="mobileOutterGutters">Outer</label>
                                 <input type="number" id="mobileOutterGutters" value="8">
+                            </div>
+                            <h3>Horizontal</h3>
+                            <div>
+                                <label for="rowGutters">Height</label>
+                                <input type="number" id="rowGutters" class="fillCol" value="16" min="1">
                             </div>
                         </fieldset>
 
@@ -84,17 +94,12 @@
                                 <label for="offsetX">X</label>
                                 <input type="number" id="offsetX" class="fillCol" value="0">
                             </div>
+                            <div>
+                                <label for="offsetY">Y</label>
+                                <input type="number" id="offsetY" class="fillCol" value="0">
+                            </div>
                         </fieldset>
 
-                        <br>
-
-                        <input type="checkbox" id="viewports">
-                        <label
-                        info="Will center grid by using View Port units (vw), ignoring the scroll bar"
-                        for="viewports"
-                        class="tooltip">
-                            Ignore scrollbar
-                        </label>
                         <div class="reset">
                             <input type="reset" id="resetToDefaults" value="Reset Grid Settings">
                         </div>
@@ -157,6 +162,9 @@
                                 <label  info="Color of grid columns. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
                                         class="tooltip" for="color">Column Color</label>
                                 <input type="text" id="color" value="#f4ae01">
+                                <label  info="Color of horizontal lines. Examples: #ff0000, rgb(0, 0, 255), rgba(0, 255, 0, 0.3), hsl(120, 100%, 75%)"
+                                        class="tooltip" for="horizontalLinesColor">Horizontal Lines Color</label>
+                                <input type="text" id="horizontalLinesColor" value="rgba(0, 0, 0, 0.25)">
                             </div>
                         </fieldset>
                         <br>
@@ -192,6 +200,16 @@
                         </fieldset>
 
                         <br>
+
+                        <input type="checkbox" id="viewports">
+                        <label
+                        info="Will center grid by using View Port units (vw), ignoring the scroll bar"
+                        for="viewports"
+                        class="tooltip">
+                            Ignore scrollbar
+                        </label>
+
+                        <br><br>
 
                         <input type="checkbox" id="tracking-permitted">
                         <label for="tracking-permitted">
