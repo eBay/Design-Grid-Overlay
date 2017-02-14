@@ -11,7 +11,7 @@ var chrome = chrome || {};
         respond(0);
     }
 
-    if (document.getElementsByClassName('grid-overlay-container-horizontal').length) {
+    if (document.getElementsByClassName('grid-overlay-horizontal').length) {
         respondHorizontalLines(1);
     } else {
         respondHorizontalLines(0);

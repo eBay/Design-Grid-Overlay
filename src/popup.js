@@ -137,11 +137,8 @@ var popup = (function () {
     });
     
     horizontalLinesToggle.addEventListener('click', function () {
-        if (horizontalLinesToggle.checked) {
-            gridController.enableHorizontalLines(currentChromeTabId);
-        } else {
-            gridController.disableHorizontalLines(currentChromeTabId);
-        }
+        var settings = settingStorageController.saveSettings(currentChromeTabId, false);
+        gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
     });
 
 

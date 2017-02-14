@@ -30,7 +30,7 @@
                 var div = document.createElement('div');
                 div.setAttribute("class", "cb-grid-lines");
 
-                var output = '<div class="grid-overlay-container'+(request.horizontalLines ? ' grid-overlay-container-horizontal' : '')+'"> \
+                var output = '<div class="grid-overlay-container"> \
                     <div class="grid-overlay-row">';
 
                 for (var i = 0; i < numColumns; i += 1) {
@@ -99,21 +99,27 @@
     chrome.runtime.onMessage.addListener(removeCSSListener);
     chromeMessageListeners.push(removeCSSListener);
 
-    var gridOverlayContainer;
+    var horizontalLinesContainer;
     var documentScrollListener = function (e) {
         // emulate static position for container background (horizontal lines)
-        var initialOffset = gridOverlayContainer.dataset.hloffset || 0;
-        gridOverlayContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
+        var initialOffset = horizontalLinesContainer.dataset.hloffset || 0;
+        horizontalLinesContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
     }
     
     function enableHorizontalLinesListener(request, sender, sendResponse) {
-        gridOverlayContainer = document.querySelector('.grid-overlay-container');
-        if (request.method == "enableHorizontalLines" && gridOverlayContainer) {
+        if (request.method == "enableHorizontalLines") {
             chrome.storage.sync.get(request.tabId.toString(), function (item) {
-                // remember initial (user) offset
-                gridOverlayContainer.dataset.hloffset = item[request.tabId.toString()].formData.gridForm.settings.offsetY;
+                horizontalLinesContainer = document.querySelector('.grid-overlay-horizontal');
 
-                gridOverlayContainer.classList.add('grid-overlay-container-horizontal');
+                if (!horizontalLinesContainer) {
+                    horizontalLinesContainer = document.createElement('div');
+                    horizontalLinesContainer.setAttribute("class", "grid-overlay-horizontal");
+                    document.body.appendChild(horizontalLinesContainer);
+                }
+
+                // remember initial (user) offset
+                horizontalLinesContainer.dataset.hloffset = item[request.tabId.toString()].formData.gridForm.settings.offsetY;
+
                 window.addEventListener('scroll', documentScrollListener, false);
                 respondHorizontalLines(1);
             });
@@ -123,11 +129,14 @@
     chromeMessageListeners.push(enableHorizontalLinesListener);
     
     function disableHorizontalLinesListener(request, sender, sendResponse) {
-        gridOverlayContainer = document.querySelector('.grid-overlay-container');
-        if (request.method == "disableHorizontalLines" && gridOverlayContainer) {
-              gridOverlayContainer.classList.remove('grid-overlay-container-horizontal');
-              window.removeEventListener('scroll', documentScrollListener, false);
-              respondHorizontalLines(0);
+        if (request.method == "disableHorizontalLines") {
+            horizontalLinesContainer = document.querySelector('.grid-overlay-horizontal');
+            
+            if (horizontalLinesContainer) {
+                document.body.removeChild(document.getElementsByClassName('grid-overlay-horizontal')[0]);
+            }
+            window.removeEventListener('scroll', documentScrollListener, false);
+            respondHorizontalLines(0);
         }
     }
     chrome.runtime.onMessage.addListener(disableHorizontalLinesListener);
@@ -139,6 +148,11 @@
      * adding a link tag with an href to the grid.css file.
      */
     function insertBaseCSS() {
+        var customGridStyles = document.getElementById("custom-grid-style");
+        if (customGridStyles) {
+            customGridStyles.parentNode.removeChild(customGridStyles);
+        }
+
         var css = document.createElement('link');
         css.id = "base-grid-styles";
         css.rel = "stylesheet";

@@ -58,7 +58,7 @@ var gridController = (function () {
             + ".grid-overlay-col:last-child {"
             + "margin-right:0px;"
             + "}"
-            + ".grid-overlay-container-horizontal {"
+            + ".grid-overlay-horizontal {"
             + "background-image: linear-gradient(to top, rgba(0,0,0,0.25) 1px, transparent 1px);"
             + "background-size: 100% " + options.rowGutters + "px;"
             + "background-repeat-y: repeat;"
@@ -149,7 +149,7 @@ var gridController = (function () {
      */
     var createGrid = function (currentTabId) {
         respond(1);
-        chrome.tabs.sendMessage(currentTabId, {method: "create", tabId: currentTabId, horizontalLines: document.getElementById('horizontalLinesToggle').checked});
+        chrome.tabs.sendMessage(currentTabId, {method: "create", tabId: currentTabId});
     };
 
     var enableHorizontalLines = function (currentTabId) {
@@ -179,15 +179,15 @@ var gridController = (function () {
             removeGrid(currentTabId);
         }
 
-        executeCSS(currentTabId, options, advancedOptions);
+        var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
+        
+        if (horizontalLinesToggle.checked) {
+            enableHorizontalLines(currentTabId);
+        } else {
+            disableHorizontalLines(currentTabId);
+        }
 
-        // var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
-        // 
-        // if (horizontalLinesToggle.checked) {
-        //     enableHorizontalLines(currentTabId);
-        // } else {
-        //     disableHorizontalLines(currentTabId);
-        // }
+        executeCSS(currentTabId, options, advancedOptions);
     };
 
     /**
@@ -214,8 +214,6 @@ var gridController = (function () {
         respond(0);
 
         chrome.tabs.sendMessage(currentTabId, {method: "destroy", tabId: currentTabId});
-        chrome.tabs.sendMessage(currentTabId, {method: "removeCSS", tabId: currentTabId});
-
     };
 
 
