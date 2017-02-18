@@ -62,3 +62,32 @@ chrome.runtime.onInstalled.addListener(function () {
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     chrome.storage.sync.remove(tabId.toString());
 });
+
+
+//On keyboard command
+chrome.commands.onCommand.addListener(function (command) {
+  // this function is not scaleable
+
+  var method = '';
+  switch (command) {
+    case 'toggle-columns':
+      method = 'toggleGrid';
+      break;
+    case 'toggle-lines':
+      method = 'toggleHorizontalLines';
+      break;
+  }
+
+  chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+      if (chrome.runtime.lastError) {
+          console.warn("Whoops.. " + chrome.runtime.lastError.message);
+      } else {
+          if (tabs[i]) {
+              var currentId = tabs[i].id;
+              chrome.tabs.sendMessage(currentId, {method: method, tabId: currentId});
+          }
+      }
+    }
+  });
+});
