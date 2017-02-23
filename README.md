@@ -17,11 +17,13 @@ Or install via Git if you wish to contribute.
 * Once selected the plugin should appear at the top of your chrome browser.
 * Click the extension image to activate it.
 
-## Creators
+## Creators & Contributors
 
 * Anthony Topper
 * Chris Norman
 * James Skorupski
+* Aaron Kleinsteiber
+* Mikhail Panichev
 
 Props to [Carl Henderson](https://github.com/chuckhendo) whose [Chrome Bootstrap project](https://github.com/chuckhendo/chrome-bootstrap) was the original source, which we forked from.
 
