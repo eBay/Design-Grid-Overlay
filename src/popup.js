@@ -311,6 +311,11 @@ var popup = (function () {
                             settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                     });
                 });
+
+                // call addCSS on load
+                // it's a hack to do posiible use keyboard commands to show grid and lines at the very first time (before checkbox click)
+                var settings = settingStorageController.saveSettings(currentChromeTabId, false);
+                gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             }
         });
 

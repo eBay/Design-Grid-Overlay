@@ -64,6 +64,20 @@
     chrome.runtime.onMessage.addListener(destroyListener);
     chromeMessageListeners.push(destroyListener);
 
+    function toggleGridListener(request, sender, sendResponse) {
+        if (request.method == "toggleGrid") {
+            if (document.getElementsByClassName('cb-grid-lines').length) {
+                request.method = 'destroy';
+                destroyListener(request, sender, sendResponse);
+            } else {
+                request.method = 'create';
+                createListener(request, sender, sendResponse);
+            }
+        }
+    }
+    chrome.runtime.onMessage.addListener(toggleGridListener);
+    chromeMessageListeners.push(toggleGridListener);
+
     /**
      * Adds the dynamically generated CSS for the grid
      * into the head of the document.
@@ -105,7 +119,7 @@
         var initialOffset = horizontalLinesContainer.dataset.hloffset || 0;
         horizontalLinesContainer.style.backgroundPositionY = (initialOffset - document.body.scrollTop) + 'px';
     }
-    
+
     function enableHorizontalLinesListener(request, sender, sendResponse) {
         if (request.method == "enableHorizontalLines") {
             chrome.storage.sync.get(request.tabId.toString(), function (item) {
@@ -127,11 +141,11 @@
     }
     chrome.runtime.onMessage.addListener(enableHorizontalLinesListener);
     chromeMessageListeners.push(enableHorizontalLinesListener);
-    
+
     function disableHorizontalLinesListener(request, sender, sendResponse) {
         if (request.method == "disableHorizontalLines") {
             horizontalLinesContainer = document.querySelector('.grid-overlay-horizontal');
-            
+
             if (horizontalLinesContainer) {
                 document.body.removeChild(document.getElementsByClassName('grid-overlay-horizontal')[0]);
             }
@@ -141,6 +155,22 @@
     }
     chrome.runtime.onMessage.addListener(disableHorizontalLinesListener);
     chromeMessageListeners.push(disableHorizontalLinesListener);
+
+    function toggleHorizontalLinesListener(request, sender, sendResponse) {
+        if (request.method == "toggleHorizontalLines") {
+            horizontalLinesContainer = document.querySelector('.grid-overlay-horizontal');
+
+            if (horizontalLinesContainer) {
+                request.method = 'disableHorizontalLines';
+                disableHorizontalLinesListener(request, sender, sendResponse);
+            } else {
+                request.method = 'enableHorizontalLines';
+                enableHorizontalLinesListener(request, sender, sendResponse);
+            }
+        }
+    }
+    chrome.runtime.onMessage.addListener(toggleHorizontalLinesListener);
+    chromeMessageListeners.push(toggleHorizontalLinesListener);
 
     /**
      * Inserts the base CSS styles for the grid into

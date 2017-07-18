@@ -25,5 +25,21 @@
     "file://*/*",
     "storage",
     "activeTab"
-  ]
+  ],
+  "commands": {
+    "toggle-columns": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K"
+      },
+      "description": "Toggle columns"
+    },
+    "toggle-lines": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L",
+        "mac": "Command+Shift+L"
+      },
+      "description": "Toggle lines"
+    }
+  }
 }
