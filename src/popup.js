@@ -201,6 +201,8 @@ var popup = (function () {
                 }
             }
         }
+        var settings = settingStorageController.saveSettings(currentChromeTabId, true);
+        gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
     });
 
     /**
