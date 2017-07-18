@@ -135,7 +135,7 @@ var popup = (function () {
         gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
         reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
     });
-    
+
     horizontalLinesToggle.addEventListener('click', function () {
         var settings = settingStorageController.saveSettings(currentChromeTabId, false);
         gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
@@ -159,6 +159,48 @@ var popup = (function () {
             reportController.updateReportOverlay(currentChromeTabId, gridToggle.checked,
                 settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
         }, 0);
+    });
+
+    /**
+     * Shift+Up/Down to go up/down by 10px (issue #25).
+     * ----
+     * In this case I made it for all
+     * number inputs in a "Settings" tab.
+     */
+    gridForm.addEventListener('keydown', function (e) {
+        var target = e.target;
+
+        // check if keydown was in some number input
+        if (target.nodeName === 'INPUT') {
+            if (target.getAttribute('type').toUpperCase() === 'NUMBER') {
+                if (e.shiftKey && e.key === 'ArrowUp') {
+                    target.value = parseInt(target.value) + 10;
+
+                    if (target.hasAttribute('max')) {
+                        var value = parseInt(target.value);
+                        var maxValue = parseInt(target.getAttribute('max'));
+
+                        if (value > maxValue)
+                            target.value = maxValue;
+                    }
+
+                    e.preventDefault();
+                }
+                if (e.shiftKey && e.key === 'ArrowDown') {
+                    target.value = parseInt(target.value) - 10;
+
+                    if (target.hasAttribute('min')) {
+                        var value = parseInt(target.value);
+                        var minValue = parseInt(target.getAttribute('min'));
+
+                        if (value < minValue)
+                            target.value = minValue;
+                    }
+
+                    e.preventDefault();
+                }
+            }
+        }
     });
 
     /**
