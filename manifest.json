@@ -34,6 +34,13 @@
       },
       "description": "Toggle columns"
     },
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+A",
+        "mac": "Command+Shift+A"
+      },
+      "description": "Activate the extension"
+    },
     "toggle-lines": {
       "suggested_key": {
         "default": "Ctrl+Shift+H",
