@@ -68,6 +68,8 @@ https://github.com/eBay/skin/blob/master/LICENSE.txt"
 
 .tabs div[role=tabpanel][aria-hidden=false] {
   display: block;
+  height: 400px;
+  overflow-y: scroll;
 }
 
 .tabs--faux > ul {
