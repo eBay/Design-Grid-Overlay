@@ -15,7 +15,10 @@ Or install via Git if you wish to contribute.
 * Once there, be sure the "Developer mode" box is checked and then at the top click "Load unpacked extension".
 * Once clicked navagiate to the grid plugin folder on your computer and press select.
 * Once selected the plugin should appear at the top of your chrome browser.
-* Click the extension image to activate it.
+* Click the extension image to activate it or use Mac - command+shift+A, Windows - Ctrl+Shift+A to activate the extension.
+* Use Command + Shift + K to toggle Vertical Grid Overlay
+* Use Command + Shift + H to toggle Horizontal Grid Overlay
+* Hold Shift Key to go up/down 10px for all input fields in setting tab
 
 ## Creators & Contributors
 
