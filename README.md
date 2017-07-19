@@ -27,6 +27,7 @@ Or install via Git if you wish to contribute.
 * James Skorupski
 * Aaron Kleinsteiber
 * Mikhail Panichev
+* An-Ni Wang
 
 Props to [Carl Henderson](https://github.com/chuckhendo) whose [Chrome Bootstrap project](https://github.com/chuckhendo/chrome-bootstrap) was the original source, which we forked from.
 
