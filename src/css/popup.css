@@ -117,7 +117,7 @@ h3 {
 
 #gridsettings {
   background-color: #f0eeec;
-  padding: 16px 8px 0 8px;
+  padding: 12px 8px 0 8px;
   flex-grow: 1;
   -webkit-user-select: none;
 }
@@ -182,7 +182,12 @@ input[type=reset] {
 #gridForm label {
   margin: 4px 5px 0 0;
 }
-
+#gridForm fieldset {
+  margin-top: 6px;
+}
+#gridForm fieldset:first-child {
+  margin-top: 0;
+}
 .gridsettings__columns label, .gridsettings__gutters label {
 
   width: 32px;
