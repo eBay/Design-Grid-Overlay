@@ -13,8 +13,8 @@ var popup = (function () {
         checkbox.onchange = function() {
             config.setTrackingPermitted(checkbox.checked);
         };
-    }
-
+    }   
+    
     var gridForm = document.getElementById('gridForm');
     var gridToggle = document.getElementById('gridToggle');
     var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
@@ -95,7 +95,26 @@ var popup = (function () {
             //tabController.getCurrentTabState(tabs[0].id);
         });
 
+        chrome.commands.getAll(function(commands) { // use chrome extension api to get the defined shortcut
 
+            var toggle_columns_html = '';
+            var toggle_lines_html ='';
+
+            commands.forEach(function(element) {
+
+                switch (element.name) {
+                    case 'toggle-columns':
+                      toggle_columns_html = '(' + element.shortcut + ')';
+                      break;
+                    case 'toggle-lines':
+                      toggle_lines_html = '(' + element.shortcut + ')';
+                      break;
+                    }
+                });
+            
+            document.getElementById("toggle-v").innerHTML = toggle_columns_html; // get and replace shortcut from chrome extension api
+            document.getElementById("toggle-h").innerHTML = toggle_lines_html; 
+        });
 
 
     });
@@ -216,6 +235,7 @@ var popup = (function () {
         // SetTimeout is used to delay the execution of this code and storage of the DOM state until AFTER the reset
         // event has finished resetting the form values - this reset event is fired BEFORE the DOM state has changed
         setTimeout(function () {
+            console.log('reset');
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
@@ -281,7 +301,7 @@ var popup = (function () {
      * Saves the current tab state, generates the grid, and calculates the report.
      */
     var init = function () {
-
+        
         settingStorageController.init(gridForm, reportForm, advancedForm, tabContentContainer, tabLabelContainer);
 
         /**
@@ -320,7 +340,6 @@ var popup = (function () {
                 gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             }
         });
-
 
         //Grid form event binding
         var gridFormInputs = gridForm.getElementsByTagName('input');

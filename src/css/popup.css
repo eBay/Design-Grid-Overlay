@@ -56,6 +56,9 @@ h3 {
   padding: .875rem 0;
   flex: 1;
 }
+.switch > label > span {
+  font-size: 12px;
+}
 
 .switch > input {
   position: absolute;
