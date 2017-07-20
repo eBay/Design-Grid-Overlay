@@ -96,9 +96,9 @@ var popup = (function () {
         });
 
         chrome.commands.getAll(function(commands) { // use chrome extension api to get the defined shortcut
-
             var toggle_columns_html = '';
-            var toggle_lines_html ='';
+            var toggle_lines_html = '';
+            var activate_extension = '';
 
             commands.forEach(function(element) {
 
@@ -109,11 +109,15 @@ var popup = (function () {
                     case 'toggle-lines':
                       toggle_lines_html = '(' + element.shortcut + ')';
                       break;
+                    case '_execute_browser_action':
+                      activate_html = '(' + element.shortcut + ')';
+                      break;
                     }
                 });
             
             document.getElementById("toggle-v").innerHTML = toggle_columns_html; // get and replace shortcut from chrome extension api
             document.getElementById("toggle-h").innerHTML = toggle_lines_html; 
+            document.getElementById("activate-extension").innerHTML = activate_html;
         });
 
 

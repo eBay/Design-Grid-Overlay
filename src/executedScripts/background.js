@@ -57,6 +57,16 @@ chrome.runtime.onInstalled.addListener(function () {
     });
 });
 
+/**
+ * set mouse hover title
+ * while user hover on the extension icon
+ */
+
+chrome.browserAction.setTitle({
+    title:'Use ( Ctrl / Command + Shift + A ) to activate Design Grid Overlay' 
+});
+
+
 
 //Clear tab sync storage when it is closed
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {

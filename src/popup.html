@@ -163,7 +163,6 @@
                                 <input type="text" id="horizontalLinesColor" value="rgba(155, 0, 65, 0.2)">
                             </div>
                         </fieldset>
-                        <br>
                         <fieldset>
                             <legend>Content Width Labels</legend>
                             <div class="overlaySettingsCheckboxes">
@@ -195,25 +194,30 @@
                             </div>
                         </fieldset>
 
-                        <br>
-
-                        <input type="checkbox" id="viewports">
-                        <label
-                        info="Will center grid by using View Port units (vw), ignoring the scroll bar"
-                        for="viewports"
-                        class="tooltip">
-                            Ignore scrollbar
-                        </label>
-
-                        <br><br>
+                        
+                        <div class="advancedForm-checkbox-wrapper">
+                            <input type="checkbox" id="viewports">
+                            <label
+                            info="Will center grid by using View Port units (vw), ignoring the scroll bar"
+                            for="viewports"
+                            class="tooltip">
+                                Ignore scrollbar
+                            </label>
+                        </div>
 
                         <input type="checkbox" id="tracking-permitted">
                         <label for="tracking-permitted">
                             Send anonymous usage data
                         </label>
+                        <br>
+                        <br>
+                        <div id="activate-extension-wrapper">
+                            Activate the extension shortcut: <br>
+                            <span id="activate-extension"></span> <br>
+                        </div>
                         <a href="https://github.com/eBay/Design-Grid-Overlay/issues" class="extlink" id="github-icon">
-                            <p>Feedback?</p>
                             <img src="../icons/GitHub-Mark-32px.png">
+                            <p style="display: inline-block;">Feedback?</p>
                         </a>
                         <div class="reset">
                             <input type="reset" value="Reset Advanced">

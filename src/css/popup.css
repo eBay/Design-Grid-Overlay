@@ -185,12 +185,21 @@ input[type=reset] {
 #gridForm label {
   margin: 4px 5px 0 0;
 }
-#gridForm fieldset {
+#gridForm fieldset, #advancedForm fieldset {
   margin-top: 6px;
 }
-#gridForm fieldset:first-child {
+#gridForm fieldset:first-child, #advancedForm fieldset:first-child {
   margin-top: 0;
 }
+#advancedForm .advancedForm-checkbox-wrapper {
+  margin-top: 15px;
+}
+
+#activate-extension-wrapper {
+  padding-left: 4px;
+  color: #555;
+}
+
 .gridsettings__columns label, .gridsettings__gutters label {
 
   width: 32px;
@@ -272,10 +281,16 @@ input[type=reset] {
 }
 
 #github-icon {
-  display: block;
+  display: flex;
   text-align: center;
-  margin-top: 32px;
   text-decoration: inherit;
+  margin: 14px auto;
+  width: 120px;
+}
+
+#github-icon img {
+  align-self: center;
+  margin-right: 10px;
 }
 
 .reportContainer {
