@@ -150,6 +150,10 @@ fieldset {
   border-bottom: 1px solid #ccc;
 }
 
+#gridForm fieldset:last-of-type {
+  border-bottom: 0;
+}
+
 input[type=button],
 input[type=reset] {
   width: 100%;
@@ -296,7 +300,7 @@ input[type=reset] {
 
 .reportContainer {
   padding: 0 8px 0 8px;
-  height: 298px;
+  height: 280px;
   overflow-y: scroll;
   width: 100%;
 }
