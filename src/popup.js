@@ -115,9 +115,9 @@ var popup = (function () {
                     }
                 });
             
-            document.getElementById("toggle-v").innerHTML = toggle_columns_html; // get and replace shortcut from chrome extension api
-            document.getElementById("toggle-h").innerHTML = toggle_lines_html; 
-            document.getElementById("activate-extension").innerHTML = activate_html;
+            document.getElementById("toggle-v").innerHTML = (toggle_columns_html).split('+').join(' + '); // get and replace shortcut from chrome extension api
+            document.getElementById("toggle-h").innerHTML = (toggle_lines_html).split('+').join(' + '); 
+            document.getElementById("activate-extension").innerHTML = (activate_html).split('+').join(' + ');
         });
 
 
