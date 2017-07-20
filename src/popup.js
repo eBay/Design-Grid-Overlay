@@ -104,13 +104,13 @@ var popup = (function () {
 
                 switch (element.name) {
                     case 'toggle-columns':
-                      toggle_columns_html = '(' + element.shortcut + ')';
+                      toggle_columns_html = element.shortcut;
                       break;
                     case 'toggle-lines':
-                      toggle_lines_html = '(' + element.shortcut + ')';
+                      toggle_lines_html = element.shortcut;
                       break;
                     case '_execute_browser_action':
-                      activate_html = '(' + element.shortcut + ')';
+                      activate_html = element.shortcut;
                       break;
                     }
                 });
