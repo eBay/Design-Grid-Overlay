@@ -104,20 +104,20 @@ var popup = (function () {
 
                 switch (element.name) {
                     case 'toggle-columns':
-                      toggle_columns_html = '(' + element.shortcut + ')';
+                      toggle_columns_html = element.shortcut;
                       break;
                     case 'toggle-lines':
-                      toggle_lines_html = '(' + element.shortcut + ')';
+                      toggle_lines_html = element.shortcut;
                       break;
                     case '_execute_browser_action':
-                      activate_html = '(' + element.shortcut + ')';
+                      activate_html = element.shortcut;
                       break;
                     }
                 });
             
-            document.getElementById("toggle-v").innerHTML = toggle_columns_html; // get and replace shortcut from chrome extension api
-            document.getElementById("toggle-h").innerHTML = toggle_lines_html; 
-            document.getElementById("activate-extension").innerHTML = activate_html;
+            document.getElementById("toggle-v").innerHTML = (toggle_columns_html).split('+').join(' + '); // get and replace shortcut from chrome extension api
+            document.getElementById("toggle-h").innerHTML = (toggle_lines_html).split('+').join(' + '); 
+            document.getElementById("activate-extension").innerHTML = (activate_html).split('+').join(' + ');
         });
 
 
