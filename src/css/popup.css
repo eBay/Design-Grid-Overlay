@@ -54,10 +54,12 @@ h3 {
 
 .switch > label {
   padding: .875rem 0;
+  font-weight: bold;
   flex: 1;
 }
 .switch > label > span {
   font-size: 12px;
+  font-weight: normal;
 }
 
 .switch > input {
@@ -144,9 +146,12 @@ input[type=number].fillCol {
 }
 
 fieldset {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 2px;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+#gridForm fieldset:last-of-type {
+  border-bottom: 0;
 }
 
 input[type=button],
@@ -171,7 +176,7 @@ input[type=reset] {
   margin-top: 8px;
   color: #555555;
   border: 1px solid #999999;
-  background-color: rgba(240, 238, 236, 0.5);
+  background-color: rgba(240, 238, 236, 1);
 }
 
 .gridsettings__columns div,
@@ -295,7 +300,7 @@ input[type=reset] {
 
 .reportContainer {
   padding: 0 8px 0 8px;
-  height: 298px;
+  height: 280px;
   overflow-y: scroll;
   width: 100%;
 }
