@@ -13,8 +13,8 @@ var popup = (function () {
         checkbox.onchange = function() {
             config.setTrackingPermitted(checkbox.checked);
         };
-    }
-
+    }   
+    
     var gridForm = document.getElementById('gridForm');
     var gridToggle = document.getElementById('gridToggle');
     var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
@@ -95,7 +95,30 @@ var popup = (function () {
             //tabController.getCurrentTabState(tabs[0].id);
         });
 
+        chrome.commands.getAll(function(commands) { // use chrome extension api to get the defined shortcut
+            var toggle_columns_html = '';
+            var toggle_lines_html = '';
+            var activate_extension = '';
 
+            commands.forEach(function(element) {
+
+                switch (element.name) {
+                    case 'toggle-columns':
+                      toggle_columns_html = element.shortcut;
+                      break;
+                    case 'toggle-lines':
+                      toggle_lines_html = element.shortcut;
+                      break;
+                    case '_execute_browser_action':
+                      activate_html = element.shortcut;
+                      break;
+                    }
+                });
+            
+            document.getElementById("toggle-v").innerHTML = (toggle_columns_html).split('+').join(' + '); // get and replace shortcut from chrome extension api
+            document.getElementById("toggle-h").innerHTML = (toggle_lines_html).split('+').join(' + '); 
+            document.getElementById("activate-extension").innerHTML = (activate_html).split('+').join(' + ');
+        });
 
 
     });
@@ -162,6 +185,50 @@ var popup = (function () {
     });
 
     /**
+     * Shift+Up/Down to go up/down by 10px (issue #25).
+     * ----
+     * In this case I made it for all
+     * number inputs in a "Settings" tab.
+     */
+    gridForm.addEventListener('keydown', function (e) {
+        var target = e.target;
+
+        // check if keydown was in some number input
+        if (target.nodeName === 'INPUT') {
+            if (target.getAttribute('type').toUpperCase() === 'NUMBER') {
+                if (e.shiftKey && e.key === 'ArrowUp') {
+                    target.value = parseInt(target.value) + 10;
+
+                    if (target.hasAttribute('max')) {
+                        var value = parseInt(target.value);
+                        var maxValue = parseInt(target.getAttribute('max'));
+
+                        if (value > maxValue)
+                            target.value = maxValue;
+                    }
+
+                    e.preventDefault();
+                }
+                if (e.shiftKey && e.key === 'ArrowDown') {
+                    target.value = parseInt(target.value) - 10;
+
+                    if (target.hasAttribute('min')) {
+                        var value = parseInt(target.value);
+                        var minValue = parseInt(target.getAttribute('min'));
+
+                        if (value < minValue)
+                            target.value = minValue;
+                    }
+
+                    e.preventDefault();
+                }
+            }
+        }
+        var settings = settingStorageController.saveSettings(currentChromeTabId, true);
+        gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
+    });
+
+    /**
      * Adds an event to the reset button
      * in order to reset all the values on
      * the grid to the default values in the
@@ -172,6 +239,7 @@ var popup = (function () {
         // SetTimeout is used to delay the execution of this code and storage of the DOM state until AFTER the reset
         // event has finished resetting the form values - this reset event is fired BEFORE the DOM state has changed
         setTimeout(function () {
+            console.log('reset');
             var settings = settingStorageController.saveSettings(currentChromeTabId, true);
             gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
             reportController.calculateReport(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
@@ -237,7 +305,7 @@ var popup = (function () {
      * Saves the current tab state, generates the grid, and calculates the report.
      */
     var init = function () {
-
+        
         settingStorageController.init(gridForm, reportForm, advancedForm, tabContentContainer, tabLabelContainer);
 
         /**
@@ -269,10 +337,8 @@ var popup = (function () {
                             settings.formData.reportForm.settings, settings.formData.advancedForm.settings);
                     });
                 });
-
             }
         });
-
 
         //Grid form event binding
         var gridFormInputs = gridForm.getElementsByTagName('input');
