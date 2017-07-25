@@ -6,6 +6,8 @@ var popup = (function () {
     service.getConfig().addCallback(initAnalyticsConfig);
     var tracker = service.getTracker('UA-80131763-3');
     tracker.sendAppView('MainView');
+    
+    var keyboardShortcutEnabled = false; //it’s a hack to do posiible use keyboard commands to show grid and lines at the very first time (before checkbox click)
 
     function initAnalyticsConfig(config) {
         var checkbox = document.getElementById('tracking-permitted');
@@ -131,16 +133,32 @@ var popup = (function () {
         function (request, sender, sendResponse) {
             if (request.status !== undefined) {
                 if (request.status === 1 && gridToggle.checked === false) {
+                    
                     console.log('Grid already enabled on page');
                     gridToggle.checked = true;
+                    
+                    if (!keyboardShortcutEnabled) { // hack way to use keyboard shortcut before clicing on checkbox
+                        var settings = settingStorageController.saveSettings(currentChromeTabId, true);
+                        gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
+                        keyboardShortcutEnabled = true;
+                    }
+                    
+
                 } else if (request.status === 0 && gridToggle.checked === true) {
                     gridToggle.checked = false;
+                    
+
                 }
             }
             if (request.horizontalLinesStatus !== undefined) {
                 if (request.horizontalLinesStatus === 1 && horizontalLinesToggle.checked === false) {
                     console.log('Horizontal lines already enabled on page');
                     horizontalLinesToggle.checked = true;
+                    
+                    // hack way to use keyboard shortcut before clicing on checkbox
+                    var settings = settingStorageController.saveSettings(currentChromeTabId, true); 
+                    gridController.updateGrid(currentChromeTabId, settings.formData.gridForm.settings, settings.formData.advancedForm.settings);
+                
                 } else if (request.horizontalLinesStatus === 0 && horizontalLinesToggle.checked === true) {
                     horizontalLinesToggle.checked = false;
                 }
