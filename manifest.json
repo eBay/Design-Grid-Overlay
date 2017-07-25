@@ -3,7 +3,7 @@
   "name": "Design Grid Overlay",
   "short_name": "Design Grid",
   "description": "This extension displays grid and measurement overlays for a design grid system.  It is configurable to fit many design scenarios",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icons": { "16": "icons/Logo16.png",
            "48": "icons/Logo48.png",
           "128": "icons/Logo128.png" },
