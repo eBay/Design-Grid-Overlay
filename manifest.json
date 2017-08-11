@@ -14,6 +14,15 @@
     "scripts": ["src/executedScripts/background.js"],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*",
+        "*://*/"
+      ],
+      "js": ["src/contentScripts/main.js"]
+    }
+  ],
   "web_accessible_resources": [
       "src/css/grid.css",
       "src/css/report.css"

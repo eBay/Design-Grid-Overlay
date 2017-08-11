@@ -36,6 +36,9 @@ var settingStorageController = (function () {
         // UI Tab stored state
         activeTabPanelId: EMPTY_VALUE,
         activeTabLabelId: EMPTY_VALUE,
+        // Displaing the grid settings
+        showGrid: false,
+        showHorizontalLines: false,
         // Form data for grid settings
         formData: {
             gridForm: {
@@ -192,6 +195,9 @@ var settingStorageController = (function () {
                 }
             }
 
+            // Load the grid displaing settings
+            settings.showGrid = document.getElementById('gridToggle').checked;
+            settings.showHorizontalLines = document.getElementById('horizontalLinesToggle').checked;
 
             // Save our data structure back to storage, to store any default values
             // This save call will also sync our UI state with our in-memory global settings object
@@ -230,6 +236,9 @@ var settingStorageController = (function () {
         settings.activeTabLabelId = dataToStore[currentChromeTabId].activeTabLabelId;
         settings.activeTabPanelId = dataToStore[currentChromeTabId].activeTabPanelId;
 
+        // Save the grid displaing settings
+        dataToStore[currentChromeTabId].showGrid = document.getElementById('gridToggle').checked;
+        dataToStore[currentChromeTabId].showHorizontalLines = document.getElementById('horizontalLinesToggle').checked;
 
         //Go through each settings ID in each form and pull the data from the HTML state into an object for storage
         for (var formName in settings.formData) {

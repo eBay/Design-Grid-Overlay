@@ -63,7 +63,7 @@ chrome.runtime.onInstalled.addListener(function () {
  */
 
 chrome.browserAction.setTitle({
-    title:'Use ( Ctrl / Command + Shift + A ) to activate Design Grid Overlay' 
+    title:'Use ( Ctrl / Command + Shift + A ) to activate Design Grid Overlay'
 });
 
 
@@ -100,4 +100,10 @@ chrome.commands.onCommand.addListener(function (command) {
       }
     }
   });
+});
+
+// this listener helps to content_scripts to know the current tab ID
+chrome.extension.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.type === 'getTabId')
+      sendResponse(sender.tab.id);
 });
