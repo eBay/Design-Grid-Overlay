@@ -41,7 +41,10 @@
                     </div>';
 
                 div.innerHTML = output;
-                document.body.appendChild(div);
+
+                // double grid fix
+                if (document.getElementsByClassName('cb-grid-lines').length < 1)
+                  document.body.appendChild(div);
 
                 respond(1);
             });
