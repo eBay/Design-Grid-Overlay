@@ -63,7 +63,14 @@ var gridController = (function () {
             + "background-size: 100% " + options.rowGutters + "px;"
             + "background-repeat-y: repeat;"
             + "background-position-y: " + options.offsetY + "px;"
-            + "} ";
+            + "} "
+            + ( parseInt(options.largeColumns) < parseInt(options.smallColumns)
+                ? "@media (min-width:" + options.smallWidth + "px) {"
+                    + ".grid-overlay-col:nth-child(n+" + (parseInt(options.largeColumns) + 1) + ") {"
+                    + "display:none;"
+                    + "}"
+                    + "}"
+                : "");
     };
 
     /**
@@ -92,9 +99,11 @@ var gridController = (function () {
             + ".grid-overlay-col:nth-child(" + options.smallColumns + ") {"
             + "margin-right:0px;"
             + "}"
-            + ".grid-overlay-col:nth-child(n+" + (parseInt(options.smallColumns) + 1) + ") {"
-            + "display:none;"
-            + "}"
+            + ( parseInt(options.smallColumns) < parseInt(options.largeColumns)
+                ? ".grid-overlay-col:nth-child(n+" + (parseInt(options.smallColumns) + 1) + ") {"
+                    + "display:none;"
+                    + "}"
+                : "")
             + "}"
     };
 
@@ -180,7 +189,7 @@ var gridController = (function () {
         }
 
         var horizontalLinesToggle = document.getElementById('horizontalLinesToggle');
-        
+
         if (horizontalLinesToggle.checked) {
             enableHorizontalLines(currentTabId);
         } else {
