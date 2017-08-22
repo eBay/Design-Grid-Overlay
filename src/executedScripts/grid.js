@@ -25,7 +25,9 @@
     function createListener(request, sender, sendResponse) {
         if (request.method == "create") {
             chrome.storage.sync.get(request.tabId.toString(), function (item) {
-                var numColumns = item[request.tabId.toString()].formData.gridForm.settings.largeColumns || 16;
+                var largeColumns = item[request.tabId.toString()].formData.gridForm.settings.largeColumns || 16;
+                var smallColumns = item[request.tabId.toString()].formData.gridForm.settings.smallColumns || 16;
+                var numColumns = Math.max(largeColumns, smallColumns);
 
                 var div = document.createElement('div');
                 div.setAttribute("class", "cb-grid-lines");
